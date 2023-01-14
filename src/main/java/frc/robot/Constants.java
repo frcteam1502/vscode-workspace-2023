@@ -27,6 +27,27 @@ public final class Constants {
     public static final int FRONT_LEFT_MODULE_STEER_CANCODER = 1; //FIXME: CAN ID of front left CANCoder
     public static final double FRONT_LEFT_MODULE_STEER_OFFSET = 313.09; /*FIXME: reading of front left CANCoder (in degrees) 
     after manually setting wheel to forward (axle bolt head to the right side of the robot)*/
+
+    //FRONT Right MODULE
+    public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 5; //FIXME: CAN ID of front left drive motor
+    public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 9; //FIXME: CAN ID of front left steer motor
+    public static final int FRONT_RIGHT_MODULE_STEER_CANCODER = 1; //FIXME: CAN ID of front left CANCoder
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = 313.09; /*FIXME: reading of front left CANCoder (in degrees) 
+    after manually setting wheel to forward (axle bolt head to the right side of the robot)*/
+
+    //BACK LEFT MODULE
+    public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 5; //FIXME: CAN ID of front left drive motor
+    public static final int BACK_LEFT_MODULE_STEER_MOTOR = 9; //FIXME: CAN ID of front left steer motor
+    public static final int BACK_LEFT_MODULE_STEER_CANCODER = 1; //FIXME: CAN ID of front left CANCoder
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = 313.09; /*FIXME: reading of front left CANCoder (in degrees) 
+    after manually setting wheel to forward (axle bolt head to the right side of the robot)*/
+
+    //BACK RIGHT MODULE
+    public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 5; //FIXME: CAN ID of front left drive motor
+    public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 9; //FIXME: CAN ID of front left steer motor
+    public static final int BACK_RIGHT_MODULE_STEER_CANCODER = 1; //FIXME: CAN ID of front left CANCoder
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = 313.09; /*FIXME: reading of front left CANCoder (in degrees) 
+    after manually setting wheel to forward (axle bolt head to the right side of the robot)*/
   }
 
   public static final class DriveConstants {
@@ -131,7 +152,6 @@ public final class Constants {
     public static final CANSparkMax DRIVE_BACK_LEFT = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static final CANSparkMax DRIVE_BACK_RIGHT = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
     
-
     //turn
     public static final CANSparkMax ANGLE_FRONT_LEFT = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static final CANSparkMax ANGLE_FRONT_RIGHT = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
