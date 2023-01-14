@@ -1,46 +1,43 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.SwerveModule;
+import frc.robot.Constants;
 
-public class DriveTrain {
-  public static final double kMaxSpeed = 3.0; // 3 meters per second
-  public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
-
-  private final Translation2d frontLeftLocation = new Translation2d(0.381, 0.381);
-  private final Translation2d frontRightLocation = new Translation2d(0.381, -0.381);
-  private final Translation2d backLeftLocation = new Translation2d(-0.381, 0.381);
-  private final Translation2d backRightLocation = new Translation2d(-0.381, -0.381);
-
-  private final SwerveModule frontLeft = new SwerveModule(1, 2, 0, 1, 2, 3);
-  private final SwerveModule frontRight = new SwerveModule(3, 4, 4, 5, 6, 7);
-  private final SwerveModule backLeft = new SwerveModule(5, 6, 8, 9, 10, 11);
-  private final SwerveModule backRight = new SwerveModule(7, 8, 12, 13, 14, 15);
+public class DriveTrain extends SubsystemBase{
+  private final SwerveModule frontLeft;
+  private final SwerveModule frontRight;
+  private final SwerveModule backLeft;
+  private final SwerveModule backRight;
 
   private final AnalogGyro gyro = new AnalogGyro(0);
 
-  private final SwerveDriveKinematics kinematics =
-      new SwerveDriveKinematics(
-          frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
+  private final SwerveDriveKinematics kinematics = Constants.DriveConstants.KINEMATICS;
 
-  private final SwerveDriveOdometry odometry =
-      new SwerveDriveOdometry(
-          kinematics,
-          gyro.getRotation2d(),
-          new SwerveModulePosition[] {
-            frontLeft.getPosition(),
-            frontRight.getPosition(),
-            backLeft.getPosition(),
-            backRight.getPosition()
-          });
+  private final SwerveDriveOdometry odometry;
 
-  public DriveTrain() {
-    gyro.reset();
+  public DriveTrain(SwerveModule frontLeft, SwerveModule frontRight, SwerveModule backLeft, SwerveModule backRight) {
+    this.frontLeft = frontLeft;
+    this.frontRight = frontRight;
+    this.backLeft = backLeft;
+    this.backRight = backRight;
+
+    this.odometry = new SwerveDriveOdometry(
+      kinematics,
+      gyro.getRotation2d(),
+      new SwerveModulePosition[] {
+        frontLeft.getPosition(),
+        frontRight.getPosition(),
+        backLeft.getPosition(),
+        backRight.getPosition()
+      });
+
+      gyro.reset();
   }
 
   /**
@@ -57,14 +54,13 @@ public class DriveTrain {
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.ModuleConstants.kFreeMetersPerSecond);
     frontLeft.setDesiredState(swerveModuleStates[0]);
     frontRight.setDesiredState(swerveModuleStates[1]);
     backLeft.setDesiredState(swerveModuleStates[2]);
     backRight.setDesiredState(swerveModuleStates[3]);
   }
 
-  /** Updates the field relative position of the robot. */
   public void updateOdometry() {
     odometry.update(
         gyro.getRotation2d(),
@@ -76,13 +72,17 @@ public class DriveTrain {
         });
   }
 
-  /**Point all wheels inward and set power low */
   public void setToBreak() {
 
   }
 
-  /**Points all wheels forward */
   public void setWheelsForward() {
-    
+
   }
+
+  public void zeroHeading() {
+    gyro.reset();
+  }
+
+  
 }
