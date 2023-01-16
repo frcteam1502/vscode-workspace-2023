@@ -1,12 +1,12 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.SwerveModule;
 import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase{
@@ -15,7 +15,7 @@ public class DriveTrain extends SubsystemBase{
   private final SwerveModule backLeft;
   private final SwerveModule backRight;
 
-  private final AnalogGyro gyro = new AnalogGyro(0);
+  private final AnalogGyro gyro = Constants.gyro;
 
   private final SwerveDriveKinematics kinematics = Constants.DriveConstants.KINEMATICS;
 
@@ -37,7 +37,7 @@ public class DriveTrain extends SubsystemBase{
         backRight.getPosition()
       });
 
-      gyro.reset();
+      reset();
   }
 
   /**
@@ -52,9 +52,9 @@ public class DriveTrain extends SubsystemBase{
     var swerveModuleStates =
         kinematics.toSwerveModuleStates(
             fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, new Rotation2d()/*gyro.getRotation2d()*/)
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.ModuleConstants.kFreeMetersPerSecond);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.ModuleConstants.MAX_METERS_PER_SECOND);
     frontLeft.setDesiredState(swerveModuleStates[0]);
     frontRight.setDesiredState(swerveModuleStates[1]);
     backLeft.setDesiredState(swerveModuleStates[2]);
@@ -63,7 +63,7 @@ public class DriveTrain extends SubsystemBase{
 
   public void updateOdometry() {
     odometry.update(
-        gyro.getRotation2d(),
+        new Rotation2d()/*gyro.getRotation2d()*/,
         new SwerveModulePosition[] {
           frontLeft.getPosition(),
           frontRight.getPosition(),
@@ -85,9 +85,11 @@ public class DriveTrain extends SubsystemBase{
 
   }
 
-  public void zeroHeading() {
+  public void reset() {
     gyro.reset();
-  }
-
-  
+    frontLeft.resetEncoders();
+    frontRight.resetEncoders();
+    backLeft.resetEncoders();
+    backRight.resetEncoders();
+  }  
 }

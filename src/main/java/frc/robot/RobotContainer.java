@@ -2,6 +2,7 @@ package frc.robot;
 
 import frc.robot.commands.DriveByController;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.SwerveModule;
 import frc.robot.Constants.Motors;
 
 public class RobotContainer {
@@ -13,20 +14,12 @@ public class RobotContainer {
   //Subsystems
   private final DriveTrain driveSubsystem = new DriveTrain(frontLeft, frontRight, backLeft, backRight);
 
-  //Commands
-  public final DriveByController drive = new DriveByController(driveSubsystem);
-
   public RobotContainer() {
     configureBindings();
-    configSmartDashboard();
   }
 
   private void configureBindings() {
-    driveSubsystem.setDefaultCommand(drive);
-  }
-
-  private void configSmartDashboard() {
-  
+    driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem));
   }
 
   // public Command getAutonomousCommand() {

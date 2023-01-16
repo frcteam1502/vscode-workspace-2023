@@ -19,6 +19,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
+
   }
 
   /**
@@ -35,11 +36,16 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    SmartDashboard.putNumber("FrontLeft power", Constants.Motors.DRIVE_FRONT_LEFT.get());
-    SmartDashboard.putNumber("FrontRight power", Constants.Motors.DRIVE_FRONT_RIGHT.get());
-    SmartDashboard.putNumber("BackLeft power", Constants.Motors.DRIVE_BACK_LEFT.get());
-    SmartDashboard.putNumber("BackRight power", Constants.Motors.DRIVE_BACK_RIGHT.get());
+    SmartDashboard.putNumber("FrontLeft Encoder", Constants.Motors.DRIVE_FRONT_LEFT.getEncoder().getPosition());
+    SmartDashboard.putNumber("FrontRight Encoder", Constants.Motors.DRIVE_FRONT_RIGHT.getEncoder().getPosition());
+    SmartDashboard.putNumber("BackLeft Encoder", Constants.Motors.DRIVE_BACK_LEFT.getEncoder().getPosition());
+    SmartDashboard.putNumber("BackRight Encoder", Constants.Motors.DRIVE_BACK_RIGHT.getEncoder().getPosition());
+    SmartDashboard.putNumber("FrontLeft Angle", Constants.Motors.ANGLE_FRONT_LEFT.getEncoder().getPosition());
+    SmartDashboard.putNumber("FrontRight Angle", Constants.Motors.ANGLE_FRONT_RIGHT.getEncoder().getPosition());
+    SmartDashboard.putNumber("BackLeft Angle", Constants.Motors.ANGLE_BACK_LEFT.getEncoder().getPosition());
+    SmartDashboard.putNumber("BackRight Angle", Constants.Motors.ANGLE_BACK_RIGHT.getEncoder().getPosition());
     SmartDashboard.putNumber("joystick", Constants.Joysticks.DRIVE_CONTROLLER.getLeftX());
+    SmartDashboard.putNumber("Angle", Constants.gyro.getAngle());
   }
 
   @Override

@@ -6,21 +6,13 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
- */
 public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
+
+  public static final AnalogGyro gyro = new AnalogGyro(0);
 
   public static final class CanConstants {
     //FRONT LEFT MODULE
@@ -91,48 +83,48 @@ public final class Constants {
     public static final double MAX_ROTATION_RADIANS_PER_SECOND = Math.PI * 2;
     public static final double MAX_ROTATION_RADIANS_PER_SECOND_PER_SECOND = Math.PI;
 
-    public static final double ksVolts = 1;
-    public static final double kvVoltSecondsPerMeter = 0.8;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.15;
+    // public static final double ksVolts = 1;
+    // public static final double kvVoltSecondsPerMeter = 0.8;
+    // public static final double kaVoltSecondsSquaredPerMeter = 0.15;
 
-    public static final double kP_X = 0.2;
-    public static final double kD_X = 0;
-    public static final double kP_Y = 0.2;
-    public static final double kD_Y = 0;
-    public static final double kP_Theta = 8;
-    public static final double kD_Theta = 0;
-    public static double kTranslationSlew = 1.55;
-    public static double kRotationSlew = 3.00;
-    public static double kControllerDeadband = .05;
-    public static double kControllerRotDeadband = .1;
-    public static double kVoltCompensation = 12.6;
+    // public static final double kP_X = 0.2;
+    // public static final double kD_X = 0;
+    // public static final double kP_Y = 0.2;
+    // public static final double kD_Y = 0;
+    // public static final double kP_Theta = 8;
+    // public static final double kD_Theta = 0;
+    // public static double kTranslationSlew = 1.55;
+    // public static double kRotationSlew = 3.00;
+    // public static double kControllerDeadband = .05;
+    // public static double kControllerRotDeadband = .1;
+    // public static double kVoltCompensation = 12.6;
   }
 
   public static final class ModuleConstants {
     
     public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(4);
-    public static double DRIVE_GEAR_RATIO = 1 / ((14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0));
-    public static double STEER_GEAR_RATIO = 1 / ((14.0 / 50.0) * (10.0 / 60.0));
+    public static final double DRIVE_GEAR_RATIO = 1 / ((14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0));
+    public static final double STEER_GEAR_RATIO = 1 / ((14.0 / 50.0) * (10.0 / 60.0));
 
     public static final double DRIVE_METERS_PER_ENCODER_REV = (WHEEL_DIAMETER_METERS * Math.PI) / DRIVE_GEAR_RATIO;
 
-    public static final double DRIVE_ENCODER_RPM_PER_MPS = DRIVE_METERS_PER_ENCODER_REV / 60; 
+    public static final double DRIVE_ENCODER_MPS_PER_REV = DRIVE_METERS_PER_ENCODER_REV / 60; 
 
-    public static double kEncoderRevsPerMeter = 1 / DRIVE_METERS_PER_ENCODER_REV;
-
-    public static double kFreeMetersPerSecond = 5600 * DRIVE_ENCODER_RPM_PER_MPS;
+    public static final double MAX_METERS_PER_SECOND = 5600 * DRIVE_ENCODER_MPS_PER_REV;
   
-    public static final double kTurningDegreesPerEncRev = 360 / STEER_GEAR_RATIO;
+    public static final double TURNING_DEGREES_PER_ENCODER_REV = 360 / STEER_GEAR_RATIO;
+
+    public static final double RADIANS_PER_ENCODER_REV = TURNING_DEGREES_PER_ENCODER_REV * (Math.PI/180);
 
     // max turn speed = (5400/ 21.43) revs per min 240 revs per min 4250 deg per min
-    public static final double MODULE_TURN_PID_CONTROLLER_P = .025;
+    public static final double MODULE_TURN_PID_CONTROLLER_P = .5;
 
-    public static final double MODULE_DRIVE_PID_CONTROLLER_P = .2;
+    public static final double MODULE_DRIVE_PID_CONTROLLER_P = .5;
 
-    //FIXME: use sysid on robot
-    public static double ksVolts = .055;
-    public static double kvVoltSecondsPerMeter = .2;
-    public static double kaVoltSecondsSquaredPerMeter = .02;
+    // //FIXME: use sysid on robot
+    // public static double ksVolts = .055;
+    // public static double kvVoltSecondsPerMeter = .2;
+    // public static double kaVoltSecondsSquaredPerMeter = .02;
 
     public static double MAX_MODULE_ROTATION_DEGREES_PER_SECOND = 90; // deg per sec
 
@@ -143,14 +135,14 @@ public final class Constants {
     //drive
     public static final CANSparkMax DRIVE_FRONT_LEFT = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static final CANSparkMax DRIVE_FRONT_RIGHT = new CANSparkMax(8, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax DRIVE_BACK_LEFT = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax DRIVE_BACK_RIGHT = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax DRIVE_BACK_LEFT = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax DRIVE_BACK_RIGHT = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
     
     //turn
     public static final CANSparkMax ANGLE_FRONT_LEFT = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static final CANSparkMax ANGLE_FRONT_RIGHT = new CANSparkMax(7, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax ANGLE_BACK_LEFT = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax ANGLE_BACK_RIGHT = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax ANGLE_BACK_LEFT = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax ANGLE_BACK_RIGHT = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
 }
 
 public static final class Joysticks {

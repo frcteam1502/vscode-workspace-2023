@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -10,23 +10,20 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import frc.robot.Constants;
 
 public class SwerveModule {
-  private final int kEncoderResolution = 4096;
-
   private final CANSparkMax driveMotor;
   private final CANSparkMax turningMotor;
 
   private final RelativeEncoder driveEncoder;
   private final RelativeEncoder turningEncoder;
 
-  //FIXME: Get actual values
-  private final PIDController drivePIDController = new PIDController(1, 0, 0);
+  private final PIDController drivePIDController = new PIDController(Constants.ModuleConstants.MODULE_DRIVE_PID_CONTROLLER_P, 0, 0);
 
-  //FIXME: Get actual values
-  private ProfiledPIDController turningPIDController =
+  private final ProfiledPIDController turningPIDController =
       new ProfiledPIDController(
-          1,
+          Constants.ModuleConstants.MODULE_TURN_PID_CONTROLLER_P,
           0,
           0,
           new TrapezoidProfile.Constraints(
@@ -34,32 +31,30 @@ public class SwerveModule {
             Constants.ModuleConstants.MAX_MODULE_ROTATION_DEGREES_PER_SECOND_PER_SECOND));
 
   //FIXME: Get actual values
-  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
-  private SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
+  private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(0, 0);
+  private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(0, 0);
 
-  /**
-   * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
-   *
-   * @param driveMotor The CANSparkMax you'll use in the module to drive
-   * @param turnMotor The CANSparkMax you'll use in the module to turn
-   * 
-   */
-  public SwerveModule( CANSparkMax driveMotor, CANSparkMax turnMotor) {
+  // private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(1, 3);
+  // private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
+
+  public SwerveModule(CANSparkMax driveMotor, CANSparkMax turnMotor) {
     this.driveMotor = driveMotor;
     this.turningMotor = turnMotor;
 
     driveEncoder = driveMotor.getEncoder();
     turningEncoder = turnMotor.getEncoder();
 
-    // Set the distance per pulse for the drive encoder. We can simply use the
-    // distance traveled for one rotation of the wheel divided by the encoder
-    // resolution.
-    driveEncoder.setPositionConversionFactor(2 * Math.PI * Constants.ModuleConstants.WHEEL_DIAMETER_METERS / kEncoderResolution);
+    /**Set the distance per pulse for the drive encoder. We can simply use the
+    distance traveled for one rotation of the wheel divided by the encoder
+    resolution.*/
+    driveEncoder.setPositionConversionFactor(Constants.ModuleConstants.DRIVE_METERS_PER_ENCODER_REV);
 
-    // Set the distance (in this case, angle) in radians per pulse for the turning encoder.
-    // This is the the angle through an entire rotation (2 * pi) divided by the
-    // encoder resolution.
-    turningEncoder.setPositionConversionFactor(2 * Math.PI / kEncoderResolution);
+    driveEncoder.setVelocityConversionFactor(Constants.ModuleConstants.DRIVE_ENCODER_MPS_PER_REV);
+
+    /**Set the distance (in this case, angle) in radians per pulse for the turning encoder.
+    This is the the angle through an entire rotation (2 * pi) divided by the
+    encoder resolution.*/
+    turningEncoder.setPositionConversionFactor(Constants.ModuleConstants.RADIANS_PER_ENCODER_REV);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
@@ -84,6 +79,11 @@ public class SwerveModule {
     return new SwerveModulePosition(driveEncoder.getPosition(), new Rotation2d(turningEncoder.getPosition()));
   }
 
+  public void resetEncoders() {
+    driveEncoder.setPosition(0);
+    turningEncoder.setPosition(0);
+  }
+
   /**
    * Sets the desired state for the module.
    *
@@ -96,14 +96,14 @@ public class SwerveModule {
     // Calculate the drive output from the drive PID controller.
     final double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity(), state.speedMetersPerSecond);
 
-    final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
+    final double driveFeedforward = this.driveFeedforward.calculate(state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput = turningPIDController.calculate(turningEncoder.getPosition(), state.angle.getRadians());
 
     final double turnFeedforward = this.turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);
 
-    driveMotor.setVoltage((driveOutput + driveFeedforward)/10);
-    turningMotor.setVoltage((turnOutput + turnFeedforward)/10);
+    driveMotor.setVoltage(driveOutput + driveFeedforward);
+    turningMotor.setVoltage(turnOutput + turnFeedforward);
   }
 }
