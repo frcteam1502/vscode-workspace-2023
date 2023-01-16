@@ -1,9 +1,7 @@
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveByController;
 import frc.robot.subsystems.DriveTrain;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Motors;
 
 public class RobotContainer {
@@ -16,16 +14,20 @@ public class RobotContainer {
   private final DriveTrain driveSubsystem = new DriveTrain(frontLeft, frontRight, backLeft, backRight);
 
   //Commands
-  private final DriveByController drive = new DriveByController(driveSubsystem);
-
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  public final DriveByController drive = new DriveByController(driveSubsystem);
 
   public RobotContainer() {
     configureBindings();
+    configSmartDashboard();
   }
 
-  private void configureBindings() {}
+  private void configureBindings() {
+    driveSubsystem.setDefaultCommand(drive);
+  }
+
+  private void configSmartDashboard() {
+  
+  }
 
   // public Command getAutonomousCommand() {
   //   return Autos.exampleAuto(m_exampleSubsystem);

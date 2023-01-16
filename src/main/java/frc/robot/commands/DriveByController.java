@@ -14,6 +14,7 @@ public class DriveByController extends CommandBase {
   public DriveByController(DriveTrain drive) {
     this.drive = drive;
     addRequirements(drive);
+    
   }
 
   @Override

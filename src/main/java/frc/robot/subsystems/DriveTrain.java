@@ -72,8 +72,13 @@ public class DriveTrain extends SubsystemBase{
         });
   }
 
-  public void setToBreak() {
+  //Make individual states for each swerve module to be set to break
+  public void makeBreakState() {
 
+  }
+
+  public void setToBreak() {
+    makeBreakState();
   }
 
   public void setWheelsForward() {
