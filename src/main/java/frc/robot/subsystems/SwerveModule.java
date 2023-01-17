@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
@@ -10,6 +11,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -19,8 +21,10 @@ public class SwerveModule {
   private final RelativeEncoder driveEncoder;
   private final RelativeEncoder turningEncoder;
 
-  private final PIDController drivePIDController = new PIDController(Constants.ModuleConstants.MODULE_DRIVE_PID_CONTROLLER_P, 0, 0);
+  private final CANCoder absEncoder;
+  private final double AbsOffset;
 
+  private final PIDController drivePIDController = new PIDController(Constants.ModuleConstants.MODULE_DRIVE_PID_CONTROLLER_P, 0, 0);
   private final ProfiledPIDController turningPIDController =
       new ProfiledPIDController(
           Constants.ModuleConstants.MODULE_TURN_PID_CONTROLLER_P,
@@ -37,28 +41,29 @@ public class SwerveModule {
   // private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(1, 3);
   // private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
-  public SwerveModule(CANSparkMax driveMotor, CANSparkMax turnMotor) {
+  public SwerveModule(CANSparkMax driveMotor, CANSparkMax turnMotor, CANCoder absEncoder, double absOffset) {
     this.driveMotor = driveMotor;
     this.turningMotor = turnMotor;
+    this.absEncoder = absEncoder;
+    this.AbsOffset = absOffset;
 
     driveEncoder = driveMotor.getEncoder();
     turningEncoder = turnMotor.getEncoder();
 
-    /**Set the distance per pulse for the drive encoder. We can simply use the
-    distance traveled for one rotation of the wheel divided by the encoder
-    resolution.*/
+    // Set the distance per pulse for the drive encoder. 
     driveEncoder.setPositionConversionFactor(Constants.ModuleConstants.DRIVE_METERS_PER_ENCODER_REV);
 
+    // Set the velocity per pulse for the drive encoder
     driveEncoder.setVelocityConversionFactor(Constants.ModuleConstants.DRIVE_ENCODER_MPS_PER_REV);
 
-    /**Set the distance (in this case, angle) in radians per pulse for the turning encoder.
-    This is the the angle through an entire rotation (2 * pi) divided by the
-    encoder resolution.*/
+    // Set the angle in radians per pulse for the turning encoder.
     turningEncoder.setPositionConversionFactor(Constants.ModuleConstants.RADIANS_PER_ENCODER_REV);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
     turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+
+    zeroModule();
   }
 
   /**
@@ -79,9 +84,15 @@ public class SwerveModule {
     return new SwerveModulePosition(driveEncoder.getPosition(), new Rotation2d(turningEncoder.getPosition()));
   }
 
-  public void resetEncoders() {
+  public void zeroModule() {
+    resetAngleToAbsolute();
     driveEncoder.setPosition(0);
-    turningEncoder.setPosition(0);
+  }
+
+  //FIXME: Check units (Maybe use Units.degreesToRadians()?)
+  public void resetAngleToAbsolute() {
+    double angle = absEncoder.getAbsolutePosition() - AbsOffset;
+    turningEncoder.setPosition(Units.degreesToRadians(angle));
   }
 
   /**

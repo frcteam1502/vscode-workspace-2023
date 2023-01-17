@@ -1,18 +1,19 @@
 package frc.robot;
 
+import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.Pigeon2;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public final class Constants {
 
-  public static final AnalogGyro gyro = new AnalogGyro(0);
+  public static final Pigeon2 gyro = new Pigeon2(0); //FIXME: get actual divice number
 
   public static final class CanConstants {
     //FRONT LEFT MODULE
@@ -42,6 +43,13 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_CANCODER = 1; //FIXME: CAN ID of front left CANCoder
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = 313.09; /*FIXME: reading of front left CANCoder (in degrees) 
     after manually setting wheel to forward (axle bolt head to the right side of the robot)*/
+  }
+
+  public static final class CANCoders { //FIXME: Get the device number for each CANCoder
+    public static final CANCoder FRONT_LEFT_CAN_CODER = new CANCoder(1);
+    public static final CANCoder FRONT_RIGHT_CAN_CODER = new CANCoder(2);
+    public static final CANCoder BACK_LEFT_CAN_CODER = new CANCoder(3);
+    public static final CANCoder BACK_RIGHT_CAN_CODER = new CANCoder(4);
   }
 
   public static final class DriveConstants {

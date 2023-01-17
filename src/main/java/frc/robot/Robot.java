@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("BackLeft Angle", Constants.Motors.ANGLE_BACK_LEFT.getEncoder().getPosition());
     SmartDashboard.putNumber("BackRight Angle", Constants.Motors.ANGLE_BACK_RIGHT.getEncoder().getPosition());
     SmartDashboard.putNumber("joystick", Constants.Joysticks.DRIVE_CONTROLLER.getLeftX());
-    SmartDashboard.putNumber("Angle", Constants.gyro.getAngle());
+    SmartDashboard.putNumber("Angle", Constants.gyro.getYaw());
   }
 
   @Override

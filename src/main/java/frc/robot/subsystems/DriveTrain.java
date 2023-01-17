@@ -1,11 +1,14 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.Pigeon2;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -15,7 +18,7 @@ public class DriveTrain extends SubsystemBase{
   private final SwerveModule backLeft;
   private final SwerveModule backRight;
 
-  private final AnalogGyro gyro = Constants.gyro;
+  private final Pigeon2 gyro = Constants.gyro;
 
   private final SwerveDriveKinematics kinematics = Constants.DriveConstants.KINEMATICS;
 
@@ -29,7 +32,7 @@ public class DriveTrain extends SubsystemBase{
 
     this.odometry = new SwerveDriveOdometry(
       kinematics,
-      gyro.getRotation2d(),
+      getGyroRotation2d(),
       new SwerveModulePosition[] {
         frontLeft.getPosition(),
         frontRight.getPosition(),
@@ -40,19 +43,11 @@ public class DriveTrain extends SubsystemBase{
       reset();
   }
 
-  /**
-   * Method to drive the robot using joystick info.
-   *
-   * @param xSpeed Speed of the robot in the x direction (forward).
-   * @param ySpeed Speed of the robot in the y direction (sideways).
-   * @param rot Angular rate of the robot.
-   * @param fieldRelative Whether the provided x and y speeds are relative to the field.
-   */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     var swerveModuleStates =
         kinematics.toSwerveModuleStates(
             fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, new Rotation2d()/*gyro.getRotation2d()*/)
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getGyroRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.ModuleConstants.MAX_METERS_PER_SECOND);
     frontLeft.setDesiredState(swerveModuleStates[0]);
@@ -63,7 +58,7 @@ public class DriveTrain extends SubsystemBase{
 
   public void updateOdometry() {
     odometry.update(
-        new Rotation2d()/*gyro.getRotation2d()*/,
+        getGyroRotation2d(),
         new SwerveModulePosition[] {
           frontLeft.getPosition(),
           frontRight.getPosition(),
@@ -73,23 +68,52 @@ public class DriveTrain extends SubsystemBase{
   }
 
   //Make individual states for each swerve module to be set to break
-  public void makeBreakState() {
-
+  public SwerveModuleState[] makeSwerveModuleState(double[] speeds, double[] angles) {
+    SwerveModuleState[] moduleStates = new SwerveModuleState[angles.length];
+    for(int i = 0; i < 5; i++) moduleStates[i] = new SwerveModuleState(speeds[i], new Rotation2d(Units.degreesToRadians(angles[i])));
+    return moduleStates;
   }
 
   public void setToBreak() {
-    makeBreakState();
+    resetModules();
+    double[] speeds = {.1, .1, .1, .1};
+    double[] angles = {-135, 135, -45, 45};
+    SwerveModuleState[] moduleStates = makeSwerveModuleState(speeds, angles);
+    frontLeft.setDesiredState(moduleStates[0]);
+    frontRight.setDesiredState(moduleStates[1]);
+    backLeft.setDesiredState(moduleStates[2]);
+    backRight.setDesiredState(moduleStates[3]);
   }
 
   public void setWheelsForward() {
+    resetModules();
+    double[] speeds = {.001, .001, .001, .001};
+    double[] angles = {0, 0, 0, 0};
+    SwerveModuleState[] moduleStates = makeSwerveModuleState(speeds, angles);
+    frontLeft.setDesiredState(moduleStates[0]);
+    frontRight.setDesiredState(moduleStates[1]);
+    backLeft.setDesiredState(moduleStates[2]);
+    backRight.setDesiredState(moduleStates[3]);
+  }
 
+  //Get Rotation2d from the Pigeon
+  public Rotation2d getGyroRotation2d() {
+    return new Rotation2d(Units.degreesToRadians(gyro.getYaw()));
+  }
+
+  public void resetGyro() {
+    gyro.setYaw(0);
+  }
+
+  public void resetModules() {
+    frontLeft.zeroModule();
+    frontRight.zeroModule();
+    backLeft.zeroModule();
+    backRight.zeroModule();
   }
 
   public void reset() {
-    gyro.reset();
-    frontLeft.resetEncoders();
-    frontRight.resetEncoders();
-    backLeft.resetEncoders();
-    backRight.resetEncoders();
+    resetGyro();
+    resetModules();
   }  
 }
