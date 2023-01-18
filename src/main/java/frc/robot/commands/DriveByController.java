@@ -25,7 +25,7 @@ public class DriveByController extends CommandBase {
     drive.drive(
       Joysticks.DRIVE_CONTROLLER.getLeftY(), 
       Joysticks.DRIVE_CONTROLLER.getLeftX(), 
-      0/*Joysticks.DRIVE_CONTROLLER.getRightX()*/, 
+      Joysticks.DRIVE_CONTROLLER.getRightX(), 
       true);
   }
 

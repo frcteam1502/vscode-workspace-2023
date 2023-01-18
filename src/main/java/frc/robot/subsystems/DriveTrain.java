@@ -87,7 +87,7 @@ public class DriveTrain extends SubsystemBase{
   //Make individual states for each swerve module to be set to break
   public SwerveModuleState[] makeSwerveModuleState(double[] speeds, double[] angles) {
     SwerveModuleState[] moduleStates = new SwerveModuleState[angles.length];
-    for(int i = 0; i < 5; i++) moduleStates[i] = new SwerveModuleState(speeds[i], new Rotation2d(Units.degreesToRadians(angles[i])));
+    for(int i = 0; i <= angles.length; i++) moduleStates[i] = new SwerveModuleState(speeds[i], new Rotation2d(Units.degreesToRadians(angles[i])));
     return moduleStates;
   }
 

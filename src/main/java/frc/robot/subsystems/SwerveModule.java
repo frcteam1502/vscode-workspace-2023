@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -19,7 +18,6 @@ public class SwerveModule {
   private final CANSparkMax turningMotor;
 
   private final RelativeEncoder driveEncoder;
-  private final RelativeEncoder turningEncoder;
 
   private final CANCoder absEncoder;
   private final double AbsOffset;
@@ -48,7 +46,6 @@ public class SwerveModule {
     this.AbsOffset = absOffset;
 
     driveEncoder = driveMotor.getEncoder();
-    turningEncoder = turnMotor.getEncoder();
 
     // Set the distance per pulse for the drive encoder. 
     driveEncoder.setPositionConversionFactor(Constants.ModuleConstants.DRIVE_METERS_PER_ENCODER_REV);
@@ -57,15 +54,16 @@ public class SwerveModule {
     driveEncoder.setVelocityConversionFactor(Constants.ModuleConstants.DRIVE_ENCODER_MPS_PER_REV);
 
     // Set the angle in radians per pulse for the turning encoder.
-    turningEncoder.setPositionConversionFactor(Constants.ModuleConstants.RADIANS_PER_ENCODER_REV);
+    //turningEncoder.setPositionConversionFactor(Constants.ModuleConstants.RADIANS_PER_ENCODER_REV);
+    this.absEncoder.configSensorDirection(CANCoderDirection);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
     turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
-    this.absEncoder.configSensorDirection(CANCoderDirection);
+    
 
-    zeroModule();
+    //zeroModule();
   }
 
   /**
@@ -74,7 +72,7 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(driveEncoder.getVelocity(), new Rotation2d(turningEncoder.getPosition()));
+    return new SwerveModuleState(driveEncoder.getVelocity(), new Rotation2d(getAbsPosition()));
   }
 
   /**
@@ -83,18 +81,16 @@ public class SwerveModule {
    * @return The current position of the module.
    */
   public SwerveModulePosition getPosition() {
-    return new SwerveModulePosition(driveEncoder.getPosition(), new Rotation2d(turningEncoder.getPosition()));
+    return new SwerveModulePosition(driveEncoder.getPosition(), new Rotation2d(getAbsPosition()));
   }
 
   public void zeroModule() {
-    resetAngleToAbsolute();
+    //resetAngleToAbsolute();
     driveEncoder.setPosition(0);
   }
 
-  //FIXME: Check units (Maybe use Units.degreesToRadians()?)
-  public void resetAngleToAbsolute() {
-    double angle = absEncoder.getAbsolutePosition() - AbsOffset;
-    turningEncoder.setPosition(Units.degreesToRadians(angle));
+  public double getAbsPosition() {
+    return absEncoder.getAbsolutePosition() - AbsOffset;
   }
 
   /**
@@ -104,7 +100,7 @@ public class SwerveModule {
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(turningEncoder.getPosition()));
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(getAbsPosition()));
 
     // Calculate the drive output from the drive PID controller.
     final double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity(), state.speedMetersPerSecond);
@@ -112,7 +108,7 @@ public class SwerveModule {
     final double driveFeedforward = this.driveFeedforward.calculate(state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = turningPIDController.calculate(turningEncoder.getPosition(), state.angle.getRadians());
+    final double turnOutput = turningPIDController.calculate(getAbsPosition(), state.angle.getRadians());
 
     final double turnFeedforward = this.turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);
 
