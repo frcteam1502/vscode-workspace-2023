@@ -36,11 +36,14 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("FrontRight Encoder", Constants.Motors.DRIVE_FRONT_RIGHT.getEncoder().getPosition());
     SmartDashboard.putNumber("BackLeft Encoder", Constants.Motors.DRIVE_BACK_LEFT.getEncoder().getPosition());
     SmartDashboard.putNumber("BackRight Encoder", Constants.Motors.DRIVE_BACK_RIGHT.getEncoder().getPosition());
-    SmartDashboard.putNumber("FrontLeft Angle", Constants.Motors.ANGLE_FRONT_LEFT.getEncoder().getPosition());
-    SmartDashboard.putNumber("FrontRight Angle", Constants.Motors.ANGLE_FRONT_RIGHT.getEncoder().getPosition());
-    SmartDashboard.putNumber("BackLeft Angle", Constants.Motors.ANGLE_BACK_LEFT.getEncoder().getPosition());
-    SmartDashboard.putNumber("BackRight Angle", Constants.Motors.ANGLE_BACK_RIGHT.getEncoder().getPosition());
+
+    SmartDashboard.putNumber("FrontLeft Angle", Constants.CANCoders.FRONT_LEFT_CAN_CODER.getAbsolutePosition());
+    SmartDashboard.putNumber("FrontRight Angle", Constants.CANCoders.FRONT_RIGHT_CAN_CODER.getAbsolutePosition());
+    SmartDashboard.putNumber("BackLeft Angle", Constants.CANCoders.BACK_LEFT_CAN_CODER.getAbsolutePosition());
+    SmartDashboard.putNumber("BackRight Angle", Constants.CANCoders.BACK_RIGHT_CAN_CODER.getAbsolutePosition());
+
     SmartDashboard.putNumber("joystick", Constants.Joysticks.DRIVE_CONTROLLER.getLeftX());
+
     SmartDashboard.putNumber("Angle", Constants.gyro.getYaw());
   }
 

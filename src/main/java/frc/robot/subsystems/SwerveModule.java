@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -72,7 +73,7 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(driveEncoder.getVelocity(), new Rotation2d(getAbsPosition()));
+    return new SwerveModuleState(driveEncoder.getVelocity(), new Rotation2d(getAbsPosition(true)));
   }
 
   /**
@@ -81,7 +82,7 @@ public class SwerveModule {
    * @return The current position of the module.
    */
   public SwerveModulePosition getPosition() {
-    return new SwerveModulePosition(driveEncoder.getPosition(), new Rotation2d(getAbsPosition()));
+    return new SwerveModulePosition(driveEncoder.getPosition(), new Rotation2d(getAbsPosition(true)));
   }
 
   public void zeroModule() {
@@ -89,8 +90,9 @@ public class SwerveModule {
     driveEncoder.setPosition(0);
   }
 
-  public double getAbsPosition() {
-    return absEncoder.getAbsolutePosition() - AbsOffset;
+  public double getAbsPosition(boolean inRadians) {
+    if (inRadians) return Units.degreesToRadians(getAbsPosition(false));
+    else return absEncoder.getAbsolutePosition() - AbsOffset;
   }
 
   /**
@@ -100,7 +102,7 @@ public class SwerveModule {
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(getAbsPosition()));
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(getAbsPosition(true)));
 
     // Calculate the drive output from the drive PID controller.
     final double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity(), state.speedMetersPerSecond);
@@ -108,7 +110,7 @@ public class SwerveModule {
     final double driveFeedforward = this.driveFeedforward.calculate(state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = turningPIDController.calculate(getAbsPosition(), state.angle.getRadians());
+    final double turnOutput = turningPIDController.calculate(getAbsPosition(true), state.angle.getRadians());
 
     final double turnFeedforward = this.turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);
 

@@ -14,10 +14,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public final class Constants {
 
   /** TODO:
-   * 
-   * Check if working: Gyro, CANCoders
-   * 
-   * Configure CANCoders: Offset, direction
+   *
+   * Configure CANCoders: Direction
    * 
    * Configure Motor Direction
    * 
@@ -56,25 +54,25 @@ public final class Constants {
     //Front Left CANCoder
     public static final CANCoder FRONT_LEFT_CAN_CODER = new CANCoder(CanConstants.FRONT_LEFT_MODULE_STEER_CANCODER);
     public static final boolean FRONT_LEFT_CAN_CODER_DIRECTION = false;
-    public static final double FRONT_LEFT_CAN_CODER_OFFSET = 313.09; /*FIXME: reading of front left CANCoder (in degrees) 
+    public static final double FRONT_LEFT_CAN_CODER_OFFSET = 2.72; /*FIXME: reading of front left CANCoder (in degrees) 
     after manually setting wheel to forward (axle bolt head to the right side of the robot)*/
 
     //Front Right CANCoder
     public static final CANCoder FRONT_RIGHT_CAN_CODER = new CANCoder(CanConstants.FRONT_RIGHT_MODULE_STEER_CANCODER);
     public static final boolean FRONT_RIGHT_CAN_CODER_DIRECTION = false;
-    public static final double FRONT_RIGHT_CAN_CODER_OFFSET = 313.09; /*FIXME: reading of front left CANCoder (in degrees) 
+    public static final double FRONT_RIGHT_CAN_CODER_OFFSET = 327.3; /*FIXME: reading of front left CANCoder (in degrees) 
     after manually setting wheel to forward (axle bolt head to the right side of the robot)*/
 
     //Back Left CANCoder
     public static final CANCoder BACK_LEFT_CAN_CODER = new CANCoder(CanConstants.BACK_LEFT_MODULE_STEER_CANCODER);
     public static final boolean BACK_LEFT_CAN_CODER_DIRECTION = false;
-    public static final double BACK_LEFT_CAN_CODER_OFFSET = 313.09; /*FIXME: reading of front left CANCoder (in degrees) 
+    public static final double BACK_LEFT_CAN_CODER_OFFSET = 160.5; /*FIXME: reading of front left CANCoder (in degrees) 
     after manually setting wheel to forward (axle bolt head to the right side of the robot)*/
 
     //Back Right CANCoder
     public static final CANCoder BACK_RIGHT_CAN_CODER = new CANCoder(CanConstants.BACK_RIGHT_MODULE_STEER_CANCODER);
     public static final boolean BACK_RIGHT_CAN_CODER_DIRECTION = false;
-    public static final double BACK_RIGHT_CAN_CODER_OFFSET = 313.09; /*FIXME: reading of front left CANCoder (in degrees) 
+    public static final double BACK_RIGHT_CAN_CODER_OFFSET = 276.1; /*FIXME: reading of front left CANCoder (in degrees) 
     after manually setting wheel to forward (axle bolt head to the right side of the robot)*/
   }
 
@@ -89,8 +87,8 @@ public final class Constants {
     //Drive Motors
     public static final boolean FrontLeftDriveMotorReversed = true;
     public static final boolean BackLeftDriveMotorReversed = true;
-    public static final boolean FrontRightDriveMotorReversed = true;
-    public static final boolean BackRightDriveMotorReversed = true;
+    public static final boolean FrontRightDriveMotorReversed = false;
+    public static final boolean BackRightDriveMotorReversed = false;
 
     //Wheel Base
     public static final double WHEEL_BASE_WIDTH = Units.inchesToMeters(29.5); //FIXME: Change actual values

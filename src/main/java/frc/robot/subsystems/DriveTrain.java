@@ -140,7 +140,7 @@ public class DriveTrain extends SubsystemBase{
     Motors.ANGLE_BACK_LEFT.setInverted(Constants.DriveConstants.BackLeftTurningMotorReversed);
     Motors.ANGLE_BACK_RIGHT.setInverted(Constants.DriveConstants.BackRightTurningMotorReversed);
     Motors.DRIVE_FRONT_LEFT.setInverted(Constants.DriveConstants.FrontLeftDriveMotorReversed);
-    Motors.DRIVE_FRONT_RIGHT.setInverted(Constants.DriveConstants.FrontLeftDriveMotorReversed);
+    Motors.DRIVE_FRONT_RIGHT.setInverted(Constants.DriveConstants.FrontRightDriveMotorReversed);
     Motors.DRIVE_BACK_LEFT.setInverted(Constants.DriveConstants.BackLeftDriveMotorReversed);
     Motors.DRIVE_BACK_RIGHT.setInverted(Constants.DriveConstants.BackRightDriveMotorReversed);
   }
