@@ -41,7 +41,7 @@ public class SwerveModule {
   // private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(1, 3);
   // private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
-  public SwerveModule(CANSparkMax driveMotor, CANSparkMax turnMotor, CANCoder absEncoder, double absOffset) {
+  public SwerveModule(CANSparkMax driveMotor, CANSparkMax turnMotor, CANCoder absEncoder, double absOffset, boolean CANCoderDirection) {
     this.driveMotor = driveMotor;
     this.turningMotor = turnMotor;
     this.absEncoder = absEncoder;
@@ -62,6 +62,8 @@ public class SwerveModule {
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
     turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+
+    this.absEncoder.configSensorDirection(CANCoderDirection);
 
     zeroModule();
   }

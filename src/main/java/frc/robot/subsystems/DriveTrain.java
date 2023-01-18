@@ -11,12 +11,32 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.Motors;
 
 public class DriveTrain extends SubsystemBase{
-  private final SwerveModule frontLeft;
-  private final SwerveModule frontRight;
-  private final SwerveModule backLeft;
-  private final SwerveModule backRight;
+  private final SwerveModule frontLeft = new SwerveModule(
+    Motors.DRIVE_FRONT_LEFT, Motors.ANGLE_FRONT_LEFT, 
+    Constants.CANCoders.FRONT_LEFT_CAN_CODER, 
+    Constants.CANCoders.FRONT_LEFT_CAN_CODER_OFFSET,
+    Constants.CANCoders.FRONT_LEFT_CAN_CODER_DIRECTION);
+
+  private final SwerveModule frontRight = new SwerveModule(
+    Motors.DRIVE_FRONT_RIGHT, Motors.ANGLE_FRONT_RIGHT, 
+    Constants.CANCoders.FRONT_RIGHT_CAN_CODER, 
+    Constants.CANCoders.FRONT_RIGHT_CAN_CODER_OFFSET,
+    Constants.CANCoders.FRONT_RIGHT_CAN_CODER_DIRECTION);
+
+  private final SwerveModule backLeft = new SwerveModule(
+    Motors.DRIVE_BACK_LEFT, Motors.ANGLE_BACK_LEFT, 
+    Constants.CANCoders.BACK_LEFT_CAN_CODER, 
+    Constants.CANCoders.BACK_LEFT_CAN_CODER_OFFSET,
+    Constants.CANCoders.BACK_LEFT_CAN_CODER_DIRECTION);
+
+  private final SwerveModule backRight = new SwerveModule(
+    Motors.DRIVE_BACK_RIGHT, Motors.ANGLE_BACK_RIGHT, 
+    Constants.CANCoders.BACK_RIGHT_CAN_CODER, 
+    Constants.CANCoders.BACK_RIGHT_CAN_CODER_OFFSET,
+    Constants.CANCoders.BACK_RIGHT_CAN_CODER_DIRECTION);
 
   private final Pigeon2 gyro = Constants.gyro;
 
@@ -24,12 +44,7 @@ public class DriveTrain extends SubsystemBase{
 
   private final SwerveDriveOdometry odometry;
 
-  public DriveTrain(SwerveModule frontLeft, SwerveModule frontRight, SwerveModule backLeft, SwerveModule backRight) {
-    this.frontLeft = frontLeft;
-    this.frontRight = frontRight;
-    this.backLeft = backLeft;
-    this.backRight = backRight;
-
+  public DriveTrain() {
     this.odometry = new SwerveDriveOdometry(
       kinematics,
       getGyroRotation2d(),
@@ -41,6 +56,8 @@ public class DriveTrain extends SubsystemBase{
       });
 
       reset();
+
+      ConfigMotorDirections();
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
@@ -116,4 +133,15 @@ public class DriveTrain extends SubsystemBase{
     resetGyro();
     resetModules();
   }  
+
+  public void ConfigMotorDirections() {
+    Motors.ANGLE_FRONT_LEFT.setInverted(Constants.DriveConstants.FrontLeftTurningMotorReversed);
+    Motors.ANGLE_FRONT_RIGHT.setInverted(Constants.DriveConstants.FrontRightTurningMotorReversed);
+    Motors.ANGLE_BACK_LEFT.setInverted(Constants.DriveConstants.BackLeftTurningMotorReversed);
+    Motors.ANGLE_BACK_RIGHT.setInverted(Constants.DriveConstants.BackRightTurningMotorReversed);
+    Motors.DRIVE_FRONT_LEFT.setInverted(Constants.DriveConstants.FrontLeftDriveMotorReversed);
+    Motors.DRIVE_FRONT_RIGHT.setInverted(Constants.DriveConstants.FrontLeftDriveMotorReversed);
+    Motors.DRIVE_BACK_LEFT.setInverted(Constants.DriveConstants.BackLeftDriveMotorReversed);
+    Motors.DRIVE_BACK_RIGHT.setInverted(Constants.DriveConstants.BackRightDriveMotorReversed);
+  }
 }
