@@ -142,25 +142,25 @@ public final class Constants {
 
     public static final double DRIVE_ENCODER_MPS_PER_REV = DRIVE_METERS_PER_ENCODER_REV / 60; 
 
-    public static final double MAX_METERS_PER_SECOND = 5600 * DRIVE_ENCODER_MPS_PER_REV;
+    public static final double MAX_METERS_PER_SECOND = 4.4; //5600 * DRIVE_ENCODER_MPS_PER_REV;
   
     public static final double TURNING_DEGREES_PER_ENCODER_REV = 360 / STEER_GEAR_RATIO;
 
     public static final double RADIANS_PER_ENCODER_REV = TURNING_DEGREES_PER_ENCODER_REV * (Math.PI/180);
 
     // max turn speed = (5400/ 21.43) revs per min 240 revs per min 4250 deg per min
-    public static final double MODULE_TURN_PID_CONTROLLER_P = .5;
+    public static final double MODULE_TURN_PID_CONTROLLER_P = 1.0;
 
-    public static final double MODULE_DRIVE_PID_CONTROLLER_P = .5;
+    public static final double MODULE_DRIVE_PID_CONTROLLER_P = 1.0;
 
     // //FIXME: use sysid on robot
     // public static double ksVolts = .055;
     // public static double kvVoltSecondsPerMeter = .2;
     // public static double kaVoltSecondsSquaredPerMeter = .02;
 
-    public static double MAX_MODULE_ROTATION_DEGREES_PER_SECOND = 90; // deg per sec
+    public static final double MAX_MODULE_ROTATION_DEGREES_PER_SECOND = 360; //90; // deg per sec
 
-    public static double MAX_MODULE_ROTATION_DEGREES_PER_SECOND_PER_SECOND = 90;
+    public static final double MAX_MODULE_ROTATION_DEGREES_PER_SECOND_PER_SECOND = 90;
   }
 
   public static final class Motors {

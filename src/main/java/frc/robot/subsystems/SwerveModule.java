@@ -30,8 +30,8 @@ public class SwerveModule {
           0,
           0,
           new TrapezoidProfile.Constraints(
-            Constants.ModuleConstants.MAX_MODULE_ROTATION_DEGREES_PER_SECOND, 
-            Constants.ModuleConstants.MAX_MODULE_ROTATION_DEGREES_PER_SECOND_PER_SECOND));
+            Units.degreesToRadians(Constants.ModuleConstants.MAX_MODULE_ROTATION_DEGREES_PER_SECOND), 
+            Units.degreesToRadians(Constants.ModuleConstants.MAX_MODULE_ROTATION_DEGREES_PER_SECOND_PER_SECOND)));
 
   //FIXME: Get actual values
   private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(0, 0);
@@ -62,9 +62,6 @@ public class SwerveModule {
     // to be continuous.
     turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
-    
-
-    //zeroModule();
   }
 
   /**
@@ -73,7 +70,7 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(driveEncoder.getVelocity(), new Rotation2d(getAbsPosition(true)));
+    return new SwerveModuleState(driveEncoder.getVelocity(), new Rotation2d(getAbsPositionZeroed(true)));
   }
 
   /**
@@ -82,16 +79,19 @@ public class SwerveModule {
    * @return The current position of the module.
    */
   public SwerveModulePosition getPosition() {
-    return new SwerveModulePosition(driveEncoder.getPosition(), new Rotation2d(getAbsPosition(true)));
+    return new SwerveModulePosition(driveEncoder.getPosition(), new Rotation2d(getAbsPositionZeroed(true)));
   }
 
   public void zeroModule() {
-    //resetAngleToAbsolute();
     driveEncoder.setPosition(0);
   }
 
-  public double getAbsPosition(boolean inRadians) {
-    if (inRadians) return Units.degreesToRadians(getAbsPosition(false));
+  public double getAbsPositionZeroed(boolean inRadians) {
+    if (inRadians) {
+      double radians = Units.degreesToRadians(getAbsPositionZeroed(false));
+      if(radians <= Math.PI) return radians;
+      else return radians - (2 * Math.PI);
+    } 
     else return absEncoder.getAbsolutePosition() - AbsOffset;
   }
 
@@ -102,7 +102,7 @@ public class SwerveModule {
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(getAbsPosition(true)));
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(getAbsPositionZeroed(true)));
 
     // Calculate the drive output from the drive PID controller.
     final double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity(), state.speedMetersPerSecond);
@@ -110,7 +110,7 @@ public class SwerveModule {
     final double driveFeedforward = this.driveFeedforward.calculate(state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = turningPIDController.calculate(getAbsPosition(true), state.angle.getRadians());
+    final double turnOutput = turningPIDController.calculate(getAbsPositionZeroed(true), state.angle.getRadians());
 
     final double turnFeedforward = this.turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);
 

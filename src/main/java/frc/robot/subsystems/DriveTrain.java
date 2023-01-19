@@ -14,6 +14,10 @@ import frc.robot.Constants;
 import frc.robot.Constants.Motors;
 
 public class DriveTrain extends SubsystemBase{
+  public static double xSpeed = 0;
+  public static double ySpeed = 0;
+  public static double turnSpeed = 0;
+
   private final SwerveModule frontLeft = new SwerveModule(
     Motors.DRIVE_FRONT_LEFT, Motors.ANGLE_FRONT_LEFT, 
     Constants.CANCoders.FRONT_LEFT_CAN_CODER, 
@@ -61,6 +65,9 @@ public class DriveTrain extends SubsystemBase{
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    this.xSpeed = xSpeed;
+    this.ySpeed = ySpeed;
+    turnSpeed = rot;
     var swerveModuleStates =
         kinematics.toSwerveModuleStates(
             fieldRelative
