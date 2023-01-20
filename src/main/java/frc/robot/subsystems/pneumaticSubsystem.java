@@ -8,29 +8,35 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.Constants.PneumaticsConstants;
 public class pneumaticSubsystem extends SubsystemBase {
-  public DoubleSolenoid DoublePH = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, frc.robot.Constants.PneumaticsConstants.kIn,frc.robot.Constants.PneumaticsConstants.kOut);
+  public DoubleSolenoid DoublePH = new DoubleSolenoid(1, PneumaticsModuleType.REVPH,frc.robot.Constants.PneumaticsConstants.kforwardchannel,frc.robot.Constants.PneumaticsConstants.kreversechannel);
   public Compressor phCompressor = new Compressor(1, PneumaticsModuleType.REVPH);
 
   public pneumaticSubsystem() {}
     
   public void Toggle() {
     DoublePH.toggle();
-   }
+  }
 
-   public void setIn() {
-    DoublePH.set(kIn);
-   }
+  public void setIn() {
+    DoublePH.set(Value.kReverse);
+  }  
+  
+  public void setOut() {
+      DoublePH.set(Value.kForward);
+  }
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
    *  boolean enabled = pcmCompressor.enabled();
 boolean pressureSwitch = pcmCompressor.getPressureSwitchValue();
 
    * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  boolean enabled = phCompressor.enabled();
+  
+   boolean enabled = phCompressor.enabled();
   boolean pressureSwitch = phCompressor.getPressureSwitchValue();
+  */
   public boolean exampleCondition() {
     // Query some boolean state, such as a digital sensor.
     //DoublePH.set(kOff);

@@ -45,8 +45,8 @@ public static final class XboxButtons {
 
   public static class PneumaticsConstants{
 // Forward piston solenoid value
-    public static final int kIn = 0;
-    public static final int kOut = 15;
+    public static final int kreversechannel = 0;
+    public static final int kforwardchannel = 15;
   } }
   
     

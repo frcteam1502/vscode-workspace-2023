@@ -28,12 +28,12 @@ public class pneumaticCommand extends CommandBase {
   public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    DoublePHSubsystem.Toggle();
+  
+  public void MoveIn() {
+    DoublePHSubsystem.setIn();
   }
-  public void Toggle() {
-    DoublePHSubsystem.Toggle();
+  public void MoveOut() {
+    DoublePHSubsystem.setOut();
   }
   // Called once the command ends or is interrupted.
   @Override
