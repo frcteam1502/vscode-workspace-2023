@@ -10,13 +10,14 @@
 * Jonathan Berent (Mentor)
 
 ## Laptop Assignments
-Laptop | Name | User(s)
---- | --- | ---
-Laptop-1 | SHORT CIRCUIT | James
-Laptop-2 | STATIC SHOCK  | Hung
-Laptop-3 | LOOSE SCREWS  | .
-Laptop-4 | GLITCH        | .
-Laptop-5 | CRASH         | Deven
-Laptop-6 | GREMLINS      | Emily
+Laptop   | Name          | User(s) | status
+---      | ---           | ---     | ---
+Laptop-1 | SHORT CIRCUIT | James   | James, Hung - cred fail
+Laptop-2 | STATIC SHOCK  | Hung    | Hung
+Laptop-3 | LOOSE SCREWS  | .       |
+Laptop-4 | GLITCH        | .       |
+Laptop-5 | CRASH         | Deven   | no cred, no repo
+Laptop-6 | GREMLINS      | Emily   | no cred
 
-Laptop-1 test commit
+* no cred: no credentials for frcteam1502
+* no repo: no repos for frcteam1502
