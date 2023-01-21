@@ -6,6 +6,7 @@
 
 **IMPORTANT:** When copying the code for use, do not copy the back ticks.
 
+
 # Laptops
 * Laptop-1 - SHORT CIRCUIT
 * Laptop-2 - STATIC SHOCK
