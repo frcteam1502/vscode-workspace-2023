@@ -12,7 +12,7 @@
 ## Laptop Assignments
 Laptop   | Name          | User(s) | status
 ---      | ---           | ---     | ---
-Laptop-1 | SHORT CIRCUIT | James   | James, Hung - cred fail
+Laptop-1 | SHORT CIRCUIT | James   | James, Hung - GOOD
 Laptop-2 | STATIC SHOCK  | Hung    | Hung
 Laptop-3 | LOOSE SCREWS  | .       |
 Laptop-4 | GLITCH        | .       |
