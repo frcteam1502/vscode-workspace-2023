@@ -15,6 +15,15 @@
 * Laptop-5 - CRASH
 * Laptop-6 - GREMLINS
 
+# WPI Lib Preparation
+
+# GitHub Integration
+
+sync laptop w. github, e.g., login and save credentials
+
+## Verify
+1. open "Windows Credential Manager"
+
 # VSCode Personalization
 For shared laptops, it is desirable that the code author gets credit for their `commits`.
 One way to do this (without muiltiple user accounts and/or personal folders) is to set an environment
