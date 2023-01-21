@@ -8,7 +8,7 @@
 
 
 # Laptops
-* Laptop-1 - SHORT CIRCUIT - C:\Users\frcte\Repose\vscode-workspace-2023 - MS account
+* Laptop-1 - SHORT CIRCUIT
 * Laptop-2 - STATIC SHOCK
 * Laptop-3 - LOOSE SCREWS
 * Laptop-4 - GLITCH
