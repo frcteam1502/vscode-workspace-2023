@@ -9,14 +9,26 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Motors;
 
 public class DriveTrain extends SubsystemBase{
-  public static double xSpeed = 0;
-  public static double ySpeed = 0;
-  public static double turnSpeed = 0;
+  //Debug variables - CL
+  public static double fwdSpeedCmd    = 0;
+  public static double strafeSpeedCmd = 0;
+  public static double turnSpeedCmd   = 0;
+
+  public static double fl_speed = 0;
+  public static double fr_speed = 0;
+  public static double rl_speed = 0;
+  public static double rr_speed = 0;
+
+  public static double fl_encoder_speed = 0;
+  public static double fr_encoder_speed = 0;
+  public static double rl_encoder_speed = 0;
+  public static double rr_encoder_speed = 0;
 
   private final SwerveModule frontLeft = new SwerveModule(
     Motors.DRIVE_FRONT_LEFT, Motors.ANGLE_FRONT_LEFT, 
@@ -43,6 +55,8 @@ public class DriveTrain extends SubsystemBase{
     Constants.CANCoders.BACK_RIGHT_CAN_CODER_DIRECTION);
 
   private final Pigeon2 gyro = Constants.gyro;
+  private final AnalogGyro analogGyro = new AnalogGyro(0);
+
 
   private final SwerveDriveKinematics kinematics = Constants.DriveConstants.KINEMATICS;
 
@@ -65,19 +79,32 @@ public class DriveTrain extends SubsystemBase{
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    this.xSpeed = xSpeed;
-    this.ySpeed = ySpeed;
-    turnSpeed = rot;
+    //this.xSpeed = xSpeed;
+    //this.ySpeed = ySpeed;
+    //turnSpeed = rot;
+    
+    //Log commanded speed inputs
+    fwdSpeedCmd = xSpeed;
+    strafeSpeedCmd = ySpeed;
+    turnSpeedCmd = rot;
+
     var swerveModuleStates =
         kinematics.toSwerveModuleStates(
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getGyroRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.ModuleConstants.MAX_METERS_PER_SECOND);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND);
+    
+    fl_speed = swerveModuleStates[0].speedMetersPerSecond;
+    fr_speed = swerveModuleStates[1].speedMetersPerSecond;
+    rl_speed = swerveModuleStates[2].speedMetersPerSecond;
+    rr_speed = swerveModuleStates[3].speedMetersPerSecond;
+  
     frontLeft.setDesiredState(swerveModuleStates[0]);
     frontRight.setDesiredState(swerveModuleStates[1]);
     backLeft.setDesiredState(swerveModuleStates[2]);
     backRight.setDesiredState(swerveModuleStates[3]);
+
   }
 
   public void updateOdometry() {

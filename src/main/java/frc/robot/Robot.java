@@ -35,16 +35,21 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     //Drive Motor Encoders
-    SmartDashboard.putNumber("FrontLeft Encoder", Constants.Motors.DRIVE_FRONT_LEFT.getEncoder().getPosition());
-    SmartDashboard.putNumber("FrontRight Encoder", Constants.Motors.DRIVE_FRONT_RIGHT.getEncoder().getPosition());
-    SmartDashboard.putNumber("BackLeft Encoder", Constants.Motors.DRIVE_BACK_LEFT.getEncoder().getPosition());
-    SmartDashboard.putNumber("BackRight Encoder", Constants.Motors.DRIVE_BACK_RIGHT.getEncoder().getPosition());
+    SmartDashboard.putNumber("FL Encoder Pos", Constants.Motors.DRIVE_FRONT_LEFT.getEncoder().getPosition());
+    SmartDashboard.putNumber("FR Encoder Pos", Constants.Motors.DRIVE_FRONT_RIGHT.getEncoder().getPosition());
+    SmartDashboard.putNumber("RL Encoder Pos", Constants.Motors.DRIVE_BACK_LEFT.getEncoder().getPosition());
+    SmartDashboard.putNumber("RR Encoder Pos", Constants.Motors.DRIVE_BACK_RIGHT.getEncoder().getPosition());
+
+    SmartDashboard.putNumber("FL Encoder Vel", Constants.Motors.DRIVE_FRONT_LEFT.getEncoder().getVelocity());
+    SmartDashboard.putNumber("FR Encoder Vel", Constants.Motors.DRIVE_FRONT_RIGHT.getEncoder().getVelocity());
+    SmartDashboard.putNumber("RL Encoder Vel", Constants.Motors.DRIVE_BACK_LEFT.getEncoder().getVelocity());
+    SmartDashboard.putNumber("RR Encoder Vel", Constants.Motors.DRIVE_BACK_RIGHT.getEncoder().getVelocity());
 
     //Drive Motor Volts
-    SmartDashboard.putNumber("FrontLeft Volt", Constants.Motors.DRIVE_FRONT_LEFT.getBusVoltage());
-    SmartDashboard.putNumber("FrontRight Volt", Constants.Motors.DRIVE_FRONT_RIGHT.getBusVoltage());
-    SmartDashboard.putNumber("BackLeft Volt", Constants.Motors.DRIVE_BACK_LEFT.getBusVoltage());
-    SmartDashboard.putNumber("BackRight Volt", Constants.Motors.DRIVE_BACK_RIGHT.getBusVoltage());
+    SmartDashboard.putNumber("FrontLeft Volt", Constants.Motors.DRIVE_FRONT_LEFT.getAppliedOutput());
+    SmartDashboard.putNumber("FrontRight Volt", Constants.Motors.DRIVE_FRONT_RIGHT.getAppliedOutput());
+    SmartDashboard.putNumber("BackLeft Volt", Constants.Motors.DRIVE_BACK_LEFT.getAppliedOutput());
+    SmartDashboard.putNumber("BackRight Volt", Constants.Motors.DRIVE_BACK_RIGHT.getAppliedOutput());
 
     //Turn Motor Angles
     SmartDashboard.putNumber("FrontLeft Angle", Constants.CANCoders.FRONT_LEFT_CAN_CODER.getAbsolutePosition());
@@ -59,17 +64,24 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("TurnBackRight Volt", Constants.Motors.ANGLE_BACK_RIGHT.getBusVoltage());
 
     //Joysticks
-    SmartDashboard.putNumber("joystick Throttle Y", Constants.Joysticks.DRIVE_CONTROLLER.getLeftX());
-    SmartDashboard.putNumber("joystick Throttle X", Constants.Joysticks.DRIVE_CONTROLLER.getLeftY());
+    SmartDashboard.putNumber("joystick Throttle Strafe", Constants.Joysticks.DRIVE_CONTROLLER.getLeftX());
+    SmartDashboard.putNumber("joystick Throttle Fwd", Constants.Joysticks.DRIVE_CONTROLLER.getLeftY());
     SmartDashboard.putNumber("joystick Turn", Constants.Joysticks.DRIVE_CONTROLLER.getRightX());
 
     //Gyro
     SmartDashboard.putNumber("Angle", Constants.gyro.getYaw());
 
     //Calc Power
-    SmartDashboard.putNumber("Drive X Power", DriveTrain.xSpeed);
-    SmartDashboard.putNumber("Drive Y Power", DriveTrain.ySpeed);
-    SmartDashboard.putNumber("Turn X Power", DriveTrain.turnSpeed);
+    SmartDashboard.putNumber("Foward Speed Cmd", DriveTrain.fwdSpeedCmd);
+    SmartDashboard.putNumber("Strafe Speed Cmd", DriveTrain.strafeSpeedCmd);
+    SmartDashboard.putNumber("Turn Speed Command", DriveTrain.turnSpeedCmd);
+
+    SmartDashboard.putNumber("FL Module Speed Cmd", DriveTrain.fl_speed);
+    SmartDashboard.putNumber("FR Module Speed Cmd", DriveTrain.fr_speed);
+    SmartDashboard.putNumber("RL Module Speed Cmd", DriveTrain.rl_speed);
+    SmartDashboard.putNumber("RR Module Speed Cmd", DriveTrain.rr_speed);
+
+
   }
 
   @Override

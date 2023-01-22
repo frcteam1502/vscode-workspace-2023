@@ -34,11 +34,11 @@ public class SwerveModule {
             Units.degreesToRadians(Constants.ModuleConstants.MAX_MODULE_ROTATION_DEGREES_PER_SECOND_PER_SECOND)));
 
   //FIXME: Get actual values
-  private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(0, 0);
-  private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(0, 0);
+  //private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(0, 0);
+  //private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(0, 0);
 
-  // private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(1, 3);
-  // private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
+  private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(1, 3);
+  private final SimpleMotorFeedforward turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
   public SwerveModule(CANSparkMax driveMotor, CANSparkMax turnMotor, CANCoder absEncoder, double absOffset, boolean CANCoderDirection) {
     this.driveMotor = driveMotor;
@@ -88,7 +88,7 @@ public class SwerveModule {
 
   public double getAbsPositionZeroed(boolean inRadians) {
     if (inRadians) {
-      double radians = Units.degreesToRadians(getAbsPositionZeroed(false));
+      double radians = Units.degreesToRadians(getAbsPositionZeroed(false));// is this the right API???
       if(radians <= Math.PI) return radians;
       else return radians - (2 * Math.PI);
     } 
@@ -105,6 +105,7 @@ public class SwerveModule {
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(getAbsPositionZeroed(true)));
 
     // Calculate the drive output from the drive PID controller.
+
     final double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity(), state.speedMetersPerSecond);
 
     final double driveFeedforward = this.driveFeedforward.calculate(state.speedMetersPerSecond);

@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Joysticks;
@@ -13,13 +14,14 @@ import frc.robot.subsystems.DriveTrain;
 
 public class DriveByController extends CommandBase {
   private final DriveTrain drive;
-  private final double maxTurnRadiansPerSecond = 
-    Units.degreesToRadians(Constants.ModuleConstants.MAX_MODULE_ROTATION_DEGREES_PER_SECOND);
-  private final double maxSpeedMetersPerSecond = 
-    Constants.ModuleConstants.MAX_METERS_PER_SECOND; 
+  private final double maxTurnRadiansPerSecond = Constants.DriveConstants.MAX_ROTATION_RADIANS_PER_SECOND;//Max ROBOT rotation
+  private final double maxSpeedMetersPerSecond = Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND;//Max ROBOT speed
   
-  private final SlewRateLimiter throttle = new SlewRateLimiter(2);
-  private final SlewRateLimiter throttleRad = new SlewRateLimiter(Math.PI);
+  //Setup SlewRateLimiters for fwd and strafe speeds
+  private final SlewRateLimiter fwdspeedlimiter = new SlewRateLimiter(2);
+  private final SlewRateLimiter strafespeedlimiter = new SlewRateLimiter(2);
+  private final SlewRateLimiter turnrateLimiter = new SlewRateLimiter(2
+  );
 
   public DriveByController(DriveTrain drive) {
     this.drive = drive;
@@ -32,11 +34,31 @@ public class DriveByController extends CommandBase {
 
   @Override
   public void execute() {
-    drive.drive(
-      controlSupplier(Joysticks.DRIVE_CONTROLLER.getLeftY(), maxSpeedMetersPerSecond), 
-      controlSupplier(Joysticks.DRIVE_CONTROLLER.getLeftX(), maxSpeedMetersPerSecond), 
-      controlSupplier(Joysticks.DRIVE_CONTROLLER.getRightX(), -maxTurnRadiansPerSecond), 
-      true);
+    
+    // Get the forward speed. We are inverting this because Xbox controllers return
+    // negative values when we push forward.
+    final var fwdSpeed =
+        -fwdspeedlimiter.calculate(MathUtil.applyDeadband(Joysticks.DRIVE_CONTROLLER.getLeftY(), 0.02))
+            * Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND;
+
+    // Get the sideways/strafe speed. We are inverting this because
+    // we want a positive value when we pull to the left. Xbox controllers
+    // return positive values when you pull to the right by default.
+    final var strafeSpeed =
+        -strafespeedlimiter.calculate(MathUtil.applyDeadband(Joysticks.DRIVE_CONTROLLER.getLeftX(), 0.02))
+            * Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND;
+
+    // Get the rate of angular rotation. We are inverting this because we want a
+    // positive value when we pull to the left (remember, CCW is positive in
+    // mathematics). Xbox controllers return positive values when you pull to
+    // the right by default.
+    final var rot =
+        -turnrateLimiter.calculate(MathUtil.applyDeadband(Joysticks.DRIVE_CONTROLLER.getRightX(), 0.02))
+            * Constants.DriveConstants.MAX_ROTATION_RADIANS_PER_SECOND;
+    
+    //Set up the Drivetrain setpoints
+    drive.drive(fwdSpeed, strafeSpeed, rot, true);
+
   }
 
   @Override

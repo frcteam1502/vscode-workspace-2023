@@ -110,9 +110,9 @@ public final class Constants {
         );
 
     //FIXME: fix values with a finished robot
-    public static final double MAX_SPEED_METERS_PER_SECOND = 5;
+    public static final double MAX_SPEED_METERS_PER_SECOND = 3;
 
-    public static final double MAX_ROTATION_RADIANS_PER_SECOND = Math.PI * 2;
+    public static final double MAX_ROTATION_RADIANS_PER_SECOND = Math.PI;
     public static final double MAX_ROTATION_RADIANS_PER_SECOND_PER_SECOND = Math.PI;
 
     // public static final double ksVolts = 1;
