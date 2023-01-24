@@ -8,12 +8,17 @@
 
 
 # Laptops
-* Laptop-1 - SHORT CIRCUIT
-* Laptop-2 - STATIC SHOCK
-* Laptop-3 - LOOSE SCREWS
-* Laptop-4 - GLITCH
-* Laptop-5 - CRASH
-* Laptop-6 - GREMLINS
+Laptop   | Nickname      | Account  |      | root
+---      |---            |---       |---   |---
+Laptop-1 | SHORT CIRCUIT | MS: DK   |      | C:\Users\frcte\Repose\vscode-workspace-2023
+Laptop-2 | STATIC SHOCK  | MS: DK   |      |
+Laptop-3 | LOOSE SCREWS  | MS       |      |
+Laptop-4 | GLITCH        |          |      |
+Laptop-5 | CRASH         |          | frct |
+Laptop-6 | GREMLINS      |          |      |
+
+MS:
+MS: DK -- Some laptops are sharing a desktop via OneDrive (intentional ?!?)
 
 # WPI Lib Preparation
 
