@@ -25,6 +25,11 @@ public class DriveTrain extends SubsystemBase{
   public static double rl_speed = 0;
   public static double rr_speed = 0;
 
+  public static double fl_angle = 0;
+  public static double fr_angle = 0;
+  public static double bl_angle = 0;
+  public static double br_angle = 0;
+
   public static double fl_encoder_speed = 0;
   public static double fr_encoder_speed = 0;
   public static double rl_encoder_speed = 0;
@@ -79,9 +84,6 @@ public class DriveTrain extends SubsystemBase{
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    //this.xSpeed = xSpeed;
-    //this.ySpeed = ySpeed;
-    //turnSpeed = rot;
     
     //Log commanded speed inputs
     fwdSpeedCmd = xSpeed;
@@ -99,6 +101,11 @@ public class DriveTrain extends SubsystemBase{
     fr_speed = swerveModuleStates[1].speedMetersPerSecond;
     rl_speed = swerveModuleStates[2].speedMetersPerSecond;
     rr_speed = swerveModuleStates[3].speedMetersPerSecond;
+
+    fl_angle = swerveModuleStates[0].angle.getDegrees();
+    fr_angle = swerveModuleStates[1].angle.getDegrees();
+    bl_angle = swerveModuleStates[2].angle.getDegrees();
+    br_angle = swerveModuleStates[3].angle.getDegrees();
   
     frontLeft.setDesiredState(swerveModuleStates[0]);
     frontRight.setDesiredState(swerveModuleStates[1]);

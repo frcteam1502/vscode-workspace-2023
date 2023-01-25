@@ -57,11 +57,17 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("BackLeft Angle", Constants.CANCoders.BACK_LEFT_CAN_CODER.getAbsolutePosition());
     SmartDashboard.putNumber("BackRight Angle", Constants.CANCoders.BACK_RIGHT_CAN_CODER.getAbsolutePosition());
 
+    //Turn Angle Commanded
+    SmartDashboard.putNumber("FL Angle Cmd", DriveTrain.fl_angle);
+    SmartDashboard.putNumber("FR Angle Cmd", DriveTrain.fr_angle);
+    SmartDashboard.putNumber("BL Angle Cmd", DriveTrain.bl_angle);
+    SmartDashboard.putNumber("BR Angle Cmd", DriveTrain.br_angle);
+
     //Turn Motor Volts
-    SmartDashboard.putNumber("TurnFrontLeft Volt", Constants.Motors.ANGLE_FRONT_LEFT.getBusVoltage());
-    SmartDashboard.putNumber("TurnFrontRight Volt", Constants.Motors.ANGLE_FRONT_RIGHT.getBusVoltage());
-    SmartDashboard.putNumber("TurnBackLeft Volt", Constants.Motors.ANGLE_BACK_LEFT.getBusVoltage());
-    SmartDashboard.putNumber("TurnBackRight Volt", Constants.Motors.ANGLE_BACK_RIGHT.getBusVoltage());
+    SmartDashboard.putNumber("TurnFrontLeft Volt", Constants.Motors.ANGLE_FRONT_LEFT.getAppliedOutput());
+    SmartDashboard.putNumber("TurnFrontRight Volt", Constants.Motors.ANGLE_FRONT_RIGHT.getAppliedOutput());
+    SmartDashboard.putNumber("TurnBackLeft Volt", Constants.Motors.ANGLE_BACK_LEFT.getAppliedOutput());
+    SmartDashboard.putNumber("TurnBackRight Volt", Constants.Motors.ANGLE_BACK_RIGHT.getAppliedOutput());
 
     //Joysticks
     SmartDashboard.putNumber("joystick Throttle Strafe", Constants.Joysticks.DRIVE_CONTROLLER.getLeftX());

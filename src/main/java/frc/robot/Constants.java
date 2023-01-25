@@ -54,26 +54,22 @@ public final class Constants {
     //Front Left CANCoder
     public static final CANCoder FRONT_LEFT_CAN_CODER = new CANCoder(CanConstants.FRONT_LEFT_MODULE_STEER_CANCODER);
     public static final boolean FRONT_LEFT_CAN_CODER_DIRECTION = false;
-    public static final double FRONT_LEFT_CAN_CODER_OFFSET = 2.72; /*FIXME: reading of front left CANCoder (in degrees) 
-    after manually setting wheel to forward (axle bolt head to the right side of the robot)*/
+    public static final double FRONT_LEFT_CAN_CODER_OFFSET = 3.4;
 
     //Front Right CANCoder
     public static final CANCoder FRONT_RIGHT_CAN_CODER = new CANCoder(CanConstants.FRONT_RIGHT_MODULE_STEER_CANCODER);
     public static final boolean FRONT_RIGHT_CAN_CODER_DIRECTION = false;
-    public static final double FRONT_RIGHT_CAN_CODER_OFFSET = 327.3; /*FIXME: reading of front left CANCoder (in degrees) 
-    after manually setting wheel to forward (axle bolt head to the right side of the robot)*/
+    public static final double FRONT_RIGHT_CAN_CODER_OFFSET = 152.4;
 
     //Back Left CANCoder
     public static final CANCoder BACK_LEFT_CAN_CODER = new CANCoder(CanConstants.BACK_LEFT_MODULE_STEER_CANCODER);
     public static final boolean BACK_LEFT_CAN_CODER_DIRECTION = false;
-    public static final double BACK_LEFT_CAN_CODER_OFFSET = 160.5; /*FIXME: reading of front left CANCoder (in degrees) 
-    after manually setting wheel to forward (axle bolt head to the right side of the robot)*/
+    public static final double BACK_LEFT_CAN_CODER_OFFSET = 211.46;
 
     //Back Right CANCoder
     public static final CANCoder BACK_RIGHT_CAN_CODER = new CANCoder(CanConstants.BACK_RIGHT_MODULE_STEER_CANCODER);
     public static final boolean BACK_RIGHT_CAN_CODER_DIRECTION = false;
-    public static final double BACK_RIGHT_CAN_CODER_OFFSET = 276.1; /*FIXME: reading of front left CANCoder (in degrees) 
-    after manually setting wheel to forward (axle bolt head to the right side of the robot)*/
+    public static final double BACK_RIGHT_CAN_CODER_OFFSET = 96.5; 
   }
 
   public static final class DriveConstants {
@@ -85,14 +81,14 @@ public final class Constants {
     public static final boolean BackRightTurningMotorReversed = true;
 
     //Drive Motors
-    public static final boolean FrontLeftDriveMotorReversed = true;
-    public static final boolean BackLeftDriveMotorReversed = true;
+    public static final boolean FrontLeftDriveMotorReversed = false;
+    public static final boolean BackLeftDriveMotorReversed = false;
     public static final boolean FrontRightDriveMotorReversed = false;
     public static final boolean BackRightDriveMotorReversed = false;
 
     //Wheel Base
-    public static final double WHEEL_BASE_WIDTH = Units.inchesToMeters(29.5); //FIXME: Change actual values
-    public static final double WHEEL_BASE_LENGTH = Units.inchesToMeters(29.5); //FIXME: Change actual values
+    public static final double WHEEL_BASE_WIDTH = Units.inchesToMeters(23); //FIXME: Change actual values
+    public static final double WHEEL_BASE_LENGTH = Units.inchesToMeters(26.5); //FIXME: Change actual values
 
     public static final boolean GYRO_REVERSED = true;
 
@@ -109,8 +105,7 @@ public final class Constants {
           BACK_RIGHT_MODULE
         );
 
-    //FIXME: fix values with a finished robot
-    public static final double MAX_SPEED_METERS_PER_SECOND = 3;
+    public static final double MAX_SPEED_METERS_PER_SECOND = 3/3;
 
     public static final double MAX_ROTATION_RADIANS_PER_SECOND = Math.PI;
     public static final double MAX_ROTATION_RADIANS_PER_SECOND_PER_SECOND = Math.PI;
@@ -149,7 +144,7 @@ public final class Constants {
     public static final double RADIANS_PER_ENCODER_REV = TURNING_DEGREES_PER_ENCODER_REV * (Math.PI/180);
 
     // max turn speed = (5400/ 21.43) revs per min 240 revs per min 4250 deg per min
-    public static final double MODULE_TURN_PID_CONTROLLER_P = 1.0;
+    public static final double MODULE_TURN_PID_CONTROLLER_P = 1.5;
 
     public static final double MODULE_DRIVE_PID_CONTROLLER_P = 1.0;
 
@@ -158,9 +153,9 @@ public final class Constants {
     // public static double kvVoltSecondsPerMeter = .2;
     // public static double kaVoltSecondsSquaredPerMeter = .02;
 
-    public static final double MAX_MODULE_ROTATION_DEGREES_PER_SECOND = 360; //90; // deg per sec
+    public static final double MAX_MODULE_ROTATION_DEGREES_PER_SECOND = 360;
 
-    public static final double MAX_MODULE_ROTATION_DEGREES_PER_SECOND_PER_SECOND = 90;
+    public static final double MAX_MODULE_ROTATION_DEGREES_PER_SECOND_PER_SECOND = 360;
   }
 
   public static final class Motors {
