@@ -5,6 +5,8 @@
 * James Haab
 * Deven Vaughn
 * Hung Nguyen
+* Sam Bieber
+* Brennan (Texas)
 * Marka Eberle (Mentor)
 * Chris Lesser (Mentor)
 * Jonathan Berent (Mentor)

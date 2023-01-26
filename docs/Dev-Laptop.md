@@ -64,6 +64,12 @@ For Example, to personalize a shortcut for "Hung Nguyen" in 2023, the shortcut w
 ```cmd
 C:\Windows\System32\cmd.exe /c "SET GIT_AUTHOR_NAME=Hung Nguyen && START /D^"C:\Users\Public\wpilib\2023\vscode^" Code.exe"
 ```
+## Standard VS Code
+Unknown what-all is in WPI-VSCode, but if you want/need to use Standard VSCode
+To set environment(like `JAVA_HOME`) from WPI lib:
+1. execute `. C:\Users\Public\wpilib\2023\frccode\frcvars2023.ps1` from PowerShell
+2. Confirm `$env:JAVA_HOME` has a valid path (e.g. C:\Users\Public\wpilib\2023\jdk)
+3. execute `.\gradlew.bat build` to confirm Java build works
 
 # TODO
 * [ ] Make a script to do the install for year 20XX
