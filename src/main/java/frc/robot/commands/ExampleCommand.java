@@ -23,7 +23,7 @@ public class ExampleCommand extends CommandBase {
 
   @Override
   public void execute() {
-    subsystem.moveMotor(Constants.Controllers.DRIVE_CONTROLLER.getLeftY());
+    //subsystem.moveMotor(Constants.Controllers.DRIVE_CONTROLLER.getLeftY());
   }
 
   @Override
