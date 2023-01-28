@@ -170,6 +170,9 @@ public final class Constants {
     public static final CANSparkMax ANGLE_FRONT_RIGHT = new CANSparkMax(7, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static final CANSparkMax ANGLE_BACK_LEFT = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static final CANSparkMax ANGLE_BACK_RIGHT = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
+
+    //intake
+    public static final CANSparkMax INTAKE_MOTOR = new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless);
 }
 
 public static final class Joysticks {
@@ -190,5 +193,10 @@ public static final class XboxButtons {
   public static final JoystickButton RIGHT_JOYSTICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 13);
   public static final JoystickButton LEFT_STICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 14);
   public static final JoystickButton RIGHT_STICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 15);
+}
+
+public static final class IntakeConstants {
+  public static final int FORWARD_CHANNEL = 1;
+  public static final int REVERSE_CHANNEL = 0;
 }
 }
