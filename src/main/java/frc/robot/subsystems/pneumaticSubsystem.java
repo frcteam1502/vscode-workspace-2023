@@ -35,7 +35,7 @@ public class pneumaticSubsystem extends SubsystemBase {
    */
   public boolean exampleCondition() {
     // Query some boolean state, such as a digital sensor.
-   boolean enabled = phCompressor.enabled();
+   //boolean enabled = phCompressor.enabled();
    boolean pressureSwitch = phCompressor.getPressureSwitchValue();
    double current = phCompressor.getCurrent();
     return false;
