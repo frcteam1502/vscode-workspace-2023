@@ -15,7 +15,7 @@ public class RobotContainer {
 
   private void configureBindings() {
     driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem));
-    frc.robot.Constants.XboxButtons.BUTTON_A.whileTrue(intakeSubsystem.runIntakeCommand());
+    frc.robot.Constants.XboxButtons.BUTTON_A.whileTrue(intakeSubsystem.runIntakeCommand()); // TODO: assign trigger
   }
 
   // public Command getAutonomousCommand() {
