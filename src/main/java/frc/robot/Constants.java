@@ -75,16 +75,16 @@ public final class Constants {
   public static final class DriveConstants {
     
     //Turning Motors
-    public static final boolean FrontLeftTurningMotorReversed = true;
-    public static final boolean BackLeftTurningMotorReversed = true;
-    public static final boolean FrontRightTurningMotorReversed = true;
-    public static final boolean BackRightTurningMotorReversed = true;
+    public static final boolean Front_Left_Turning_Motor_Reversed = true;
+    public static final boolean Back_Left_Turning_Motor_Reversed = true;
+    public static final boolean Front_Right_Turning_Motor_Reversed = true;
+    public static final boolean Back_Right_Turning_Motor_Reversed = true;
 
     //Drive Motors
-    public static final boolean FrontLeftDriveMotorReversed = false;
-    public static final boolean BackLeftDriveMotorReversed = false;
-    public static final boolean FrontRightDriveMotorReversed = false;
-    public static final boolean BackRightDriveMotorReversed = false;
+    public static final boolean Front_Left_Drive_Motor_Reversed = false;
+    public static final boolean Back_Left_Drive_Motor_Reversed = false;
+    public static final boolean Front_Right_Drive_Motor_Reversed = false;
+    public static final boolean Back_Right_Drive_Motor_Reversed = false;
 
     //Wheel Base
     public static final double WHEEL_BASE_WIDTH = Units.inchesToMeters(23); //FIXME: Change actual values

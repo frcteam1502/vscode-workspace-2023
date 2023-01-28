@@ -12,7 +12,10 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.Motors;
+import frc.robot.Constants.CANCoders;
+import static frc.robot.Constants.DriveConstants.*;
 
 public class DriveTrain extends SubsystemBase{
   //Debug variables - CL
@@ -37,33 +40,33 @@ public class DriveTrain extends SubsystemBase{
 
   private final SwerveModule frontLeft = new SwerveModule(
     Motors.DRIVE_FRONT_LEFT, Motors.ANGLE_FRONT_LEFT, 
-    Constants.CANCoders.FRONT_LEFT_CAN_CODER, 
-    Constants.CANCoders.FRONT_LEFT_CAN_CODER_OFFSET,
-    Constants.CANCoders.FRONT_LEFT_CAN_CODER_DIRECTION);
+    CANCoders.FRONT_LEFT_CAN_CODER, 
+    CANCoders.FRONT_LEFT_CAN_CODER_OFFSET,
+    CANCoders.FRONT_LEFT_CAN_CODER_DIRECTION);
 
   private final SwerveModule frontRight = new SwerveModule(
     Motors.DRIVE_FRONT_RIGHT, Motors.ANGLE_FRONT_RIGHT, 
-    Constants.CANCoders.FRONT_RIGHT_CAN_CODER, 
-    Constants.CANCoders.FRONT_RIGHT_CAN_CODER_OFFSET,
-    Constants.CANCoders.FRONT_RIGHT_CAN_CODER_DIRECTION);
+    CANCoders.FRONT_RIGHT_CAN_CODER, 
+    CANCoders.FRONT_RIGHT_CAN_CODER_OFFSET,
+    CANCoders.FRONT_RIGHT_CAN_CODER_DIRECTION);
 
   private final SwerveModule backLeft = new SwerveModule(
     Motors.DRIVE_BACK_LEFT, Motors.ANGLE_BACK_LEFT, 
-    Constants.CANCoders.BACK_LEFT_CAN_CODER, 
-    Constants.CANCoders.BACK_LEFT_CAN_CODER_OFFSET,
-    Constants.CANCoders.BACK_LEFT_CAN_CODER_DIRECTION);
+    CANCoders.BACK_LEFT_CAN_CODER, 
+    CANCoders.BACK_LEFT_CAN_CODER_OFFSET,
+    CANCoders.BACK_LEFT_CAN_CODER_DIRECTION);
 
   private final SwerveModule backRight = new SwerveModule(
     Motors.DRIVE_BACK_RIGHT, Motors.ANGLE_BACK_RIGHT, 
-    Constants.CANCoders.BACK_RIGHT_CAN_CODER, 
-    Constants.CANCoders.BACK_RIGHT_CAN_CODER_OFFSET,
-    Constants.CANCoders.BACK_RIGHT_CAN_CODER_DIRECTION);
+    CANCoders.BACK_RIGHT_CAN_CODER, 
+    CANCoders.BACK_RIGHT_CAN_CODER_OFFSET,
+    CANCoders.BACK_RIGHT_CAN_CODER_DIRECTION);
 
   private final Pigeon2 gyro = Constants.gyro;
   private final AnalogGyro analogGyro = new AnalogGyro(0);
 
 
-  private final SwerveDriveKinematics kinematics = Constants.DriveConstants.KINEMATICS;
+  private final SwerveDriveKinematics kinematics = KINEMATICS;
 
   private final SwerveDriveOdometry odometry;
 
@@ -95,7 +98,7 @@ public class DriveTrain extends SubsystemBase{
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getGyroRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, MAX_SPEED_METERS_PER_SECOND);
     
     fl_speed = swerveModuleStates[0].speedMetersPerSecond;
     fr_speed = swerveModuleStates[1].speedMetersPerSecond;
@@ -176,13 +179,13 @@ public class DriveTrain extends SubsystemBase{
   }  
 
   public void ConfigMotorDirections() {
-    Motors.ANGLE_FRONT_LEFT.setInverted(Constants.DriveConstants.FrontLeftTurningMotorReversed);
-    Motors.ANGLE_FRONT_RIGHT.setInverted(Constants.DriveConstants.FrontRightTurningMotorReversed);
-    Motors.ANGLE_BACK_LEFT.setInverted(Constants.DriveConstants.BackLeftTurningMotorReversed);
-    Motors.ANGLE_BACK_RIGHT.setInverted(Constants.DriveConstants.BackRightTurningMotorReversed);
-    Motors.DRIVE_FRONT_LEFT.setInverted(Constants.DriveConstants.FrontLeftDriveMotorReversed);
-    Motors.DRIVE_FRONT_RIGHT.setInverted(Constants.DriveConstants.FrontRightDriveMotorReversed);
-    Motors.DRIVE_BACK_LEFT.setInverted(Constants.DriveConstants.BackLeftDriveMotorReversed);
-    Motors.DRIVE_BACK_RIGHT.setInverted(Constants.DriveConstants.BackRightDriveMotorReversed);
+    Motors.ANGLE_FRONT_LEFT.setInverted(DriveConstants.Front_Left_Turning_Motor_Reversed);
+    Motors.ANGLE_FRONT_RIGHT.setInverted(DriveConstants.Front_Right_Turning_Motor_Reversed);
+    Motors.ANGLE_BACK_LEFT.setInverted(DriveConstants.Back_Left_Turning_Motor_Reversed);
+    Motors.ANGLE_BACK_RIGHT.setInverted(DriveConstants.Back_Right_Turning_Motor_Reversed);
+    Motors.DRIVE_FRONT_LEFT.setInverted(DriveConstants.Front_Left_Drive_Motor_Reversed);
+    Motors.DRIVE_FRONT_RIGHT.setInverted(DriveConstants.Front_Right_Drive_Motor_Reversed);
+    Motors.DRIVE_BACK_LEFT.setInverted(DriveConstants.Back_Left_Drive_Motor_Reversed);
+    Motors.DRIVE_BACK_RIGHT.setInverted(DriveConstants.Back_Right_Drive_Motor_Reversed);
   }
 }
