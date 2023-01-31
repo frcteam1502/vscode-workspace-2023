@@ -105,9 +105,9 @@ public final class Constants {
           BACK_RIGHT_MODULE
         );
 
-    public static final double MAX_SPEED_METERS_PER_SECOND = 3/3;
+    public static final double MAX_SPEED_METERS_PER_SECOND = 1; //IF YOU UP THE SPEED CHANGE ACCELERATION
 
-    public static final double MAX_ROTATION_RADIANS_PER_SECOND = Math.PI;
+    public static final double MAX_ROTATION_RADIANS_PER_SECOND = (Math.PI / 2);
     public static final double MAX_ROTATION_RADIANS_PER_SECOND_PER_SECOND = Math.PI;
 
     // public static final double ksVolts = 1;
@@ -153,9 +153,9 @@ public final class Constants {
     // public static double kvVoltSecondsPerMeter = .2;
     // public static double kaVoltSecondsSquaredPerMeter = .02;
 
-    public static final double MAX_MODULE_ROTATION_DEGREES_PER_SECOND = 360;
+    public static final double MAX_MODULE_ROTATION_RADIANS_PER_SECOND = Math.PI;
 
-    public static final double MAX_MODULE_ROTATION_DEGREES_PER_SECOND_PER_SECOND = 360;
+    public static final double MAX_MODULE_ROTATION_RADIANS_PER_SECOND_PER_SECOND = Math.PI;
   }
 
   public static final class Motors {
@@ -193,6 +193,9 @@ public static final class XboxButtons {
   public static final JoystickButton RIGHT_JOYSTICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 13);
   public static final JoystickButton LEFT_STICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 14);
   public static final JoystickButton RIGHT_STICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 15);
+
+  //Driver Buttons
+  public static final JoystickButton DRIVER_RIGHT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kRightBumper.value); 
 }
 
 public static final class IntakeConstants {

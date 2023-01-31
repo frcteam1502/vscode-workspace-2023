@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,6 +23,15 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer();
 
+    Constants.Motors.DRIVE_FRONT_LEFT.setIdleMode(IdleMode.kBrake);
+    Constants.Motors.DRIVE_FRONT_RIGHT.setIdleMode(IdleMode.kBrake);
+    Constants.Motors.DRIVE_BACK_LEFT.setIdleMode(IdleMode.kBrake);
+    Constants.Motors.DRIVE_BACK_RIGHT.setIdleMode(IdleMode.kBrake);
+
+    Constants.Motors.ANGLE_FRONT_LEFT.setIdleMode(IdleMode.kCoast);
+    Constants.Motors.ANGLE_FRONT_RIGHT.setIdleMode(IdleMode.kCoast);
+    Constants.Motors.ANGLE_BACK_LEFT.setIdleMode(IdleMode.kCoast);
+    Constants.Motors.ANGLE_BACK_RIGHT.setIdleMode(IdleMode.kCoast);
   }
 
   /**
@@ -56,6 +67,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("FrontRight Angle", Constants.CANCoders.FRONT_RIGHT_CAN_CODER.getAbsolutePosition());
     SmartDashboard.putNumber("BackLeft Angle", Constants.CANCoders.BACK_LEFT_CAN_CODER.getAbsolutePosition());
     SmartDashboard.putNumber("BackRight Angle", Constants.CANCoders.BACK_RIGHT_CAN_CODER.getAbsolutePosition());
+
+    SmartDashboard.putNumber("BackRight Angle Velocity", Constants.CANCoders.BACK_RIGHT_CAN_CODER.getVelocity());
+
 
     //Turn Angle Commanded
     SmartDashboard.putNumber("FL Angle Cmd", DriveTrain.fl_angle);

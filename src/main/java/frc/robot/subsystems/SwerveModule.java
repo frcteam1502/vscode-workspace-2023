@@ -3,14 +3,13 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 
@@ -22,18 +21,8 @@ public class SwerveModule {
 
   private final CANCoder absEncoder;
 
-  private final PIDController drivePIDController = new PIDController(Constants.ModuleConstants.MODULE_DRIVE_PID_CONTROLLER_P, 0, 0);
-  private final PIDController turningPIDController = new PIDController(1.0, 0, 0);
-  // private final ProfiledPIDController turningPIDController =
-  //     new ProfiledPIDController(
-  //         1.0,
-  //         0,
-  //         0,
-  //         new TrapezoidProfile.Constraints(
-  //           Units.degreesToRadians(Constants.ModuleConstants.MAX_MODULE_ROTATION_DEGREES_PER_SECOND), 
-  //           Units.degreesToRadians(Constants.ModuleConstants.MAX_MODULE_ROTATION_DEGREES_PER_SECOND_PER_SECOND)));
-
-  private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(1, 3);
+  private final SparkMaxPIDController drivePIDController;
+  private final PIDController turningPIDController = new PIDController(3, 0, 0);
 
   public SwerveModule(CANSparkMax driveMotor, CANSparkMax turnMotor, CANCoder absEncoder, double absOffset, boolean CANCoderDirection) {
     this.driveMotor = driveMotor;
@@ -55,7 +44,14 @@ public class SwerveModule {
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
-    turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+    this.turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+
+    this.drivePIDController = this.driveMotor.getPIDController();
+    this.drivePIDController.setP(.1);
+    this.drivePIDController.setI(0);
+    this.drivePIDController.setD(0);
+    this.drivePIDController.setFF(1);
+
 
   }
 
@@ -101,17 +97,15 @@ public class SwerveModule {
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(getAbsPositionZeroed(true)));
 
     // Calculate the drive output from the drive PID controller.
+    //final double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity(), state.speedMetersPerSecond);
 
-    final double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity(), state.speedMetersPerSecond);
-
-    final double driveFeedforward = this.driveFeedforward.calculate(state.speedMetersPerSecond);
+    //final double driveFeedforward = this.driveFeedforward.calculate(state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput = turningPIDController.calculate(getAbsPositionZeroed(true), state.angle.getRadians());
 
-    final double turnFeedforward = 0;//this.turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);
-
-    driveMotor.setVoltage(driveOutput + driveFeedforward);
-    turningMotor.setVoltage(turnOutput + turnFeedforward);
+    //driveMotor.setVoltage(driveOutput + driveFeedforward);
+    drivePIDController.setReference(state.speedMetersPerSecond, ControlType.kVelocity);
+    turningMotor.setVoltage(turnOutput);
   }
 }
