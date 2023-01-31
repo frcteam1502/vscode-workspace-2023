@@ -9,7 +9,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Motors;
@@ -60,7 +59,6 @@ public class DriveTrain extends SubsystemBase{
     Constants.CANCoders.BACK_RIGHT_CAN_CODER_DIRECTION);
 
   private final Pigeon2 gyro = Constants.gyro;
-  private final AnalogGyro analogGyro = new AnalogGyro(0);
 
 
   private final SwerveDriveKinematics kinematics = Constants.DriveConstants.KINEMATICS;
@@ -157,6 +155,10 @@ public class DriveTrain extends SubsystemBase{
   //Get Rotation2d from the Pigeon
   public Rotation2d getGyroRotation2d() {
     return new Rotation2d(Units.degreesToRadians(gyro.getYaw()));
+  }
+
+  public double getPitch() {
+    return gyro.getPitch();
   }
 
   public void resetGyro() {

@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -26,7 +27,7 @@ public class DriveByController extends CommandBase {
 
   @Override
   public void execute() {
-    
+
     // Get the forward speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
     final var fwdSpeed =
@@ -49,7 +50,8 @@ public class DriveByController extends CommandBase {
             * Constants.DriveConstants.MAX_ROTATION_RADIANS_PER_SECOND;
     
     //Set up the Drivetrain setpoints
-    drive.drive(fwdSpeed, strafeSpeed, rot, true);
+    if(Constants.XboxButtons.DRIVER_RIGHT_BUMPER.getAsBoolean()) drive.drive(fwdSpeed/2, strafeSpeed/2, rot/2, true);
+    else drive.drive(fwdSpeed, strafeSpeed, rot, true);
 
   }
 
