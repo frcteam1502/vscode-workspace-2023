@@ -25,12 +25,21 @@ MS: DK -- Some laptops are sharing a desktop via OneDrive (intentional ?!?)
 # GitHub Integration
 sync laptop w. github, e.g., login and save credentials
 
+## Helpful git alias
+Helpful when using git in terminal windows
+```
+git config --global alias.la 'log --all --decorate --graph --oneline'
+```
+To see a nice tree of commits, branches, remotes, etc:
+type `git la`
+
+
 Do not change the default (Edge) browser.
 The laptops are (or may) be synced to GitHub through the browser
 Microsoft built/owns VSCode, GitHub and Edge; 
 remember these are **shared**.
 
-when trying to checkin with web browser (MS User Account: frcteam1502)
+ERROR: when trying to checkin with web browser (MS User Account: frcteam1502)
 http://localhost:50310/?code=702118c2b5b2cc7ddb0e&state=94953bf8e1774ee080c7be2df8b2b645
 
 ## Verify
