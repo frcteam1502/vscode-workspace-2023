@@ -2,25 +2,18 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Auto;
 
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class ExampleCommand extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private ExampleSubsystem subsystem;
+public class EmptyAutoCommand extends CommandBase {
 
-  public ExampleCommand(ExampleSubsystem subsystem) {
-    this.subsystem = subsystem;
-    addRequirements(subsystem);
+  public EmptyAutoCommand() {
   }
 
   @Override
-  public void initialize() {
-    subsystem.moveMotor(0);
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
