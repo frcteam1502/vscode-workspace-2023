@@ -3,7 +3,9 @@ package frc.robot;
 import frc.robot.commands.DriveByController;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.IntakeSubsystem;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.XboxButtons;
+import frc.robot.commands.Auto.EmptyAuto;
 
 public class RobotContainer {
   //Subsystems
@@ -19,7 +21,8 @@ public class RobotContainer {
     XboxButtons.BUTTON_A.whileTrue(intakeSubsystem.runIntakeCommand()); // TODO: assign trigger
   }
 
-  // public Command getAutonomousCommand() {
-  //   return Autos.exampleAuto(m_exampleSubsystem);
-  // }
+  // TODO: implement SendableChooser
+  public Command getAutonomousCommand() {
+    return new EmptyAuto();
+  }
 }
