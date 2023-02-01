@@ -5,7 +5,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.XboxButtons;
-import frc.robot.commands.Auto.EmptyAuto;
+import frc.robot.commands.Auto.EmptyAutoCommand;
 
 public class RobotContainer {
   //Subsystems
@@ -23,6 +23,6 @@ public class RobotContainer {
 
   // TODO: implement SendableChooser
   public Command getAutonomousCommand() {
-    return new EmptyAuto();
+    return new EmptyAutoCommand();
   }
 }
