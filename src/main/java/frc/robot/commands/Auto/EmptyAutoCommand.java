@@ -5,11 +5,11 @@
 package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 
-/** An example command that uses an example subsystem. */
 public class EmptyAutoCommand extends CommandBase {
 
-  public EmptyAutoCommand() {
+  public EmptyAutoCommand(Subsystem subsystem) {
   }
 
   @Override

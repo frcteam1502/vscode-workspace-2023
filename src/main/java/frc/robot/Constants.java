@@ -11,8 +11,6 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public final class Constants {
 
@@ -178,36 +176,37 @@ public final class Constants {
     public static final CANSparkMax INTAKE_MOTOR = new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless);
 }
 
-public static final class Joysticks {
-  public static final XboxController MANIP_CONTROLLER = new XboxController(0);
-  public static final XboxController DRIVE_CONTROLLER = new XboxController(1);
-}
+  public static final class Joysticks {
+    public static final XboxController MANIP_CONTROLLER = new XboxController(0);
+    public static final XboxController DRIVE_CONTROLLER = new XboxController(1);
+  }
 
-public static final class XboxButtons {
-  public static final JoystickButton LEFT_BUMPER = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kLeftBumper.value); 
-  public static final JoystickButton RIGHT_BUMPER = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kRightBumper.value); 
-  public static final JoystickButton BUTTON_Y = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kY.value); 
-  public static final JoystickButton BUTTON_A = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kA.value); 
-  public static final JoystickButton BUTTON_X = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kX.value); 
-  public static final JoystickButton BUTTON_B = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kB.value); 
-  public static final JoystickButton BACK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 7);
-  public static final JoystickButton START = new JoystickButton(Joysticks.MANIP_CONTROLLER, 8);
-  public static final JoystickButton LEFT_JOYSTICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 12);
-  public static final JoystickButton RIGHT_JOYSTICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 13);
-  public static final JoystickButton LEFT_STICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 14);
-  public static final JoystickButton RIGHT_STICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 15);
+  public static final class XboxButtons {
+    public static final JoystickButton LEFT_BUMPER = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kLeftBumper.value); 
+    public static final JoystickButton RIGHT_BUMPER = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kRightBumper.value); 
+    public static final JoystickButton BUTTON_Y = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kY.value); 
+    public static final JoystickButton BUTTON_A = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kA.value); 
+    public static final JoystickButton BUTTON_X = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kX.value); 
+    public static final JoystickButton BUTTON_B = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kB.value); 
+    public static final JoystickButton BACK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 7);
+    public static final JoystickButton START = new JoystickButton(Joysticks.MANIP_CONTROLLER, 8);
+    public static final JoystickButton LEFT_JOYSTICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 12);
+    public static final JoystickButton RIGHT_JOYSTICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 13);
+    public static final JoystickButton LEFT_STICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 14);
+    public static final JoystickButton RIGHT_STICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 15);
 
-  //Driver Buttons
-  public static final JoystickButton DRIVER_RIGHT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kRightBumper.value); 
-}
+    //Driver Buttons
+    public static final JoystickButton DRIVER_RIGHT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kRightBumper.value); 
+  }
 
-public static final class IntakeConstants {
-  public static final int FORWARD_CHANNEL = 1;
-  public static final int REVERSE_CHANNEL = 0;
-}
+  public static final class IntakeConstants {
+    public static final int FORWARD_CHANNEL = 1;
+    public static final int REVERSE_CHANNEL = 0;
+  }
 
-public static class PneumaticsConstants{
-  // Forward piston solenoid value
-      public static final int kreversechannel = 0;
-      public static final int kforwardchannel = 15;
+  public static class PneumaticsConstants{
+    // Forward piston solenoid value
+        public static final int kreversechannel = 0;
+        public static final int kforwardchannel = 15;
+  }
 }
