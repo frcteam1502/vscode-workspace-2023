@@ -1,43 +1,51 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import frc.robot.Constants.PneumaticsConstants;
 
 public class pneumaticSubsystem extends SubsystemBase {
-  /** Creates a new Subsystem. */
+  public DoubleSolenoid DoublePH = new DoubleSolenoid(1,
+    PneumaticsModuleType.REVPH,
+    PneumaticsConstants.kforwardchannel,
+    PneumaticsConstants.kreversechannel);
+  
+    public Compressor phCompressor = new Compressor(1, PneumaticsModuleType.REVPH);
 
   public pneumaticSubsystem() {}
-  Compressor phCompressor = new Compressor(1, PneumaticsModuleType.REVPH);
-  DoubleSolenoid DoublePH = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, 1, 0);
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-  public CommandBase MethodCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */}); 
+    
+  public void Toggle() {
+    DoublePH.toggle();
   }
 
+  public void setIn() {
+    DoublePH.set(Value.kReverse);
+  }  
+  
+  public void setOut() {
+      DoublePH.set(Value.kForward);
+  }
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
+   *  boolean enabled = pcmCompressor.enabled();
+boolean pressureSwitch = pcmCompressor.getPressureSwitchValue();
+
    * @return value of some boolean subsystem state, such as a digital sensor.
-   */
+  
+   boolean enabled = phCompressor.enabled();
+  boolean pressureSwitch = phCompressor.getPressureSwitchValue();
+  */
   public boolean exampleCondition() {
     // Query some boolean state, such as a digital sensor.
-   //boolean enabled = phCompressor.enabled();
-   boolean pressureSwitch = phCompressor.getPressureSwitchValue();
-   double current = phCompressor.getCurrent();
+    //DoublePH.set(kOff);
+    //DoublePH.set(kForward);
+    //DoublePH.set(kReverse);
     return false;
   }
 
@@ -51,3 +59,4 @@ public class pneumaticSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 }
+  
