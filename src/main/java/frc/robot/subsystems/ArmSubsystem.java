@@ -26,7 +26,7 @@ public class ArmSubsystem extends SubsystemBase {
     double current_arm_value = m_LeftArmAngle.getEncoder().getPosition();
     if (current_arm_value > FLOOR_ANGLE) {m_LeftArmAngle.set(0.25);}
     if (current_arm_value == FLOOR_ANGLE) {m_LeftArmAngle.set(0);}
-    if (current_arm_value < FLOOR_ANGLE) {m_LeftArmAngle.set(-0.25);}
+    if (current_arm_value < FLOOR_ANGLE) {m_LeftArmAngle.set(-0.25)
   }
   public void GoToMiddle() {
     // Change arm angle to middle
