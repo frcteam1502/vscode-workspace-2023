@@ -1,9 +1,11 @@
 # WpiLib VSCode
 
 ## Build and Deploy
+Manual Build and Deploy from Terminal
+```
  .\gradlew.bat build
  .\gradlew.bat deploy  -PteamNumber=1502 --offline  -Dorg.gradle.java.home="C:\Users\Public\wpilib\2023\jdk"
- 
+ ```
  ?? .\gradlew.bat deployfrcJavaroborio
 
 

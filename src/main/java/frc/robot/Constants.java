@@ -173,7 +173,12 @@ public final class Constants {
     public static final CANSparkMax ANGLE_BACK_RIGHT = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     //intake
-    public static final CANSparkMax INTAKE_MOTOR = new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax INTAKE_MOTOR = new CANSparkMax(15, CANSparkMaxLowLevel.MotorType.kBrushless);
+
+    //arm
+    public static final CANSparkMax RIGHT_ARM_ANGLE = new CANSparkMax(16, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax LEFT_ARM_ANGLE = new CANSparkMax(17, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax ARM_EXTENDER = new CANSparkMax(18, CANSparkMaxLowLevel.MotorType.kBrushless);
 }
 
   public static final class Joysticks {
@@ -197,6 +202,24 @@ public final class Constants {
 
     //Driver Buttons
     public static final JoystickButton DRIVER_RIGHT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kRightBumper.value); 
+  }
+
+  public enum Encoders {
+    RightArmAngleEncoder (Motors.RIGHT_ARM_ANGLE.getEncoder()),
+    LeftArmAngleEncoder (Motors.LEFT_ARM_ANGLE.getEncoder()),
+    ExtenderEncoder (Motors.ARM_EXTENDER.getEncoder());
+    //AngleEncoder (Motors.ANGLE.getEncoder());
+  
+    //fake encodere
+    public static double TOP_ANGLE = 100;
+    public static double MIDDLE_ANGLE = 50;
+    public static double FLOOR_ANGLE = 25;
+    public static double STOW_ANGLE = 0;
+
+    public RelativeEncoder Encoder;
+    Encoders(RelativeEncoder encoder) {
+      this.Encoder = encoder;
+    }
   }
 
   public static final class IntakeConstants {
