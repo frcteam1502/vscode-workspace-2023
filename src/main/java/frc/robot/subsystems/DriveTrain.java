@@ -1,14 +1,26 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.Pigeon2;
+import java.util.ArrayList;
+import java.util.HashMap;
 
+import com.ctre.phoenix.sensors.Pigeon2;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Motors;
@@ -105,11 +117,14 @@ public class DriveTrain extends SubsystemBase{
     bl_angle = swerveModuleStates[2].angle.getDegrees();
     br_angle = swerveModuleStates[3].angle.getDegrees();
   
+    setDesiredState(swerveModuleStates); //TODO: Does this work???
+  }
+
+  public void setDesiredState(SwerveModuleState[] swerveModuleStates) {
     frontLeft.setDesiredState(swerveModuleStates[0]);
     frontRight.setDesiredState(swerveModuleStates[1]);
     backLeft.setDesiredState(swerveModuleStates[2]);
     backRight.setDesiredState(swerveModuleStates[3]);
-
   }
 
   public void updateOdometry() {
@@ -123,6 +138,23 @@ public class DriveTrain extends SubsystemBase{
         });
   }
 
+  public void resetOdometry(Pose2d pose) {
+    odometry.resetPosition(getGyroRotation2d(), kinematics.get, pose);
+  }
+
+  /**
+        public SwerveModuleState[] getModuleStates() {
+
+        return new SwerveModuleState[] {
+            new SwerveModuleState(frontLeftMod.getCurrentVelocityMetersPerSecond(), frontLeftMod.getSteerEncAngle()),
+            new SwerveModuleState(frontRightMod.getCurrentVelocityMetersPerSecond(), frontRightMod.getSteerEncAngle()),
+            new SwerveModuleState(rearLeftMod.getCurrentVelocityMetersPerSecond(), rearLeftMod.getSteerEncAngle()),
+            new SwerveModuleState(rearRightMod.getCurrentVelocityMetersPerSecond(), rearRightMod.getSteerEncAngle())
+        };
+
+    }
+   */
+
   //Make individual states for each swerve module to be set to break
   public SwerveModuleState[] makeSwerveModuleState(double[] speeds, double[] angles) {
     SwerveModuleState[] moduleStates = new SwerveModuleState[angles.length];
@@ -135,10 +167,7 @@ public class DriveTrain extends SubsystemBase{
     double[] speeds = {.1, .1, .1, .1};
     double[] angles = {-135, 135, -45, 45};
     SwerveModuleState[] moduleStates = makeSwerveModuleState(speeds, angles);
-    frontLeft.setDesiredState(moduleStates[0]);
-    frontRight.setDesiredState(moduleStates[1]);
-    backLeft.setDesiredState(moduleStates[2]);
-    backRight.setDesiredState(moduleStates[3]);
+    setDesiredState(moduleStates);
   }
 
   public void setWheelsForward() {
@@ -146,15 +175,20 @@ public class DriveTrain extends SubsystemBase{
     double[] speeds = {.001, .001, .001, .001};
     double[] angles = {0, 0, 0, 0};
     SwerveModuleState[] moduleStates = makeSwerveModuleState(speeds, angles);
-    frontLeft.setDesiredState(moduleStates[0]);
-    frontRight.setDesiredState(moduleStates[1]);
-    backLeft.setDesiredState(moduleStates[2]);
-    backRight.setDesiredState(moduleStates[3]);
+    setDesiredState(moduleStates);
   }
 
   //Get Rotation2d from the Pigeon
   public Rotation2d getGyroRotation2d() {
     return new Rotation2d(Units.degreesToRadians(gyro.getYaw()));
+  }
+
+  public Translation2d getTranslation2d() {
+    return new Translation2d(odometry.getPoseMeters().getX(), odometry.getPoseMeters().getY());
+  }
+
+  public Pose2d getPose2d() {
+    return new Pose2d(getTranslation2d(), getGyroRotation2d());
   }
 
   public double getPitch() {
@@ -186,5 +220,43 @@ public class DriveTrain extends SubsystemBase{
     Motors.DRIVE_FRONT_RIGHT.setInverted(Constants.DriveConstants.FrontRightDriveMotorReversed);
     Motors.DRIVE_BACK_LEFT.setInverted(Constants.DriveConstants.BackLeftDriveMotorReversed);
     Motors.DRIVE_BACK_RIGHT.setInverted(Constants.DriveConstants.BackRightDriveMotorReversed);
+  }
+
+  public Command getPathFollowingCommand(PathPlannerTrajectory trajectory) {
+    return new PPSwerveControllerCommand(
+      trajectory, 
+      this::getPose2d, // Pose supplier
+      Constants.DriveConstants.KINEMATICS, // SwerveDriveKinematics
+      new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+      new PIDController(0, 0, 0), // Y controller (usually the same values as X controller)
+      new PIDController(3, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+      this::setDesiredState, // Module states consumer
+      true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+      this // Requires this drive subsystem
+    ); //TODO: Fix these PIDControllers
+  }
+
+  public Command buildAuto(PathPlannerTrajectory trajectory, HashMap<String, Command> eventMap) {
+    return new FollowPathWithEvents(
+      getPathFollowingCommand(trajectory),
+      trajectory.getMarkers(),
+      eventMap
+    );
+  }
+
+  public Command buildAuto(HashMap<String, Command> eventMap, ArrayList<PathPlannerTrajectory> pathGroup) {
+    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+      this::getPose2d, // Pose2d supplier
+      this::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
+      Constants.DriveConstants.KINEMATICS, // SwerveDriveKinematics
+      new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+      new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+      this::setDesiredState, // Module states consumer used to output to the drive subsystem
+      eventMap,
+      true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+      this // The drive subsystem. Used to properly set the requirements of path following commands
+    );
+    
+    return autoBuilder.fullAuto(pathGroup);
   }
 }
