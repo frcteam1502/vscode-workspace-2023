@@ -2,7 +2,9 @@
 
 ## Build and Deploy
  .\gradlew.bat build
- .\gradlew.bat deployfrcJavaroborio
+ .\gradlew.bat deploy  -PteamNumber=1502 --offline  -Dorg.gradle.java.home="C:\Users\Public\wpilib\2023\jdk"
+ 
+ ?? .\gradlew.bat deployfrcJavaroborio
 
 
 ## Tasks
