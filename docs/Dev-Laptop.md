@@ -8,14 +8,14 @@
 
 
 # Laptops
-Laptop   | Nickname      | Account  |      | root
----      |---            |---       |---   |---
-Laptop-1 | SHORT CIRCUIT | MS: DK   |      | C:\Users\frcte\Repose\vscode-workspace-2023
-Laptop-2 | STATIC SHOCK  | MS: DK   |      |
-Laptop-3 | LOOSE SCREWS  | MS       |      |
-Laptop-4 | GLITCH        |          |      |
-Laptop-5 | CRASH         |          | frct |
-Laptop-6 | GREMLINS      |          |      |
+Laptop   | Nickname      | Account  | User Folder   | root
+---      |---            |---       |---            |---
+Laptop-1 | SHORT CIRCUIT | MS: DK   | frct          | \Repose\vscode-workspace-2023
+Laptop-2 | STATIC SHOCK  | MS: DK   |               |
+Laptop-3 | LOOSE SCREWS  | MS       |               |
+Laptop-4 | GLITCH        | local    | Team 1502     | \repos\vscode-workspace-2023
+Laptop-5 | CRASH         |          | frct          |
+Laptop-6 | GREMLINS      |          |               |
 
 MS:
 MS: DK -- Some laptops are sharing a desktop via OneDrive (intentional ?!?)
@@ -80,5 +80,15 @@ To set environment(like `JAVA_HOME`) from WPI lib:
 2. Confirm `$env:JAVA_HOME` has a valid path (e.g. C:\Users\Public\wpilib\2023\jdk)
 3. execute `.\gradlew.bat build` to confirm Java build works
 
+# Nerd Fonts
+Download and install `CaskaydiaCove` from https://www.nerdfonts.com/font-downloads
+1. Download and unzip the font files, extract fonts to a folder
+2. Click "Windows Key", search for "Font", open Font Settings
+3. Drag (just) font files from unzipped font folder into Font Settings drop area
+
+VSCode settings.json:
+```
+  "terminal.integrated.fontFamily": "CaskaydiaCove NF Mono"
+```
 # TODO
 * [ ] Make a script to do the install for year 20XX
