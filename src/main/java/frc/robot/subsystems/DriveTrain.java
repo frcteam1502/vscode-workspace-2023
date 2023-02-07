@@ -1,13 +1,14 @@
 package frc.robot.subsystems;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
-import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -139,21 +140,27 @@ public class DriveTrain extends SubsystemBase{
   }
 
   public void resetOdometry(Pose2d pose) {
-    odometry.resetPosition(getGyroRotation2d(), kinematics.get, pose);
+    odometry.resetPosition(getGyroRotation2d(), getModulePositions(), pose);
+  }
+  
+  public SwerveModulePosition[] getModulePositions() {
+    return new SwerveModulePosition[] {
+      frontLeft.getPosition(),
+      frontRight.getPosition(),
+      backLeft.getPosition(),
+      backRight.getPosition()
+    };
   }
 
-  /**
-        public SwerveModuleState[] getModuleStates() {
-
-        return new SwerveModuleState[] {
-            new SwerveModuleState(frontLeftMod.getCurrentVelocityMetersPerSecond(), frontLeftMod.getSteerEncAngle()),
-            new SwerveModuleState(frontRightMod.getCurrentVelocityMetersPerSecond(), frontRightMod.getSteerEncAngle()),
-            new SwerveModuleState(rearLeftMod.getCurrentVelocityMetersPerSecond(), rearLeftMod.getSteerEncAngle()),
-            new SwerveModuleState(rearRightMod.getCurrentVelocityMetersPerSecond(), rearRightMod.getSteerEncAngle())
-        };
-
-    }
-   */
+  public SwerveModuleState[] getModuleStates() {
+    return new SwerveModuleState[] {
+      new SwerveModuleState(frontLeft.getVelocity(), frontLeft.geRotation2d()),
+      new SwerveModuleState(frontRight.getVelocity(), frontRight.geRotation2d()),
+      new SwerveModuleState(backLeft.getVelocity(), backLeft.geRotation2d()),
+      new SwerveModuleState(backRight.getVelocity(), backRight.geRotation2d())
+    };
+  }
+  
 
   //Make individual states for each swerve module to be set to break
   public SwerveModuleState[] makeSwerveModuleState(double[] speeds, double[] angles) {
@@ -178,7 +185,6 @@ public class DriveTrain extends SubsystemBase{
     setDesiredState(moduleStates);
   }
 
-  //Get Rotation2d from the Pigeon
   public Rotation2d getGyroRotation2d() {
     return new Rotation2d(Units.degreesToRadians(gyro.getYaw()));
   }
@@ -222,7 +228,11 @@ public class DriveTrain extends SubsystemBase{
     Motors.DRIVE_BACK_RIGHT.setInverted(Constants.DriveConstants.BackRightDriveMotorReversed);
   }
 
-  public Command getPathFollowingCommand(PathPlannerTrajectory trajectory) {
+  public Command getPathFollowingCommand(String pathName) {
+    PathPlannerTrajectory trajectory = PathPlanner.loadPath(
+      pathName, 
+      new PathConstraints(Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND, 1) //TODO: Find MAX ACCEL
+      );
     return new PPSwerveControllerCommand(
       trajectory, 
       this::getPose2d, // Pose supplier
@@ -236,15 +246,11 @@ public class DriveTrain extends SubsystemBase{
     ); //TODO: Fix these PIDControllers
   }
 
-  public Command buildAuto(PathPlannerTrajectory trajectory, HashMap<String, Command> eventMap) {
-    return new FollowPathWithEvents(
-      getPathFollowingCommand(trajectory),
-      trajectory.getMarkers(),
-      eventMap
-    );
-  }
+  public Command buildAuto(HashMap<String, Command> eventMap, String pathName) {
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
+      pathName, 
+      new PathConstraints(Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND, 1)); //TODO: Find MAX ACCEL
 
-  public Command buildAuto(HashMap<String, Command> eventMap, ArrayList<PathPlannerTrajectory> pathGroup) {
     SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
       this::getPose2d, // Pose2d supplier
       this::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
@@ -255,7 +261,7 @@ public class DriveTrain extends SubsystemBase{
       eventMap,
       true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
       this // The drive subsystem. Used to properly set the requirements of path following commands
-    );
+    ); //TODO: Check PIDs
     
     return autoBuilder.fullAuto(pathGroup);
   }

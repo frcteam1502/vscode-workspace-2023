@@ -64,6 +64,14 @@ public class SwerveModule {
     return new SwerveModuleState(driveEncoder.getVelocity(), new Rotation2d(getAbsPositionZeroed(true)));
   }
 
+  public double getVelocity() {
+    return driveEncoder.getVelocity();
+  }
+
+  public Rotation2d geRotation2d() {
+    return new Rotation2d(Units.degreesToRadians(absEncoder.getAbsolutePosition()));
+  }
+
   /**
    * Returns the current position of the module.
    *
