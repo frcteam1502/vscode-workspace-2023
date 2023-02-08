@@ -18,10 +18,6 @@ public class ArmSubsystem extends SubsystemBase {
  static class xboxcontroller {
   //work in progress found the right buttons just need to put the values.
 
-  public final static double kLeftX;
-  public final static double kLeftY;
-
-
  }
  
  
@@ -32,9 +28,9 @@ public class ArmSubsystem extends SubsystemBase {
     public final static int EXTEND_DEVICE_ID = 18; // TODO: TBD
     // ARM POSITION/ELEVATION (rotations)
     private static final double STOW_ANGLE = 0;
-    private static final double FLOOR_ANGLE = 45;
-    private static final double MIDDLE_ANGLE = 90;
-    private static final double TOP_ANGLE = 120;
+    private static final double FLOOR_ANGLE = 0.1;
+    private static final double MIDDLE_ANGLE = 0.2;
+    private static final double TOP_ANGLE = 0.3;
     
     // PID coefficients (sample values, TBD)
     public final static double kP = 0.1;
@@ -53,9 +49,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     // ARM POSITION/ELEVATION (rotations)
     private static final double STOW_EXTENSION = 0;
-    private static final double FLOOR_EXTENSION = 45;
-    private static final double MIDDLE_EXTENSION = 90;
-    private static final double TOP_EXTENSION = 120;
+    private static final double FLOOR_EXTENSION = 0.1;
+    private static final double MIDDLE_EXTENSION = 0.2;
+    private static final double TOP_EXTENSION = 0.3;
 
     // PID coefficients (sample values, TBD)
     public final static double kP = 0.1;
