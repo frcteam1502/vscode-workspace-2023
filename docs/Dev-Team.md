@@ -14,12 +14,12 @@
 ## Laptop Assignments
 Laptop   | Name          | User(s) | status
 ---      | ---           | ---     | ---
-Laptop-1 | SHORT CIRCUIT | James   | James, Hung - GOOD
+Laptop-1 | SHORT CIRCUIT | James   | GOOD
 Laptop-2 | STATIC SHOCK  | Hung    | Hung
 Laptop-3 | LOOSE SCREWS  | .       |
-Laptop-4 | GLITCH        | Emily   | Emily - GOOD
-Laptop-5 | CRASH         | Deven   | no cred, no repo
-Laptop-6 | GREMLINS      | Emily   | no cred
+Laptop-4 | GLITCH        | Emily   | GOOD
+Laptop-5 | CRASH         | Deven   | GOOD
+Laptop-6 | GREMLINS      | Emily   | GOOD
 
 * no cred: no credentials for frcteam1502
 * no repo: no repos for frcteam1502
