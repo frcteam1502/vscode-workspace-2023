@@ -37,7 +37,7 @@ public class RobotContainer {
   private void setUpSendableChooser() {
     createAutoHashMaps();
     sendableChooser.setDefaultOption("Balance", simpleBalance);
-    sendableChooser.addOption("2 Cone Straight", driveSubsystem.buildAuto(twoCone, "twoCone"));
+    sendableChooser.addOption("2 Cone", driveSubsystem.buildAuto(twoCone, "twoCone"));
     SmartDashboard.putData(sendableChooser);
   }
   
@@ -49,7 +49,7 @@ public class RobotContainer {
   
   public void createAutoHashMaps() {
     //twoCone
-    twoCone.put(null, null);
+    //twoCone.put(null, null);
 
   }
 }
