@@ -14,7 +14,7 @@ Laptop-1 | SHORT CIRCUIT |      | MS: DK   | frct          | \Repose\vscode-work
 Laptop-2 | STATIC SHOCK  |      | MS: DK   |               |
 Laptop-3 | LOOSE SCREWS  |      | MS       |               |
 Laptop-4 | GLITCH        |11    | local    | Team 1502     | \repos\vscode-workspace-2023
-Laptop-5 | CRASH         |10 Pro| MS: DK   | frct          | \repos\vscode-workspace-2023
+Laptop-5 | CRASH         |11    | MS: DK   | frct          | \repos\vscode-workspace-2023
 Laptop-6 | GREMLINS      |      |          |               |
 
 MS: Microsoft Account (Team 1502 - frcteam1502@gmail.com)
