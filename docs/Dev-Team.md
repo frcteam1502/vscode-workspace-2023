@@ -15,7 +15,7 @@
 Laptop   | Name          | User(s) | status
 ---      | ---           | ---     | ---
 Laptop-1 | SHORT CIRCUIT | James   | GOOD
-Laptop-2 | STATIC SHOCK  | Hung    | Hung
+Laptop-2 | STATIC SHOCK  | Hung    | Hung -- no global config
 Laptop-3 | LOOSE SCREWS  | .       |
 Laptop-4 | GLITCH        | Emily   | GOOD
 Laptop-5 | CRASH         | Deven   | GOOD
