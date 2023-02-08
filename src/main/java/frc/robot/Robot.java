@@ -2,7 +2,9 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -18,6 +20,11 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
 
+  private double pdhVoltage = 0;
+  private double currentLF_Drive = 0;
+  private double currentRF_Drive = 0;
+  private double currentRL_Drive = 0;
+  private double currentRR_Drive = 0;
 
   @Override
   public void robotInit() {
@@ -45,8 +52,21 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
+    pdhVoltage = Constants.revPDH.getVoltage();
+    currentLF_Drive = Constants.revPDH.getCurrent(0);
+    currentRF_Drive = Constants.revPDH.getCurrent(19);
+    currentRL_Drive = Constants.revPDH.getCurrent(2);
+    currentRR_Drive = Constants.revPDH.getCurrent(17);
+
+    //Drive Motor Currents
+    SmartDashboard.putNumber("PDH Voltage", pdhVoltage);
+    SmartDashboard.putNumber("FL Drive Current", currentLF_Drive);
+    SmartDashboard.putNumber("FR Drive Current", currentRF_Drive);
+    SmartDashboard.putNumber("RL Drive Current", currentRL_Drive);
+    SmartDashboard.putNumber("RR Drive Current", currentRR_Drive);
+
     //Drive Motor Encoders
-    SmartDashboard.putNumber("FL Encoder Pos", Constants.Motors.DRIVE_FRONT_LEFT.getEncoder().getPosition());
+    /*SmartDashboard.putNumber("FL Encoder Pos", Constants.Motors.DRIVE_FRONT_LEFT.getEncoder().getPosition());
     SmartDashboard.putNumber("FR Encoder Pos", Constants.Motors.DRIVE_FRONT_RIGHT.getEncoder().getPosition());
     SmartDashboard.putNumber("RL Encoder Pos", Constants.Motors.DRIVE_BACK_LEFT.getEncoder().getPosition());
     SmartDashboard.putNumber("RR Encoder Pos", Constants.Motors.DRIVE_BACK_RIGHT.getEncoder().getPosition());
@@ -99,7 +119,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("FL Module Speed Cmd", DriveTrain.fl_speed);
     SmartDashboard.putNumber("FR Module Speed Cmd", DriveTrain.fr_speed);
     SmartDashboard.putNumber("RL Module Speed Cmd", DriveTrain.rl_speed);
-    SmartDashboard.putNumber("RR Module Speed Cmd", DriveTrain.rr_speed);
+    SmartDashboard.putNumber("RR Module Speed Cmd", DriveTrain.rr_speed);*/
 
 
   }
