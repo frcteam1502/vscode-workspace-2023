@@ -8,17 +8,19 @@
 
 
 # Laptops
-Laptop   | Nickname      | Account  | User Folder   | root
----      |---            |---       |---            |---
-Laptop-1 | SHORT CIRCUIT | MS: DK   | frct          | \Repose\vscode-workspace-2023
-Laptop-2 | STATIC SHOCK  | MS: DK   |               |
-Laptop-3 | LOOSE SCREWS  | MS       |               |
-Laptop-4 | GLITCH        | local    | Team 1502     | \repos\vscode-workspace-2023
-Laptop-5 | CRASH         |          | frct          |
-Laptop-6 | GREMLINS      |          |               |
+Laptop   | Nickname      |Win   | Account  | User Folder   | root
+---      |---            |---   |---       |---            |---
+Laptop-1 | SHORT CIRCUIT |      | MS: DK   | frct          | \Repose\vscode-workspace-2023
+Laptop-2 | STATIC SHOCK  |      | MS: DK   |               |
+Laptop-3 | LOOSE SCREWS  |      | MS       |               |
+Laptop-4 | GLITCH        |11    | local    | Team 1502     | \repos\vscode-workspace-2023
+Laptop-5 | CRASH         |10 Pro| MS: DK   | frct          | \repos\vscode-workspace-2023
+Laptop-6 | GREMLINS      |      |          |               |
 
-MS:
+MS: Microsoft Account (Team 1502 - frcteam1502@gmail.com)
 MS: DK -- Some laptops are sharing a desktop via OneDrive (intentional ?!?)
+* Laptop-5 has desktop and documents (including repos) in OneDrive somehow
+
 
 # WPI Lib Preparation
 
@@ -90,5 +92,8 @@ VSCode settings.json:
 ```
   "terminal.integrated.fontFamily": "CaskaydiaCove NF Mono"
 ```
+
+aliases: CaskaydiaCove NFM, CaskaydiaCove Nerd Font Mono ??
+
 # TODO
 * [ ] Make a script to do the install for year 20XX
