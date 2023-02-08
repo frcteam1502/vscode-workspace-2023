@@ -27,6 +27,12 @@ MS: DK -- Some laptops are sharing a desktop via OneDrive (intentional ?!?)
 # GitHub Integration
 sync laptop w. github, e.g., login and save credentials
 
+```
+git config --global user.email frcteam1502@gmail.com
+git config --global user.name "Team 1502"
+```
+(default `user.name` is over-written using the 'VSCode Personalization' scheme below)
+
 ## Helpful git alias
 Helpful when using git in terminal windows
 ```
