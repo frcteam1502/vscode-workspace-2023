@@ -7,13 +7,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.Autonomous.Selection.*;
+import frc.robot.commands.Autonomous.Simple.AutoBalance;
 import frc.robot.subsystems.DriveTrain;
 
 public class RobotContainer { 
   private final SendableChooser<Command> sendableChooser = new SendableChooser<>();
 
   //Subsystems
-  private final DriveTrain driveSubsystem = new DriveTrain();
+  public final DriveTrain driveSubsystem = new DriveTrain();
 
   //Commands
 
@@ -31,6 +32,8 @@ public class RobotContainer {
 
   private void configureBindings() {
     driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem));
+
+    Constants.XboxButtons.BUTTON_A.onTrue(new AutoBalance(driveSubsystem));
   }
 
 

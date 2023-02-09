@@ -29,6 +29,9 @@ public class SwerveModule {
     this.turningMotor = turnMotor;
     this.absEncoder = absEncoder;
 
+    driveMotor.setClosedLoopRampRate(.25);
+    driveMotor.setSmartCurrentLimit(60);
+
     driveEncoder = driveMotor.getEncoder();
 
     // Set the distance per pulse for the drive encoder. 
@@ -47,12 +50,10 @@ public class SwerveModule {
     this.turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
     this.drivePIDController = this.driveMotor.getPIDController();
-    this.drivePIDController.setP(.1);
+    this.drivePIDController.setP(.08);
     this.drivePIDController.setI(0);
     this.drivePIDController.setD(0);
     this.drivePIDController.setFF(1);
-
-
   }
 
   /**

@@ -12,12 +12,11 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
@@ -73,22 +72,11 @@ public class DriveTrain extends SubsystemBase{
 
   private final Pigeon2 gyro = Constants.gyro;
 
-
   private final SwerveDriveKinematics kinematics = Constants.DriveConstants.KINEMATICS;
 
-  private final SwerveDriveOdometry odometry;
+  public final SwerveDrivePoseEstimator odometry = new SwerveDrivePoseEstimator(kinematics, getGyroRotation2d(), getModulePositions(), getPose2d());
 
   public DriveTrain() {
-    this.odometry = new SwerveDriveOdometry(
-      kinematics,
-      getGyroRotation2d(),
-      new SwerveModulePosition[] {
-        frontLeft.getPosition(),
-        frontRight.getPosition(),
-        backLeft.getPosition(),
-        backRight.getPosition()
-      });
-
       reset();
 
       ConfigMotorDirections();
@@ -177,24 +165,12 @@ public class DriveTrain extends SubsystemBase{
     setDesiredState(moduleStates);
   }
 
-  public void setWheelsForward() {
-    resetModules();
-    double[] speeds = {.001, .001, .001, .001};
-    double[] angles = {0, 0, 0, 0};
-    SwerveModuleState[] moduleStates = makeSwerveModuleState(speeds, angles);
-    setDesiredState(moduleStates);
-  }
-
   public Rotation2d getGyroRotation2d() {
     return new Rotation2d(Units.degreesToRadians(gyro.getYaw()));
   }
 
-  public Translation2d getTranslation2d() {
-    return new Translation2d(odometry.getPoseMeters().getX(), odometry.getPoseMeters().getY());
-  }
-
   public Pose2d getPose2d() {
-    return new Pose2d(getTranslation2d(), getGyroRotation2d());
+    return odometry.getEstimatedPosition();
   }
 
   public double getPitch() {

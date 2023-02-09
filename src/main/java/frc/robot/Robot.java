@@ -44,6 +44,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    m_robotContainer.driveSubsystem.updateOdometry();
+
+    SmartDashboard.putNumber("Odometry X", m_robotContainer.driveSubsystem.odometry.getEstimatedPosition().getX());
 
     //Drive Motor Encoders
     SmartDashboard.putNumber("FL Encoder Pos", Constants.Motors.DRIVE_FRONT_LEFT.getEncoder().getPosition());
