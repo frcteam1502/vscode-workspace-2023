@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.LimelightHelpers;
 
 public class Limelight {
     double distance;
@@ -57,22 +58,29 @@ public class Limelight {
 
   /**
    * Outputs the primary in-view April Tag seen by the robot
-   * PIPELINE MUST BE SET TO 1
- * @param i
+   * PIPELINE MUST BE SET TO 0
    * 
    * @return The April Tag data registered by the robot
    */
-  public static double[] getAprilTagData(){
-    return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDoubleArray(new double[6]);
-  }
-
-  public static double getAprilTagData(int data){
-    double[] dataTable = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDoubleArray(new double[6]);
-    return dataTable[data];
+  public static double getAprilTagData(){
+    return LimelightHelpers.getFiducialID("limelight");
   }
 
   /**
-   * Pipeline must be set to 1 and April Tag being tracked
+   * (tx, ty, ta)
+   * 
+   * @return The X and Y coordinates of the fidual marker being tracked and the area of the camera the marker takes
+  */
+  public static double[] getTagPos(){
+    double[] tagPos = new double[3];
+    tagPos[0] = LimelightHelpers.getTX("limelight");
+    tagPos[1] = LimelightHelpers.getTY("limelight");
+    tagPos[2] = LimelightHelpers.getTA("limelight");
+    return tagPos;
+  }
+
+  /**
+   * Pipeline must be set to 0 and April Tag being tracked
    * 
    * @return The location of the April Tag in 3D space relative to the Camera
    */
