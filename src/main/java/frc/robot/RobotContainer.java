@@ -6,10 +6,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.Auto.EmptyAutoCommand;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.pneumaticCommand;
-
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.Motors;
 import frc.robot.Constants.XboxButtons;
-
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -25,6 +25,7 @@ public class RobotContainer {
   
   private final pneumaticSubsystem pneumaticSubsystem = new pneumaticSubsystem();
   private final pneumaticCommand pneumaticCommand = new pneumaticCommand(pneumaticSubsystem);
+  private final ArmSubsystem ArmSubsystem = new ArmSubsystem(ArmConstants.LEAD_DEVICE_ID,ArmConstants.FOLOW_DEVICE_ID, ArmConstants.EXTEND_DEVICE_ID);
   
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem(Motors.INTAKE_MOTOR);
   
@@ -39,7 +40,13 @@ public class RobotContainer {
   
     XboxButtons.LEFT_BUMPER.onTrue(new InstantCommand(pneumaticCommand::MoveOut));
     XboxButtons.RIGHT_BUMPER.onTrue(new InstantCommand(pneumaticCommand::MoveIn));
+    XboxButtons.BUTTON_Y.onTrue(new InstantCommand(ArmSubsystem::GoToTop));
+    XboxButtons.BUTTON_B.onTrue(new InstantCommand(ArmSubsystem::GoToMiddle));
+    XboxButtons.BUTTON_A.onTrue(new InstantCommand(ArmSubsystem::GoToFloor));
+    XboxButtons.BUTTON_X.onTrue(new InstantCommand(ArmSubsystem::GoToStow));
   }
+  
+
 
   // TODO: implement SendableChooser
   public Command getAutonomousCommand() {

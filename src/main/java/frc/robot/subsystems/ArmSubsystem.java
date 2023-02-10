@@ -22,10 +22,7 @@ public class ArmSubsystem extends SubsystemBase {
  
  
   final static class ARM_CONSTANTS {
-    // Device IDs
-    public final static int LEAD_DEVICE_ID = 16; // TODO: TBD (get from global device map?)
-    public final static int FOLOW_DEVICE_ID = 17; // TODO: TBD
-    public final static int EXTEND_DEVICE_ID = 18; // TODO: TBD
+   
     // ARM POSITION/ELEVATION (rotations)
     private static final double STOW_ANGLE = 0;
     private static final double FLOOR_ANGLE = 0.1;
@@ -201,6 +198,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void SetPosition(double angle, double extend) {
     m_elevationMotor.SetElevation(angle);
+    m_extenderMotor.SetExtension(extend);
   }
 
   public void Extension() {

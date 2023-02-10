@@ -5,15 +5,13 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ArmLengthSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class ArmCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ArmSubsystem m_ArmAngleSubsystem;
-  private final ArmLengthSubsystem m_ArmLengthSubsystem;
+  private final ArmSubsystem m_ArmSubsystem;
   private final GripperSubsystem m_GripperSubsystem;
 
   /**
@@ -21,14 +19,12 @@ public class ArmCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmCommand(ArmSubsystem subsystem_1 , ArmLengthSubsystem subsystem_2 , GripperSubsystem subsystem_3) {
-    m_ArmAngleSubsystem = subsystem_1;
-    m_ArmLengthSubsystem = subsystem_2;
-    m_GripperSubsystem = subsystem_3;
+  public ArmCommand(ArmSubsystem subsystem_1 , GripperSubsystem subsystem_2) {
+    m_ArmSubsystem = subsystem_1;
+    m_GripperSubsystem = subsystem_2;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem_1);
     addRequirements(subsystem_2);
-    addRequirements(subsystem_3);
   }
 
   // Called when the command is initially scheduled.
