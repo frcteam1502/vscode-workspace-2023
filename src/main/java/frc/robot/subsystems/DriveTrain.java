@@ -74,12 +74,24 @@ public class DriveTrain extends SubsystemBase{
 
   private final SwerveDriveKinematics kinematics = Constants.DriveConstants.KINEMATICS;
 
-  public final SwerveDrivePoseEstimator odometry = new SwerveDrivePoseEstimator(kinematics, getGyroRotation2d(), getModulePositions(), getPose2d());
+  public final SwerveDrivePoseEstimator odometry;
+
+  private Pose2d pose = new Pose2d();
+  
+  private final double pitchOffset;
 
   public DriveTrain() {
-      reset();
+    pitchOffset = gyro.getPitch();
+    this.odometry = new SwerveDrivePoseEstimator(kinematics, getGyroRotation2d(), getModulePositions(), pose);
 
-      ConfigMotorDirections();
+    reset();
+
+    ConfigMotorDirections();
+  }
+
+  @Override
+  public void periodic() {
+    updateOdometry();
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
@@ -117,7 +129,7 @@ public class DriveTrain extends SubsystemBase{
   }
 
   public void updateOdometry() {
-    odometry.update(
+    pose = odometry.update(
         getGyroRotation2d(),
         new SwerveModulePosition[] {
           frontLeft.getPosition(),
@@ -174,7 +186,7 @@ public class DriveTrain extends SubsystemBase{
   }
 
   public double getPitch() {
-    return gyro.getPitch();
+    return gyro.getPitch() - pitchOffset;
   }
 
   public void resetGyro() {
@@ -191,6 +203,7 @@ public class DriveTrain extends SubsystemBase{
   public void reset() {
     resetGyro();
     resetModules();
+    resetOdometry(pose);
   }  
 
   public void ConfigMotorDirections() {
@@ -232,7 +245,7 @@ public class DriveTrain extends SubsystemBase{
       this::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
       Constants.DriveConstants.KINEMATICS, // SwerveDriveKinematics
       new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
-      new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+      new PIDConstants(1.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
       this::setDesiredState, // Module states consumer used to output to the drive subsystem
       eventMap,
       true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true

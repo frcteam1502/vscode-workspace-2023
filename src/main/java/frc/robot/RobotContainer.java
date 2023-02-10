@@ -33,7 +33,7 @@ public class RobotContainer {
   private void configureBindings() {
     driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem));
 
-    Constants.XboxButtons.BUTTON_A.onTrue(new AutoBalance(driveSubsystem));
+    Constants.XboxButtons.DRIVER_LEFT_BUMPER.onTrue(new AutoBalance(driveSubsystem));
   }
 
 

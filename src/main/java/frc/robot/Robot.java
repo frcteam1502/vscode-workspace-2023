@@ -44,7 +44,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    m_robotContainer.driveSubsystem.updateOdometry();
 
     SmartDashboard.putNumber("Odometry X", m_robotContainer.driveSubsystem.odometry.getEstimatedPosition().getX());
 
@@ -93,6 +92,7 @@ public class Robot extends TimedRobot {
 
     //Gyro
     SmartDashboard.putNumber("Angle", Constants.gyro.getYaw());
+    SmartDashboard.putNumber("Tilt", Constants.gyro.getPitch());
 
     //Calc Power
     SmartDashboard.putNumber("Foward Speed Cmd", DriveTrain.fwdSpeedCmd);
