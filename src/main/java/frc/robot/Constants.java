@@ -204,24 +204,6 @@ public final class Constants {
     public static final JoystickButton DRIVER_RIGHT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kRightBumper.value); 
   }
 
-  public enum Encoders {
-    RightArmAngleEncoder (Motors.RIGHT_ARM_ANGLE.getEncoder()),
-    LeftArmAngleEncoder (Motors.LEFT_ARM_ANGLE.getEncoder()),
-    ExtenderEncoder (Motors.ARM_EXTENDER.getEncoder());
-    //AngleEncoder (Motors.ANGLE.getEncoder());
-  
-    //fake encodere
-    public static double TOP_ANGLE = 100;
-    public static double MIDDLE_ANGLE = 50;
-    public static double FLOOR_ANGLE = 25;
-    public static double STOW_ANGLE = 0;
-
-    public RelativeEncoder Encoder;
-    Encoders(RelativeEncoder encoder) {
-      this.Encoder = encoder;
-    }
-  }
-
   public static final class IntakeConstants {
     public static final int FORWARD_CHANNEL = 1;
     public static final int REVERSE_CHANNEL = 0;
@@ -231,5 +213,11 @@ public final class Constants {
     // Forward piston solenoid value
         public static final int kreversechannel = 0;
         public static final int kforwardchannel = 15;
+  }
+
+  public static class ArmConstants {
+    public final static int LEAD_DEVICE_ID = 16; // TODO: TBD (get from global device map?)
+    public final static int FOLOW_DEVICE_ID = 17; // TODO: TBD
+    public final static int EXTEND_DEVICE_ID = 18; // TODO: TBD    
   }
 }
