@@ -19,8 +19,8 @@ public class ArmSubsystem extends SubsystemBase {
  static class xboxcontroller {
   //work in progress found the right buttons just need to put the values.
 
-  public final static double kLeftX;
-  public final static double kLeftY;
+  public final static double kLeftX = 0;
+  public final static double kLeftY = 0;
 
 
  }
