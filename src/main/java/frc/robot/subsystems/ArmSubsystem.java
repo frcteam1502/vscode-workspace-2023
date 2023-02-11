@@ -11,20 +11,11 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
 
-  // no need to be global/public if not used outside of this subsystemstatic class xboxcontroller.axis 
- static class xboxcontroller {
-  //work in progress found the right buttons just need to put the values.
 
-  public final static double kLeftX;
-  public final static double kLeftY;
-
-
- }
- 
- 
   final static class ARM_CONSTANTS {
     // Device IDs
     public final static int LEAD_DEVICE_ID = 16; // TODO: TBD (get from global device map?)
@@ -80,7 +71,9 @@ public class ArmSubsystem extends SubsystemBase {
       
       m_leadMotor.restoreFactoryDefaults();
       m_followMotor.restoreFactoryDefaults();
-  
+      
+   
+
 
       m_followMotor.follow(m_leadMotor, /*invert*/ true);
 
