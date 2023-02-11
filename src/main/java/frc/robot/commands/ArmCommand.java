@@ -36,13 +36,13 @@ public class ArmCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double y = Joysticks.DRIVE_CONTROLLER.getLeftY();
+    double y = Joysticks.OPERATOR_CONTROLLER.getLeftY();
     if (Math.abs(y) > 0.1) {
       m_ArmSubsystem.FineTune(Math.signum(-y));
     }
-    double x = Joystick.DRIVE_CONTROLLER.getLeftX();
-    if (Math.abs(y) > 0.1) { 
-m_ArmSubsystem.FineTune(Math.signum(-y));
+    double x = Joysticks.OPERATOR_CONTROLLER.getLeftX();
+    if (Math.abs(x) > 0.1) { 
+m_ArmSubsystem.FineTune(Math.signum(-x));
     } 
   }
 

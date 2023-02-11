@@ -123,7 +123,7 @@ public class ArmSubsystem extends SubsystemBase {
       if((max != m_pidControllerAngle.getOutputMax()) || (min != m_pidControllerAngle.getOutputMin())) { 
         m_pidControllerAngle.setOutputRange(min, max); 
       }
-
+      
       SetElevation(rotations);
     }
     
@@ -184,7 +184,20 @@ public class ArmSubsystem extends SubsystemBase {
     m_targetExtension = rotations;
     m_pidControllerExtension.setReference(rotations, CANSparkMax.ControlType.kPosition);
     }
-    
+    // For Testing
+    public void DisplayInformation(){
+      // display PID coefficients on SmartDashboard
+      SmartDashboard.putNumber("P Gain", m_pidControllerExtension.getP());
+      SmartDashboard.putNumber("I Gain", m_pidControllerExtension.getI());
+      SmartDashboard.putNumber("D Gain", m_pidControllerExtension.getD());
+      SmartDashboard.putNumber("I Zone", m_pidControllerExtension.getIZone());
+      SmartDashboard.putNumber("Feed Forward", m_pidControllerExtension.getFF());
+      SmartDashboard.putNumber("Max Output", m_pidControllerExtension.getOutputMax());
+      SmartDashboard.putNumber("Min Output", m_pidControllerExtension.getOutputMin());
+
+      SmartDashboard.putNumber("Set Position", 0);
+
+    }
 }
   private DualMotor m_elevationMotor;
   private ExtendMotor m_extenderMotor;

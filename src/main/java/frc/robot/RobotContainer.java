@@ -45,7 +45,7 @@ public class RobotContainer {
     XboxButtons.BUTTON_B.onTrue(new InstantCommand(ArmSubsystem::GoToMiddle));
     XboxButtons.BUTTON_A.onTrue(new InstantCommand(ArmSubsystem::GoToFloor));
     XboxButtons.BUTTON_X.onTrue(new InstantCommand(ArmSubsystem::GoToStow));
-    XboxButtons.LEFT_JOYSTICK.onTrue(new InstantCommand(ArmSubsystem::MoveOut));
+    //XboxButtons.LEFT_JOYSTICK.onTrue(new InstantCommand(ArmSubsystem::Extension));
   }
   
 
