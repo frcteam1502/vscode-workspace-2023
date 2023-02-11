@@ -10,6 +10,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -45,7 +46,8 @@ public class ArmSubsystem extends SubsystemBase {
     public final static double kFF = 0;
     public final static double kMaxOutput = 1;
     public final static double kMinOutput = -1;
-  } 
+  }
+
   // no need to be global/public if not used outside of this subsystem
   final static class EXTEND_CONSTANTS {
     // ARM POSITION/ELEVATION (rotations)
@@ -63,6 +65,7 @@ public class ArmSubsystem extends SubsystemBase {
     public final static double kMaxOutput = 1;
     public final static double kMinOutput = -1;
   } 
+  
   final class DualMotor {
     private CANSparkMax m_leadMotor; // this one needs to match the rotations (CCW)
     private CANSparkMax m_followMotor;
@@ -73,13 +76,9 @@ public class ArmSubsystem extends SubsystemBase {
     public DualMotor(int leadDeviceID, int followDeviceID) {
       m_leadMotor = new CANSparkMax(leadDeviceID, MotorType.kBrushless);
       m_followMotor = new CANSparkMax(followDeviceID, MotorType.kBrushless);
-    
-      
-      m_leadMotor.restoreFactoryDefaults();
-      m_followMotor.restoreFactoryDefaults();
-      
-                                                                                                                           
 
+      m_leadMotor.restoreFactoryDefaults();
+      m_followMotor.restoreFactoryDefaults();                                                                            
 
       m_followMotor.follow(m_leadMotor, /*invert*/ true);
 
@@ -130,22 +129,22 @@ public class ArmSubsystem extends SubsystemBase {
     // For Testing
     public void DisplayInformation(){
       // display PID coefficients on SmartDashboard
-      SmartDashboard.putNumber("P Gain", m_pidControllerAngle.getP());
-      SmartDashboard.putNumber("I Gain", m_pidControllerAngle.getI());
-      SmartDashboard.putNumber("D Gain", m_pidControllerAngle.getD());
-      SmartDashboard.putNumber("I Zone", m_pidControllerAngle.getIZone());
-      SmartDashboard.putNumber("Feed Forward", m_pidControllerAngle.getFF());
-      SmartDashboard.putNumber("Max Output", m_pidControllerAngle.getOutputMax());
-      SmartDashboard.putNumber("Min Output", m_pidControllerAngle.getOutputMin());
+      SmartDashboard.putNumber("ANGLE P Gain", m_pidControllerAngle.getP());
+      SmartDashboard.putNumber("ANGLE I Gain", m_pidControllerAngle.getI());
+      SmartDashboard.putNumber("ANGLE D Gain", m_pidControllerAngle.getD());
+      SmartDashboard.putNumber("ANGLE I Zone", m_pidControllerAngle.getIZone());
+      SmartDashboard.putNumber("ANGLE Feed Forward", m_pidControllerAngle.getFF());
+      SmartDashboard.putNumber("ANGLE Max Output", m_pidControllerAngle.getOutputMax());
+      SmartDashboard.putNumber("ANGLE Min Output", m_pidControllerAngle.getOutputMin());
 
-      SmartDashboard.putNumber("Set Position", 0);
+      SmartDashboard.putNumber("ANGLE Set Position", 0);
 
     }
     
     public void DisplayPosition()
     {
-      SmartDashboard.putNumber("Arm Target Position", m_targetPosition);
-      SmartDashboard.putNumber("Arm Current Position", m_encoderangle.getPosition());
+      SmartDashboard.putNumber("ANGLE Arm Target Position", m_targetPosition);
+      SmartDashboard.putNumber("ANGLE Arm Current Position", m_encoderangle.getPosition());
     }
 
     public void FineTune(double signum) {
@@ -156,6 +155,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
   }
+  
   final class ExtendMotor{
     private CANSparkMax m_extendMotor;
     private RelativeEncoder m_encoderextension;
@@ -221,12 +221,35 @@ public class ArmSubsystem extends SubsystemBase {
     // Retract the arm
   }
 
+  private boolean m_DisplayArmDiagnostics = true;
+  private boolean m_UpdateArmDiagnostics = false;
+  private boolean m_DisplayExtendDiagnostics = true;
+  private boolean m_UpdateExtendDiagnostics = false;
+
+  private void ToggleArmUpdate() {
+    m_UpdateArmDiagnostics = !m_UpdateArmDiagnostics;
+  }
+  private void ToggleArmDiagnostics() {
+    m_DisplayArmDiagnostics = !m_DisplayArmDiagnostics;
+  }
+  private void ToggleExtendUpdate() {
+    m_UpdateExtendDiagnostics = !m_UpdateExtendDiagnostics;
+  }
+  private void ToggleExtendDiagnostics() {
+    m_DisplayExtendDiagnostics = !m_DisplayExtendDiagnostics;
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putData("Toggle ARM Update", new InstantCommand(this::ToggleArmUpdate));
     m_elevationMotor.UpdateInformation(); // for PID testing/tuning (also see test-mode)
+    SmartDashboard.putData("Toggle ARM Diagnostics", new InstantCommand(this::ToggleArmDiagnostics));
     m_elevationMotor.DisplayPosition(); // for basic arm info
+    SmartDashboard.putData("Toggle EXTEND Update", new InstantCommand(this::ToggleExtendUpdate));
+    m_extenderMotor.UpdateInformation(); // for PID testing/tuning (also see test-mode)
+    SmartDashboard.putData("Toggle EXTEND Diagnostics", new InstantCommand(this::ToggleExtendDiagnostics));
+    m_extenderMotor.DisplayPosition(); // for basic arm info
   }
 
   @Override
