@@ -8,22 +8,33 @@
 
 
 # Laptops
-Laptop   | Nickname      | Account  | User Folder   | root
----      |---            |---       |---            |---
-Laptop-1 | SHORT CIRCUIT | MS: DK   | frct          | \Repose\vscode-workspace-2023
-Laptop-2 | STATIC SHOCK  | MS: DK   |               |
-Laptop-3 | LOOSE SCREWS  | MS       |               |
-Laptop-4 | GLITCH        | local    | Team 1502     | \repos\vscode-workspace-2023
-Laptop-5 | CRASH         |          | frct          |
-Laptop-6 | GREMLINS      |          |               |
+Laptop   | Nickname      |Win   | Account  | User Folder   | root
+---      |---            |---   |---       |---            |---
+Laptop-1 | SHORT CIRCUIT |      | MS: DK   | frct          | \Repose\vscode-workspace-2023
+Laptop-2 | STATIC SHOCK  |      | MS: DK   |               |
+Laptop-3 | LOOSE SCREWS  |      | MS       |               |
+Laptop-4 | GLITCH        |11 Pro| local    | Team 1502     | \repos\vscode-workspace-2023
+Laptop-5 | CRASH         |11 Pro| MS: DK   | frct          | \repos\vscode-workspace-2023
+Laptop-6 | GREMLINS      |11 Pro| MS: DK   | frcte         | \repos\vscode-workspace-2023
 
-MS:
+MS: Microsoft Account (Team 1502 - frcteam1502@gmail.com)
 MS: DK -- Some laptops are sharing a desktop via OneDrive (intentional ?!?)
+* Laptop-5 has desktop and documents (including repos) in OneDrive somehow
+* Laptop-6 has desktop and documents (including repos) in OneDrive somehow
+
+**NOTE:** Saving your repos on OneDrive could result in really difficult errors to diagonose and fix, e.g., "corrupted" files
+
 
 # WPI Lib Preparation
 
 # GitHub Integration
 sync laptop w. github, e.g., login and save credentials
+
+```
+git config --global user.email frcteam1502@gmail.com
+git config --global user.name "Team 1502"
+```
+(default `user.name` is over-written using the 'VSCode Personalization' scheme below)
 
 ## Helpful git alias
 Helpful when using git in terminal windows
@@ -90,5 +101,8 @@ VSCode settings.json:
 ```
   "terminal.integrated.fontFamily": "CaskaydiaCove NF Mono"
 ```
+
+aliases: CaskaydiaCove NFM, CaskaydiaCove Nerd Font Mono ??
+
 # TODO
 * [ ] Make a script to do the install for year 20XX

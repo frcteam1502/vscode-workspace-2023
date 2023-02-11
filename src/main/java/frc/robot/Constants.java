@@ -182,44 +182,26 @@ public final class Constants {
 }
 
   public static final class Joysticks {
-    public static final XboxController MANIP_CONTROLLER = new XboxController(0);
+    public static final XboxController OPERATOR_CONTROLLER = new XboxController(0);
     public static final XboxController DRIVE_CONTROLLER = new XboxController(1);
   }
 
   public static final class XboxButtons {
-    public static final JoystickButton LEFT_BUMPER = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kLeftBumper.value); 
-    public static final JoystickButton RIGHT_BUMPER = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kRightBumper.value); 
-    public static final JoystickButton BUTTON_Y = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kY.value); 
-    public static final JoystickButton BUTTON_A = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kA.value); 
-    public static final JoystickButton BUTTON_X = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kX.value); 
-    public static final JoystickButton BUTTON_B = new JoystickButton(Joysticks.MANIP_CONTROLLER, XboxController.Button.kB.value); 
-    public static final JoystickButton BACK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 7);
-    public static final JoystickButton START = new JoystickButton(Joysticks.MANIP_CONTROLLER, 8);
-    public static final JoystickButton LEFT_JOYSTICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 12);
-    public static final JoystickButton RIGHT_JOYSTICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 13);
-    public static final JoystickButton LEFT_STICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 14);
-    public static final JoystickButton RIGHT_STICK = new JoystickButton(Joysticks.MANIP_CONTROLLER, 15);
+    public static final JoystickButton LEFT_BUMPER = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, XboxController.Button.kLeftBumper.value); 
+    public static final JoystickButton RIGHT_BUMPER = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, XboxController.Button.kRightBumper.value); 
+    public static final JoystickButton BUTTON_Y = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, XboxController.Button.kY.value); 
+    public static final JoystickButton BUTTON_A = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, XboxController.Button.kA.value); 
+    public static final JoystickButton BUTTON_X = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, XboxController.Button.kX.value); 
+    public static final JoystickButton BUTTON_B = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, XboxController.Button.kB.value); 
+    public static final JoystickButton BACK = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 7);
+    public static final JoystickButton START = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 8);
+    public static final JoystickButton LEFT_JOYSTICK = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 12);
+    public static final JoystickButton RIGHT_JOYSTICK = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 13);
+    public static final JoystickButton LEFT_STICK = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 14);
+    public static final JoystickButton RIGHT_STICK = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 15);
 
     //Driver Buttons
     public static final JoystickButton DRIVER_RIGHT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kRightBumper.value); 
-  }
-
-  public enum Encoders {
-    RightArmAngleEncoder (Motors.RIGHT_ARM_ANGLE.getEncoder()),
-    LeftArmAngleEncoder (Motors.LEFT_ARM_ANGLE.getEncoder()),
-    ExtenderEncoder (Motors.ARM_EXTENDER.getEncoder());
-    //AngleEncoder (Motors.ANGLE.getEncoder());
-  
-    //fake encodere
-    public static double TOP_ANGLE = 100;
-    public static double MIDDLE_ANGLE = 50;
-    public static double FLOOR_ANGLE = 25;
-    public static double STOW_ANGLE = 0;
-
-    public RelativeEncoder Encoder;
-    Encoders(RelativeEncoder encoder) {
-      this.Encoder = encoder;
-    }
   }
 
   public static final class IntakeConstants {
@@ -229,7 +211,13 @@ public final class Constants {
 
   public static class PneumaticsConstants{
     // Forward piston solenoid value
-        public static final int kreversechannel = 0;
-        public static final int kforwardchannel = 15;
+    public static final int kreversechannel = 0;
+    public static final int kforwardchannel = 15;
+  }
+
+  public static class ArmConstants {
+    public final static int LEAD_DEVICE_ID = 16; // TODO: TBD (get from global device map?)
+    public final static int FOLOW_DEVICE_ID = 17; // TODO: TBD
+    public final static int EXTEND_DEVICE_ID = 18; // TODO: TBD    
   }
 }

@@ -15,17 +15,27 @@ import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
 
+  // no need to be global/public if not used outside of this subsystemstatic class xboxcontroller.axis 
+ static class xboxcontroller {
+  //work in progress found the right buttons just need to put the values.
 
+  public final static double kLeftX;
+  public final static double kLeftY;
+
+
+ }
+ 
+ 
   final static class ARM_CONSTANTS {
     // Device IDs
-    public final static int LEAD_DEVICE_ID = 16; // TODO: TBD (get from global device map?)
-    public final static int FOLOW_DEVICE_ID = 17; // TODO: TBD
-    public final static int EXTEND_DEVICE_ID = 18; // TODO: TBD
     // ARM POSITION/ELEVATION (rotations)
     private static final double STOW_ANGLE = 0;
-    private static final double FLOOR_ANGLE = 45;
-    private static final double MIDDLE_ANGLE = 90;
-    private static final double TOP_ANGLE = 120;
+    private static final double FLOOR_ANGLE = 0.1;
+    private static final double MIDDLE_ANGLE = 0.2;
+    private static final double TOP_ANGLE = 0.3;
+    
+    private static final double MIN_ANGLE = 0.0;
+    private static final double MAX_ANGLE = 0.5;
     
     // PID coefficients (sample values, TBD)
     public final static double kP = 0.1;
@@ -38,15 +48,11 @@ public class ArmSubsystem extends SubsystemBase {
   } 
   // no need to be global/public if not used outside of this subsystem
   final static class EXTEND_CONSTANTS {
-    // Device IDs
-    public final static int LEAD_DEVICE_ID = 16; // TODO: TBD (get from global device map?)
-    public final static int FOLOW_DEVICE_ID = 17; // TODO: TBD
-
     // ARM POSITION/ELEVATION (rotations)
     private static final double STOW_EXTENSION = 0;
-    private static final double FLOOR_EXTENSION = 45;
-    private static final double MIDDLE_EXTENSION = 90;
-    private static final double TOP_EXTENSION = 120;
+    private static final double FLOOR_EXTENSION = 0.1;
+    private static final double MIDDLE_EXTENSION = 0.2;
+    private static final double TOP_EXTENSION = 0.3;
 
     // PID coefficients (sample values, TBD)
     public final static double kP = 0.1;
@@ -142,6 +148,13 @@ public class ArmSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Arm Current Position", m_encoderangle.getPosition());
     }
 
+    public void FineTune(double signum) {
+      double targetPosition = m_targetPosition + signum * 0.05;
+      if (ARM_CONSTANTS.MIN_ANGLE < targetPosition && targetPosition < ARM_CONSTANTS.MAX_ANGLE) {
+        SetElevation(targetPosition);
+      }
+    }
+
   }
   final class ExtendMotor{
     private CANSparkMax m_extendMotor;
@@ -198,6 +211,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void SetPosition(double angle, double extend) {
     m_elevationMotor.SetElevation(angle);
+    m_extenderMotor.SetExtension(extend);
   }
 
   public void Extension() {
@@ -218,6 +232,9 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
+  }
+  public void FineTune(double signum) {
+    m_elevationMotor.FineTune(signum);
   }
    
  }
