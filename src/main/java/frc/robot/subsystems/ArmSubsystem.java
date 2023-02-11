@@ -72,7 +72,7 @@ public class ArmSubsystem extends SubsystemBase {
       m_leadMotor.restoreFactoryDefaults();
       m_followMotor.restoreFactoryDefaults();
       
-   
+                                                                                                                           
 
 
       m_followMotor.follow(m_leadMotor, /*invert*/ true);
