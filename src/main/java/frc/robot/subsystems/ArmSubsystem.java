@@ -56,6 +56,9 @@ public class ArmSubsystem extends SubsystemBase {
     private static final double MIDDLE_EXTENSION = 0.2;
     private static final double TOP_EXTENSION = 0.3;
 
+    private static final double MIN_EXTENSION = 0.0;
+    private static final double MAX_EXTENSION = 4.0;
+   
     // PID coefficients (sample values, TBD)
     public final static double kP = 0.1;
     public final static double kI = 1e-4;
@@ -104,14 +107,14 @@ public class ArmSubsystem extends SubsystemBase {
     // For Testing
     public void UpdateInformation(){ 
       // read PID coefficients from SmartDashboard
-      double p = SmartDashboard.getNumber("P Gain", 0);
-      double i = SmartDashboard.getNumber("I Gain", 0);
-      double d = SmartDashboard.getNumber("D Gain", 0);
-      double iz = SmartDashboard.getNumber("I Zone", 0);
-      double ff = SmartDashboard.getNumber("Feed Forward", 0);
-      double max = SmartDashboard.getNumber("Max Output", 0);
-      double min = SmartDashboard.getNumber("Min Output", 0);
-      double rotations = SmartDashboard.getNumber("Set Position", 0);
+      double p =         SmartDashboard.getNumber("ANGLE P Gain", 0);
+      double i =         SmartDashboard.getNumber("ANGLE I Gain", 0);
+      double d =         SmartDashboard.getNumber("ANGLE D Gain", 0);
+      double iz =        SmartDashboard.getNumber("ANGLE I Zone", 0);
+      double ff =        SmartDashboard.getNumber("ANGLE Feed Forward", 0);
+      double max =       SmartDashboard.getNumber("ANGLE Max Output", 0);
+      double min =       SmartDashboard.getNumber("ANGLE Min Output", 0);
+      double rotations = SmartDashboard.getNumber("ANGLE Set Position", 0);
   
       // if PID coefficients on SmartDashboard have changed, write new values to controller
       if((p != m_pidControllerAngle.getP())) { m_pidControllerAngle.setP(p); }
@@ -156,7 +159,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   }
   
-  final class ExtendMotor{
+  final class ExtendMotor {
     private CANSparkMax m_extendMotor;
     private RelativeEncoder m_encoderextension;
     private SparkMaxPIDController m_pidControllerExtension;
@@ -169,55 +172,103 @@ public class ArmSubsystem extends SubsystemBase {
 
       m_pidControllerExtension = m_extendMotor.getPIDController();
 
-    // Encoder object created to display position values
+      // Encoder object created to display position values
       m_encoderextension = m_extendMotor.getEncoder();
 
-    // set PID coefficients
-    m_pidControllerExtension.setP(EXTEND_CONSTANTS.kP);
-    m_pidControllerExtension.setI(EXTEND_CONSTANTS.kI);
-    m_pidControllerExtension.setD(EXTEND_CONSTANTS.kD);
-    m_pidControllerExtension.setIZone(EXTEND_CONSTANTS.kIz);
-    m_pidControllerExtension.setFF(EXTEND_CONSTANTS.kFF);
-    m_pidControllerExtension.setOutputRange(EXTEND_CONSTANTS.kMinOutput, EXTEND_CONSTANTS.kMaxOutput);
+      // set PID coefficients
+      m_pidControllerExtension.setP(EXTEND_CONSTANTS.kP);
+      m_pidControllerExtension.setI(EXTEND_CONSTANTS.kI);
+      m_pidControllerExtension.setD(EXTEND_CONSTANTS.kD);
+      m_pidControllerExtension.setIZone(EXTEND_CONSTANTS.kIz);
+      m_pidControllerExtension.setFF(EXTEND_CONSTANTS.kFF);
+      m_pidControllerExtension.setOutputRange(EXTEND_CONSTANTS.kMinOutput, EXTEND_CONSTANTS.kMaxOutput);
     }
-   public void SetExtension(double rotations) {
-    m_targetExtension = rotations;
-    m_pidControllerExtension.setReference(rotations, CANSparkMax.ControlType.kPosition);
+
+    public void SetExtension(double rotations) {
+      m_targetExtension = rotations;
+      m_pidControllerExtension.setReference(rotations, CANSparkMax.ControlType.kPosition);
     }
+
     // For Testing
-    public void DisplayInformation(){
-      // display PID coefficients on SmartDashboard
-      SmartDashboard.putNumber("P Gain", m_pidControllerExtension.getP());
-      SmartDashboard.putNumber("I Gain", m_pidControllerExtension.getI());
-      SmartDashboard.putNumber("D Gain", m_pidControllerExtension.getD());
-      SmartDashboard.putNumber("I Zone", m_pidControllerExtension.getIZone());
-      SmartDashboard.putNumber("Feed Forward", m_pidControllerExtension.getFF());
-      SmartDashboard.putNumber("Max Output", m_pidControllerExtension.getOutputMax());
-      SmartDashboard.putNumber("Min Output", m_pidControllerExtension.getOutputMin());
-
-      SmartDashboard.putNumber("Set Position", 0);
-
+    public void UpdateInformation(){ 
+      // read PID coefficients from SmartDashboard
+      double p = SmartDashboard.getNumber(  "EXTEND P Gain", 0);
+      double i = SmartDashboard.getNumber ( "EXTEND I Gain", 0);
+      double d = SmartDashboard.getNumber ( "EXTEND D Gain", 0);
+      double iz = SmartDashboard.getNumber( "EXTEND I Zone", 0);
+      double ff = SmartDashboard.getNumber( "EXTEND Feed Forward", 0);
+      double max = SmartDashboard.getNumber("EXTEND Max Output", 0);
+      double min = SmartDashboard.getNumber("EXTEND Min Output", 0);
+      double rotations = SmartDashboard.getNumber("EXTEND Set Position", 0);
+  
+      // if PID coefficients on SmartDashboard have changed, write new values to controller
+      if((p != m_pidControllerExtension.getP())) { m_pidControllerExtension.setP(p); }
+      if((i != m_pidControllerExtension.getI())) { m_pidControllerExtension.setI(i); }
+      if((d != m_pidControllerExtension.getD())) { m_pidControllerExtension.setD(d); }
+      if((iz != m_pidControllerExtension.getIZone())) { m_pidControllerExtension.setIZone(iz); }
+      if((ff != m_pidControllerExtension.getFF())) { m_pidControllerExtension.setFF(ff); }
+      if((max != m_pidControllerExtension.getOutputMax()) || (min != m_pidControllerExtension.getOutputMin())) { 
+        m_pidControllerExtension.setOutputRange(min, max); 
+      }
+      
+      SetExtension(rotations);
     }
-}
+
+    // For Testing
+    public void DisplayInformation() {
+      // display PID coefficients on SmartDashboard
+      SmartDashboard.putNumber("EXTEND P Gain", m_pidControllerExtension.getP());
+      SmartDashboard.putNumber("EXTEND I Gain", m_pidControllerExtension.getI());
+      SmartDashboard.putNumber("EXTEND D Gain", m_pidControllerExtension.getD());
+      SmartDashboard.putNumber("EXTEND I Zone", m_pidControllerExtension.getIZone());
+      SmartDashboard.putNumber("EXTEND Feed Forward", m_pidControllerExtension.getFF());
+      SmartDashboard.putNumber("EXTEND Max Output", m_pidControllerExtension.getOutputMax());
+      SmartDashboard.putNumber("EXTEND Min Output", m_pidControllerExtension.getOutputMin());
+
+      SmartDashboard.putNumber("EXTEND Set Position", 0);
+    }
+    public void DisplayPosition()
+    {
+      SmartDashboard.putNumber("EXTEND Arm Target Extension", m_targetExtension);
+      SmartDashboard.putNumber("EXTEND Arm Current Position", m_encoderextension.getPosition());
+    }
+
+    public void FineTune(double signum) {
+      double targetPosition = m_targetExtension + signum * 0.05;
+      if (EXTEND_CONSTANTS.MIN_EXTENSION < targetPosition && targetPosition < EXTEND_CONSTANTS.MAX_EXTENSION) {
+        SetExtension(targetPosition);
+      }
+    }
+  }
+
   private DualMotor m_elevationMotor;
   private ExtendMotor m_extenderMotor;
 
   /* TODO: provide LEAD_DEVICE_ID, etc. */
   public ArmSubsystem(int leadDeviceID, int followDeviceID, int extendDeviceID) {
     m_elevationMotor = new DualMotor(leadDeviceID, followDeviceID);
+    SmartDashboard.putData("Toggle ARM Update", new InstantCommand(this::ToggleArmUpdate));
+    SmartDashboard.putData("Toggle ARM Diagnostics", new InstantCommand(this::ToggleArmDiagnostics));
     m_elevationMotor.DisplayInformation();
-    
+    SmartDashboard.putData("Toggle EXTEND Update", new InstantCommand(this::ToggleExtendUpdate));
+    SmartDashboard.putData("Toggle EXTEND Diagnostics", new InstantCommand(this::ToggleExtendDiagnostics));
+    m_extenderMotor.DisplayInformation();
+
     m_extenderMotor = new ExtendMotor(extendDeviceID);
   }
+
   public void GoToStow() { // Change arm angle to floor
     SetPosition(ARM_CONSTANTS.STOW_ANGLE, EXTEND_CONSTANTS.STOW_EXTENSION);
   }
+
   public void GoToFloor() { // Change arm angle to floor
     SetPosition(ARM_CONSTANTS.FLOOR_ANGLE, EXTEND_CONSTANTS.FLOOR_EXTENSION);
   }
+
   public void GoToMiddle() { // Change arm angle to middle
     SetPosition(ARM_CONSTANTS.MIDDLE_ANGLE, EXTEND_CONSTANTS.MIDDLE_EXTENSION);
   }
+
   public void GoToTop() { // Change arm angle to top
     SetPosition(ARM_CONSTANTS.TOP_ANGLE, EXTEND_CONSTANTS.TOP_EXTENSION);
   }
@@ -230,6 +281,7 @@ public class ArmSubsystem extends SubsystemBase {
   public void Extension() {
     // Extend the arm
   }
+
   public void Retraction() {
     // Retract the arm
   }
@@ -242,12 +294,15 @@ public class ArmSubsystem extends SubsystemBase {
   private void ToggleArmUpdate() {
     m_UpdateArmDiagnostics = !m_UpdateArmDiagnostics;
   }
+
   private void ToggleArmDiagnostics() {
     m_DisplayArmDiagnostics = !m_DisplayArmDiagnostics;
   }
+
   private void ToggleExtendUpdate() {
     m_UpdateExtendDiagnostics = !m_UpdateExtendDiagnostics;
   }
+
   private void ToggleExtendDiagnostics() {
     m_DisplayExtendDiagnostics = !m_DisplayExtendDiagnostics;
   }
@@ -255,20 +310,25 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putData("Toggle ARM Update", new InstantCommand(this::ToggleArmUpdate));
-    m_elevationMotor.UpdateInformation(); // for PID testing/tuning (also see test-mode)
-    SmartDashboard.putData("Toggle ARM Diagnostics", new InstantCommand(this::ToggleArmDiagnostics));
-    m_elevationMotor.DisplayPosition(); // for basic arm info
-    SmartDashboard.putData("Toggle EXTEND Update", new InstantCommand(this::ToggleExtendUpdate));
-    m_extenderMotor.UpdateInformation(); // for PID testing/tuning (also see test-mode)
-    SmartDashboard.putData("Toggle EXTEND Diagnostics", new InstantCommand(this::ToggleExtendDiagnostics));
-    m_extenderMotor.DisplayPosition(); // for basic arm info
+    if (m_UpdateArmDiagnostics) {
+      m_elevationMotor.UpdateInformation(); // for PID testing/tuning (also see test-mode)
+    }
+    if (m_DisplayArmDiagnostics) {
+      m_elevationMotor.DisplayPosition(); // for basic arm info
+    }
+    if (m_UpdateExtendDiagnostics) {
+      m_extenderMotor.UpdateInformation(); // for PID testing/tuning (also see test-mode)
+    }
+    if (m_DisplayExtendDiagnostics) {
+      m_extenderMotor.DisplayPosition(); // for basic arm info
+    }
   }
 
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
   public void FineTune(double signum) {
     m_elevationMotor.FineTune(signum);
   }

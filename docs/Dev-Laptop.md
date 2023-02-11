@@ -22,7 +22,7 @@ MS: DK -- Some laptops are sharing a desktop via OneDrive (intentional ?!?)
 * Laptop-5 has desktop and documents (including repos) in OneDrive somehow
 * Laptop-6 has desktop and documents (including repos) in OneDrive somehow
 
-**NOTE:** Saving your repos on OneDrive could result in really difficult errors to diagonose and fix, e.g., "corrupted" files
+**NOTE:** Saving your repos on OneDrive could result in really difficult errors to diagnose and fix, e.g., "corrupted" files
 
 
 # WPI Lib Preparation
