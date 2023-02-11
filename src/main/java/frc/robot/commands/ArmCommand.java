@@ -7,6 +7,7 @@ package frc.robot.commands;
 import frc.robot.Constants.Joysticks;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
@@ -39,6 +40,10 @@ public class ArmCommand extends CommandBase {
     if (Math.abs(y) > 0.1) {
       m_ArmSubsystem.FineTune(Math.signum(-y));
     }
+    double x = Joystick.DRIVE_CONTROLLER.getLeftX();
+    if (Math.abs(y) > 0.1) { 
+m_ArmSubsystem.FineTune(Math.signum(-y));
+    } 
   }
 
   // Called once the command ends or is interrupted.
