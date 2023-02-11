@@ -28,7 +28,9 @@ public class ArmSubsystem extends SubsystemBase {
  
  
   final static class ARM_CONSTANTS {
-    // Device IDs
+
+    private static final double GEAR_BOX_RATIO = 12.0;
+
     // ARM POSITION/ELEVATION (rotations)
     private static final double STOW_ANGLE = 0;
     private static final double FLOOR_ANGLE = 0.1;
@@ -50,11 +52,13 @@ public class ArmSubsystem extends SubsystemBase {
 
   // no need to be global/public if not used outside of this subsystem
   final static class EXTEND_CONSTANTS {
+    private static final double GEAR_BOX_RATIO = 12.0;
+
     // ARM POSITION/ELEVATION (rotations)
     private static final double STOW_EXTENSION = 0;
     private static final double FLOOR_EXTENSION = 0.1;
-    private static final double MIDDLE_EXTENSION = 0.2;
-    private static final double TOP_EXTENSION = 0.3;
+    private static final double MIDDLE_EXTENSION = 0.25;
+    private static final double TOP_EXTENSION = 0.5;
 
     private static final double MIN_EXTENSION = 0.0;
     private static final double MAX_EXTENSION = 4.0;
@@ -100,8 +104,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
  
     public void SetElevation(double rotations) {
-      m_targetPosition = rotations;
-      m_pidControllerAngle.setReference(rotations, CANSparkMax.ControlType.kPosition);
+      m_targetPosition = rotations * ARM_CONSTANTS.GEAR_BOX_RATIO;
+      m_pidControllerAngle.setReference(m_targetPosition, CANSparkMax.ControlType.kPosition);
     }
     
     // For Testing
@@ -126,7 +130,7 @@ public class ArmSubsystem extends SubsystemBase {
         m_pidControllerAngle.setOutputRange(min, max); 
       }
       
-      SetElevation(rotations);
+      SetElevation(rotations / ARM_CONSTANTS.GEAR_BOX_RATIO);
     }
     
     // For Testing
@@ -152,7 +156,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     // TODO: Cancel previous target position from button? Some sort of adaptive fine-tune
     public void FineTune(double signum) {
-      double targetPosition = m_targetPosition + signum * 0.1;
+      double targetPosition = m_targetPosition + signum * 0.1 * ARM_CONSTANTS.GEAR_BOX_RATIO;
       if (ARM_CONSTANTS.MIN_ANGLE < targetPosition && targetPosition < ARM_CONSTANTS.MAX_ANGLE) {
         SetElevation(targetPosition);
       }
@@ -248,6 +252,8 @@ public class ArmSubsystem extends SubsystemBase {
   /* TODO: provide LEAD_DEVICE_ID, etc. */
   public ArmSubsystem(int leadDeviceID, int followDeviceID, int extendDeviceID) {
     m_elevationMotor = new DualMotor(leadDeviceID, followDeviceID);
+    m_extenderMotor = new ExtendMotor(extendDeviceID);
+    
     SmartDashboard.putData("Toggle ARM Update", new InstantCommand(this::ToggleArmUpdate));
     SmartDashboard.putData("Toggle ARM Diagnostics", new InstantCommand(this::ToggleArmDiagnostics));
     m_elevationMotor.DisplayInformation();
@@ -255,7 +261,6 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putData("Toggle EXTEND Diagnostics", new InstantCommand(this::ToggleExtendDiagnostics));
     m_extenderMotor.DisplayInformation();
 
-    m_extenderMotor = new ExtendMotor(extendDeviceID);
   }
 
   public void GoToStow() { // Change arm angle to floor
