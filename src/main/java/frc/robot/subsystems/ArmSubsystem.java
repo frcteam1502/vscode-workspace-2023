@@ -150,8 +150,9 @@ public class ArmSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("ANGLE Arm Current Position", m_encoderangle.getPosition());
     }
 
+    // TODO: Cancel previous target position from button? Some sort of adaptive fine-tune
     public void FineTune(double signum) {
-      double targetPosition = m_targetPosition + signum * 0.05;
+      double targetPosition = m_targetPosition + signum * 0.1;
       if (ARM_CONSTANTS.MIN_ANGLE < targetPosition && targetPosition < ARM_CONSTANTS.MAX_ANGLE) {
         SetElevation(targetPosition);
       }
