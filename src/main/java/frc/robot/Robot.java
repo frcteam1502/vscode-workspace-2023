@@ -92,7 +92,7 @@ public class Robot extends TimedRobot {
 
     //Gyro
     SmartDashboard.putNumber("Angle", Constants.gyro.getYaw());
-    SmartDashboard.putNumber("Tilt", Constants.gyro.getPitch());
+    SmartDashboard.putNumber("Roll", m_robotContainer.driveSubsystem.getRoll());
 
     //Calc Power
     SmartDashboard.putNumber("Foward Speed Cmd", DriveTrain.fwdSpeedCmd);

@@ -20,6 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -78,11 +79,16 @@ public class DriveTrain extends SubsystemBase{
 
   private Pose2d pose = new Pose2d();
   
-  private final double pitchOffset;
+  private double pitchOffset;
+
+  private final Timer timer = new Timer();
 
   public DriveTrain() {
-    pitchOffset = gyro.getPitch();
+    pitchOffset = 0;
+
     this.odometry = new SwerveDrivePoseEstimator(kinematics, getGyroRotation2d(), getModulePositions(), pose);
+
+    timer.start();
 
     reset();
 
@@ -118,7 +124,7 @@ public class DriveTrain extends SubsystemBase{
     bl_angle = swerveModuleStates[2].angle.getDegrees();
     br_angle = swerveModuleStates[3].angle.getDegrees();
   
-    setDesiredState(swerveModuleStates); //TODO: Does this work???
+    setDesiredState(swerveModuleStates);
   }
 
   public void setDesiredState(SwerveModuleState[] swerveModuleStates) {
@@ -165,14 +171,14 @@ public class DriveTrain extends SubsystemBase{
   //Make individual states for each swerve module to be set to break
   public SwerveModuleState[] makeSwerveModuleState(double[] speeds, double[] angles) {
     SwerveModuleState[] moduleStates = new SwerveModuleState[angles.length];
-    for(int i = 0; i <= angles.length; i++) moduleStates[i] = new SwerveModuleState(speeds[i], new Rotation2d(Units.degreesToRadians(angles[i])));
+    for(int i = 0; i < angles.length; i++) moduleStates[i] = new SwerveModuleState(speeds[i], new Rotation2d(Units.degreesToRadians(angles[i])));
     return moduleStates;
   }
 
   public void setToBreak() {
     resetModules();
-    double[] speeds = {.1, .1, .1, .1};
-    double[] angles = {-135, 135, -45, 45};
+    double[] speeds = {0, 0, 0, 0};
+    double[] angles = {90, 90, 90, 90};
     SwerveModuleState[] moduleStates = makeSwerveModuleState(speeds, angles);
     setDesiredState(moduleStates);
   }
@@ -185,8 +191,12 @@ public class DriveTrain extends SubsystemBase{
     return odometry.getEstimatedPosition();
   }
 
-  public double getPitch() {
-    return gyro.getPitch() - pitchOffset;
+  public double getRoll() {
+    if(timer.advanceIfElapsed(1)) {
+      pitchOffset = gyro.getRoll();
+      timer.stop();
+    }  
+    return gyro.getRoll() - pitchOffset;
   }
 
   public void resetGyro() {

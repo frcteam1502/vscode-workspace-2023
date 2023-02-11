@@ -194,5 +194,6 @@ public static final class XboxButtons {
   //Driver Buttons
   public static final JoystickButton DRIVER_RIGHT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kRightBumper.value);
   public static final JoystickButton DRIVER_LEFT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kLeftBumper.value);
+  public static final JoystickButton DRIVER_BUTTON_Y = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kY.value); 
 }
 }
