@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ExampleSubsystem extends SubsystemBase {
   private CANSparkMax motor;
 
+  public ExampleSubsystem() {}
   public ExampleSubsystem(CANSparkMax motor) {
     this.motor = motor;
   }

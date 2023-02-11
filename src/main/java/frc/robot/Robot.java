@@ -45,6 +45,12 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
+    //extracted();
+
+
+  }
+
+  private void extracted() {
     //Drive Motor Encoders
     SmartDashboard.putNumber("FL Encoder Pos", Constants.Motors.DRIVE_FRONT_LEFT.getEncoder().getPosition());
     SmartDashboard.putNumber("FR Encoder Pos", Constants.Motors.DRIVE_FRONT_RIGHT.getEncoder().getPosition());
@@ -100,8 +106,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("FR Module Speed Cmd", DriveTrain.fr_speed);
     SmartDashboard.putNumber("RL Module Speed Cmd", DriveTrain.rl_speed);
     SmartDashboard.putNumber("RR Module Speed Cmd", DriveTrain.rr_speed);
-
-
   }
 
   @Override

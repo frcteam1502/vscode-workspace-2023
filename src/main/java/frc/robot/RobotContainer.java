@@ -20,27 +20,32 @@ public class RobotContainer {
   //Subsystems
   // The robot's subsystems and commands are defined here...
   
-  private final DriveTrain driveSubsystem = new DriveTrain();
+  // private final DriveTrain driveSubsystem; // = new DriveTrain();
   
-  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(Motors.INTAKE_MOTOR);
+  // private final IntakeSubsystem intakeSubsystem;// = new IntakeSubsystem(Motors.INTAKE_MOTOR);
   
-  private final pneumaticSubsystem pneumaticSubsystem = new pneumaticSubsystem();
-  private final pneumaticCommand pneumaticCommand = new pneumaticCommand(pneumaticSubsystem);
+  // private final pneumaticSubsystem pneumaticSubsystem;// = new pneumaticSubsystem();
+  // private final pneumaticCommand pneumaticCommand;// = new pneumaticCommand(pneumaticSubsystem);
   private final ArmSubsystem armSubsystem = new ArmSubsystem(ArmConstants.LEAD_DEVICE_ID,ArmConstants.FOLOW_DEVICE_ID, ArmConstants.EXTEND_DEVICE_ID);
   
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem(Motors.INTAKE_MOTOR);
+ private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem(); //Motors.INTAKE_MOTOR);
   
   public RobotContainer() {
+  
+    // driveSubsystem = new DriveTrain();
+    // intakeSubsystem = new IntakeSubsystem(Motors.INTAKE_MOTOR);
+    // pneumaticSubsystem = new pneumaticSubsystem();
+    // pneumaticCommand = new pneumaticCommand(pneumaticSubsystem);
     configureBindings();
   }
 
   private void configureBindings() {
-    driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem));
+    //driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem));
   
-    XboxButtons.BUTTON_A.whileTrue(intakeSubsystem.runIntakeCommand()); // TODO: assign trigger
+    //XboxButtons.BUTTON_A.whileTrue(intakeSubsystem.runIntakeCommand()); // TODO: assign trigger
   
-    XboxButtons.LEFT_BUMPER.onTrue(new InstantCommand(pneumaticCommand::MoveOut));
-    XboxButtons.RIGHT_BUMPER.onTrue(new InstantCommand(pneumaticCommand::MoveIn));
+    //XboxButtons.LEFT_BUMPER.onTrue(new InstantCommand(pneumaticCommand::MoveOut));
+    //XboxButtons.RIGHT_BUMPER.onTrue(new InstantCommand(pneumaticCommand::MoveIn));
     XboxButtons.BUTTON_Y.onTrue(new InstantCommand(armSubsystem::GoToTop));
     XboxButtons.BUTTON_B.onTrue(new InstantCommand(armSubsystem::GoToMiddle));
     XboxButtons.BUTTON_A.onTrue(new InstantCommand(armSubsystem::GoToFloor));
