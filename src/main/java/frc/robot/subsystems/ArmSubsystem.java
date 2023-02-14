@@ -33,12 +33,12 @@ public class ArmSubsystem extends SubsystemBase {
 
     // ARM POSITION/ELEVATION (rotations)
     private static final double STOW_ANGLE = 0;
-    private static final double FLOOR_ANGLE = 0.1;
-    private static final double MIDDLE_ANGLE = 0.2;
-    private static final double TOP_ANGLE = 0.3;
+    private static final double FLOOR_ANGLE = 0.1; // 
+    private static final double MIDDLE_ANGLE = 0.25; // 
+    private static final double TOP_ANGLE = 0.4; // 
     
     private static final double MIN_ANGLE = 0.0;
-    private static final double MAX_ANGLE = 0.5;
+    private static final double MAX_ANGLE = 0.4; // don't hit top crossbar
     
     // PID coefficients (sample values, TBD)
     public final static double kP = 0.1;
@@ -56,9 +56,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     // ARM POSITION/ELEVATION (rotations)
     private static final double STOW_EXTENSION = 0;
-    private static final double FLOOR_EXTENSION = 0.1;
-    private static final double MIDDLE_EXTENSION = 0.25;
-    private static final double TOP_EXTENSION = 0.5;
+    private static final double FLOOR_EXTENSION = 1.0;
+    private static final double MIDDLE_EXTENSION = 2.0;
+    private static final double TOP_EXTENSION = 4.0;
 
     private static final double MIN_EXTENSION = 0.0;
     private static final double MAX_EXTENSION = 4.0;
@@ -79,15 +79,21 @@ public class ArmSubsystem extends SubsystemBase {
     private SparkMaxPIDController m_pidControllerAngle;
     private RelativeEncoder m_encoderangle;
     private double m_targetPosition = 0;
+    private double m_gearBoxRatio = ARM_CONSTANTS.GEAR_BOX_RATIO;
 
     public DualMotor(int leadDeviceID, int followDeviceID) {
       m_leadMotor = new CANSparkMax(leadDeviceID, MotorType.kBrushless);
       m_followMotor = new CANSparkMax(followDeviceID, MotorType.kBrushless);
 
+      //SWAP FOR TEST
+      var motor = m_leadMotor;
+      m_leadMotor = m_followMotor ;
+      m_followMotor = motor;
+
       m_leadMotor.restoreFactoryDefaults();
       m_followMotor.restoreFactoryDefaults();                                                                            
 
-      m_followMotor.follow(m_leadMotor, /*invert*/ true);
+      //m_followMotor.follow(m_leadMotor, /*invert*/ true);
 
       m_pidControllerAngle = m_leadMotor.getPIDController();
 
@@ -104,7 +110,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
  
     public void SetElevation(double rotations) {
-      m_targetPosition = rotations * ARM_CONSTANTS.GEAR_BOX_RATIO;
+      m_targetPosition = rotations * m_gearBoxRatio;
       m_pidControllerAngle.setReference(m_targetPosition, CANSparkMax.ControlType.kPosition);
     }
     
@@ -119,6 +125,7 @@ public class ArmSubsystem extends SubsystemBase {
       double max =       SmartDashboard.getNumber("ANGLE Max Output", 0);
       double min =       SmartDashboard.getNumber("ANGLE Min Output", 0);
       double rotations = SmartDashboard.getNumber("ANGLE Set Position", 0);
+      double m_gearBoxRatio = SmartDashboard.getNumber("ANGLE GearBox Ratio", ARM_CONSTANTS.GEAR_BOX_RATIO);
   
       // if PID coefficients on SmartDashboard have changed, write new values to controller
       if((p != m_pidControllerAngle.getP())) { m_pidControllerAngle.setP(p); }
@@ -130,7 +137,7 @@ public class ArmSubsystem extends SubsystemBase {
         m_pidControllerAngle.setOutputRange(min, max); 
       }
       
-      SetElevation(rotations / ARM_CONSTANTS.GEAR_BOX_RATIO);
+      SetElevation(rotations);
     }
     
     // For Testing
@@ -144,19 +151,20 @@ public class ArmSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("ANGLE Max Output", m_pidControllerAngle.getOutputMax());
       SmartDashboard.putNumber("ANGLE Min Output", m_pidControllerAngle.getOutputMin());
 
+      SmartDashboard.putNumber("ANGLE GearBox Ratio", ARM_CONSTANTS.GEAR_BOX_RATIO);
       SmartDashboard.putNumber("ANGLE Set Position", 0);
 
     }
     
     public void DisplayPosition()
     {
-      SmartDashboard.putNumber("ANGLE Arm Target Position", m_targetPosition);
-      SmartDashboard.putNumber("ANGLE Arm Current Position", m_encoderangle.getPosition());
+      SmartDashboard.putNumber("ANGLE Arm Target Position", m_targetPosition / m_gearBoxRatio);
+      SmartDashboard.putNumber("ANGLE Arm Current Position", m_encoderangle.getPosition() / m_gearBoxRatio);
     }
 
     // TODO: Cancel previous target position from button? Some sort of adaptive fine-tune
     public void FineTune(double signum) {
-      double targetPosition = m_targetPosition + signum * 0.1 * ARM_CONSTANTS.GEAR_BOX_RATIO;
+      double targetPosition = m_targetPosition + signum * 0.1 * m_gearBoxRatio;
       if (ARM_CONSTANTS.MIN_ANGLE < targetPosition && targetPosition < ARM_CONSTANTS.MAX_ANGLE) {
         SetElevation(targetPosition);
       }
@@ -254,7 +262,7 @@ public class ArmSubsystem extends SubsystemBase {
     m_elevationMotor = new DualMotor(leadDeviceID, followDeviceID);
     m_extenderMotor = new ExtendMotor(extendDeviceID);
     
-    SmartDashboard.putData("Toggle ARM Update", new InstantCommand(this::ToggleArmUpdate));
+    SmartDashboard.putBoolean("Toggle ARM Update", m_UpdateArmDiagnostics);
     SmartDashboard.putData("Toggle ARM Diagnostics", new InstantCommand(this::ToggleArmDiagnostics));
     m_elevationMotor.DisplayInformation();
     SmartDashboard.putData("Toggle EXTEND Update", new InstantCommand(this::ToggleExtendUpdate));
