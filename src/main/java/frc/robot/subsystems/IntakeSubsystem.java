@@ -84,10 +84,7 @@ public class IntakeSubsystem extends SubsystemBase {
     m_pidControllerIntake.setFF(INTAKE_CONSTANTS.kFF);
     m_pidControllerIntake.setOutputRange(INTAKE_CONSTANTS.kMinOutput, INTAKE_CONSTANTS.kMaxOutput);
   }
-
-  public IntakeSubsystem(CANSparkMax intakeMotor) {
-    this.m_intakeMotor = intakeMotor;
-  }
+  
   // below are the functions for the intake system
   // intake uses pneumatics to extend and retract
 
