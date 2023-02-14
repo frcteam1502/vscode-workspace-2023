@@ -86,9 +86,9 @@ public class ArmSubsystem extends SubsystemBase {
       m_followMotor = new CANSparkMax(followDeviceID, MotorType.kBrushless);
 
       //SWAP FOR TEST
-      var motor = m_leadMotor;
-      m_leadMotor = m_followMotor ;
-      m_followMotor = motor;
+      // var motor = m_leadMotor;
+      // m_leadMotor = m_followMotor ;
+      // m_followMotor = motor;
 
       m_leadMotor.restoreFactoryDefaults();
       m_followMotor.restoreFactoryDefaults();                                                                            
