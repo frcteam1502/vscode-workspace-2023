@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.Autonomous.Selection.*;
 import frc.robot.commands.Autonomous.Simple.AutoBalance;
@@ -24,6 +25,8 @@ public class RobotContainer {
 
   private final HashMap<String, Command> twoCone = new HashMap<>();
 
+  private final HashMap<String, Command> straightAndTurn = new HashMap<>();
+
 
   public RobotContainer() {
     configureBindings();
@@ -35,7 +38,7 @@ public class RobotContainer {
     driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem));
 
     Constants.XboxButtons.BUTTON_Y.whileTrue(new AutoBalance(driveSubsystem));
-    Constants.XboxButtons.BUTTON_B.whileTrue(new InstantCommand(driveSubsystem::setToBreak));
+    Constants.XboxButtons.BUTTON_B.whileTrue(new InstantCommand(driveSubsystem::setToBreak).repeatedly());
   }
 
 
@@ -43,6 +46,7 @@ public class RobotContainer {
     createAutoHashMaps();
     sendableChooser.setDefaultOption("Balance", simpleBalance);
     sendableChooser.addOption("2 Cone", driveSubsystem.buildAuto(twoCone, "twoCone"));
+    sendableChooser.addOption("Straight and Turn", driveSubsystem.buildAuto(straightAndTurn, "straightAndTurn"));
     SmartDashboard.putData(sendableChooser);
   }
   
@@ -55,6 +59,9 @@ public class RobotContainer {
   public void createAutoHashMaps() {
     //twoCone
     //twoCone.put(null, null);
+
+    //straightAndTurn
+    straightAndTurn.put("Stop for 2 seconds", new WaitCommand(2)); //DOES NOT WORK
 
   }
 }

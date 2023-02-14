@@ -248,19 +248,19 @@ public class DriveTrain extends SubsystemBase{
   public Command buildAuto(HashMap<String, Command> eventMap, String pathName) {
     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
       pathName, 
-      new PathConstraints(Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND, 1)); //TODO: Find MAX ACCEL
+      new PathConstraints(Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND * 3, 1)); //TODO: Find MAX ACCEL
 
     SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
       this::getPose2d, // Pose2d supplier
       this::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
       Constants.DriveConstants.KINEMATICS, // SwerveDriveKinematics
-      new PIDConstants(7, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
-      new PIDConstants(1.25, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+      new PIDConstants(4.35, 0.0, 0.09), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+      new PIDConstants(1.3, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
       this::setDesiredState, // Module states consumer used to output to the drive subsystem
       eventMap,
       true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
       this // The drive subsystem. Used to properly set the requirements of path following commands
-    ); //TODO: Check PIDs
+    ); //TODO: Check Drive PIDs. P is good
     
     return autoBuilder.fullAuto(pathGroup);
   }
