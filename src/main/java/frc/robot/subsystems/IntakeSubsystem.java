@@ -5,6 +5,10 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -12,11 +16,74 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.GamePiece;
-import static frc.robot.Constants.IntakeConstants.*;
-
+import frc.robot.Constants;
 public class IntakeSubsystem extends SubsystemBase {
-  DoubleSolenoid m_intakeDeploy = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, FORWARD_CHANNEL, REVERSE_CHANNEL);
+  DoubleSolenoid m_intakeDeploy = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, 0, 15);
+  
   private final CANSparkMax m_intakeMotor;
+  
+  
+  final static class INTAKE_CONSTANTS {
+    // Device IDs
+    
+    // PID coefficients (sample values, TBD)
+    public final static double kP = 0.1;
+    public final static double kI = 1e-4;
+    public final static double kD = 1;
+    public final static double kIz = 0;
+    public final static double kFF = 0;
+    public final static double kMaxOutput = 1;
+    public final static double kMinOutput = -1;
+  }
+  
+  final class IntakeMotor {
+    private CANSparkMax m_intakeMotor;
+    private RelativeEncoder m_encoderintake;
+    private SparkMaxPIDController m_pidControllerIntake;
+    private double m_targetIntake = 0;
+
+    public IntakeMotor(int intakeDeviceID) {
+      m_intakeMotor = new CANSparkMax(intakeDeviceID, MotorType.kBrushless);
+
+      m_intakeMotor.restoreFactoryDefaults();
+
+      m_pidControllerIntake = m_intakeMotor.getPIDController();
+
+      // Encoder object created to display position values
+      m_encoderintake = m_intakeMotor.getEncoder();
+
+      // set PID coefficients
+      m_pidControllerIntake.setP(INTAKE_CONSTANTS.kP);
+      m_pidControllerIntake.setI(INTAKE_CONSTANTS.kI);
+      m_pidControllerIntake.setD(INTAKE_CONSTANTS.kD);
+      m_pidControllerIntake.setIZone(INTAKE_CONSTANTS.kIz);
+      m_pidControllerIntake.setFF(INTAKE_CONSTANTS.kFF);
+      m_pidControllerIntake.setOutputRange(INTAKE_CONSTANTS.kMinOutput, INTAKE_CONSTANTS.kMaxOutput);
+    }
+
+    public void SetIntake(double rotations) {
+      m_targetIntake = rotations;
+      m_pidControllerIntake.setReference(rotations, CANSparkMax.ControlType.kPosition);
+    }
+  }
+  public IntakeSubsystem(int intakeDeviceID) {
+    m_intakeMotor = new CANSparkMax(intakeDeviceID, MotorType.kBrushless);
+
+    m_intakeMotor.restoreFactoryDefaults();
+
+    m_pidControllerIntake = m_intakeMotor.getPIDController();
+
+    // Encoder object created to display position values
+    m_encoderintake = m_intakeMotor.getEncoder();
+
+    // set PID coefficients
+    m_pidControllerIntake.setP(INTAKE_CONSTANTS.kP);
+    m_pidControllerIntake.setI(INTAKE_CONSTANTS.kI);
+    m_pidControllerIntake.setD(INTAKE_CONSTANTS.kD);
+    m_pidControllerIntake.setIZone(INTAKE_CONSTANTS.kIz);
+    m_pidControllerIntake.setFF(INTAKE_CONSTANTS.kFF);
+    m_pidControllerIntake.setOutputRange(INTAKE_CONSTANTS.kMinOutput, INTAKE_CONSTANTS.kMaxOutput);
+  }
 
   public IntakeSubsystem(CANSparkMax intakeMotor) {
     this.m_intakeMotor = intakeMotor;

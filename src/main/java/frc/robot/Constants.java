@@ -219,5 +219,6 @@ public final class Constants {
     public final static int LEAD_DEVICE_ID = 16; // TODO: TBD (get from global device map?)
     public final static int FOLOW_DEVICE_ID = 17; // TODO: TBD
     public final static int EXTEND_DEVICE_ID = 18; // TODO: TBD    
+    public final static int INTAKE_DEVICE_ID = 15; // TODO: TBD   
   }
 }
