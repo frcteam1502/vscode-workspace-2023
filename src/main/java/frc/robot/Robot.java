@@ -93,7 +93,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("joystick Throttle Strafe", Constants.Joysticks.DRIVE_CONTROLLER.getLeftX());
     SmartDashboard.putNumber("joystick Throttle Fwd", Constants.Joysticks.DRIVE_CONTROLLER.getLeftY());
     SmartDashboard.putNumber("joystick Turn", Constants.Joysticks.DRIVE_CONTROLLER.getRightX());
-
+    SmartDashboard.putNumber("left joystick value", Constants.Joysticks.OPERATOR_CONTROLLER.getLeftY());
     //Gyro
     SmartDashboard.putNumber("Angle", Constants.gyro.getYaw());
 
