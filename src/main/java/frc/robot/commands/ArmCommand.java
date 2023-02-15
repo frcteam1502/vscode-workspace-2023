@@ -39,12 +39,12 @@ public class ArmCommand extends CommandBase {
   public void execute() {
     double armFine = -Joysticks.OPERATOR_CONTROLLER.getLeftY();
     if (Math.abs(armFine) > 0.1) {
-      m_ArmSubsystem.FineTune(Math.signum(armFine));
+      m_ArmSubsystem.FineTuneAngle(Math.signum(armFine));
     }
 
     double extendFine = -Joysticks.OPERATOR_CONTROLLER.getRightY();
     if (Math.abs(extendFine) > 0.1) {
-      m_ArmSubsystem.FineTune(Math.signum(extendFine));
+      m_ArmSubsystem.FineTuneExtend(Math.signum(extendFine));
     }
   }
 

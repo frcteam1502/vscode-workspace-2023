@@ -156,7 +156,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     // TODO: Cancel previous target position from button? Some sort of adaptive fine-tune
     public void FineTune(double signum) {
-      double targetPosition = m_targetPosition + signum * 0.1 * ARM_CONSTANTS.GEAR_BOX_RATIO;
+      double targetPosition = m_targetPosition + signum * 0.1;
       if (ARM_CONSTANTS.MIN_ANGLE < targetPosition && targetPosition < ARM_CONSTANTS.MAX_ANGLE) {
         SetElevation(targetPosition);
       }
@@ -335,8 +335,10 @@ public class ArmSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
-  public void FineTune(double signum) {
+  public void FineTuneAngle(double signum) {
     m_elevationMotor.FineTune(signum);
   }
-   
+  public void FineTuneExtend(double signum) {
+    m_extenderMotor.FineTune(signum);
+  }
  }
