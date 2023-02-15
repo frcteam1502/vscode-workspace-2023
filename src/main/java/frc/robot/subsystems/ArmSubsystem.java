@@ -222,20 +222,20 @@ public class ArmSubsystem extends SubsystemBase {
     // For Testing
     public void DisplayInformation() {
       // display PID coefficients on SmartDashboard
-      SmartDashboard.putNumber("EXTEND P Gain", m_pidControllerExtension.getP());
-      SmartDashboard.putNumber("EXTEND I Gain", m_pidControllerExtension.getI());
-      SmartDashboard.putNumber("EXTEND D Gain", m_pidControllerExtension.getD());
-      SmartDashboard.putNumber("EXTEND I Zone", m_pidControllerExtension.getIZone());
-      SmartDashboard.putNumber("EXTEND Feed Forward", m_pidControllerExtension.getFF());
-      SmartDashboard.putNumber("EXTEND Max Output", m_pidControllerExtension.getOutputMax());
-      SmartDashboard.putNumber("EXTEND Min Output", m_pidControllerExtension.getOutputMin());
+      //SmartDashboard.putNumber("EXTEND P Gain", m_pidControllerExtension.getP());
+      //SmartDashboard.putNumber("EXTEND I Gain", m_pidControllerExtension.getI());
+      //SmartDashboard.putNumber("EXTEND D Gain", m_pidControllerExtension.getD());
+      //SmartDashboard.putNumber("EXTEND I Zone", m_pidControllerExtension.getIZone());
+      //SmartDashboard.putNumber("EXTEND Feed Forward", m_pidControllerExtension.getFF());
+      //SmartDashboard.putNumber("EXTEND Max Output", m_pidControllerExtension.getOutputMax());
+      //SmartDashboard.putNumber("EXTEND Min Output", m_pidControllerExtension.getOutputMin());
 
-      SmartDashboard.putNumber("EXTEND Set Position", 0);
+      //SmartDashboard.putNumber("EXTEND Set Position", 0);
     }
     public void DisplayPosition()
     {
-      SmartDashboard.putNumber("EXTEND Arm Target Extension", m_targetExtension);
-      SmartDashboard.putNumber("EXTEND Arm Current Position", m_encoderextension.getPosition());
+      //SmartDashboard.putNumber("EXTEND Arm Target Extension", m_targetExtension);
+      //SmartDashboard.putNumber("EXTEND Arm Current Position", m_encoderextension.getPosition());
     }
 
     public void FineTune(double signum) {
@@ -254,11 +254,11 @@ public class ArmSubsystem extends SubsystemBase {
     m_elevationMotor = new DualMotor(leadDeviceID, followDeviceID);
     m_extenderMotor = new ExtendMotor(extendDeviceID);
     
-    SmartDashboard.putData("Toggle ARM Update", new InstantCommand(this::ToggleArmUpdate));
-    SmartDashboard.putData("Toggle ARM Diagnostics", new InstantCommand(this::ToggleArmDiagnostics));
+    //SmartDashboard.putData("Toggle ARM Update", new InstantCommand(this::ToggleArmUpdate));
+    //SmartDashboard.putData("Toggle ARM Diagnostics", new InstantCommand(this::ToggleArmDiagnostics));
     m_elevationMotor.DisplayInformation();
-    SmartDashboard.putData("Toggle EXTEND Update", new InstantCommand(this::ToggleExtendUpdate));
-    SmartDashboard.putData("Toggle EXTEND Diagnostics", new InstantCommand(this::ToggleExtendDiagnostics));
+   // SmartDashboard.putData("Toggle EXTEND Update", new InstantCommand(this::ToggleExtendUpdate));
+   // SmartDashboard.putData("Toggle EXTEND Diagnostics", new InstantCommand(this::ToggleExtendDiagnostics));
     m_extenderMotor.DisplayInformation();
 
   }

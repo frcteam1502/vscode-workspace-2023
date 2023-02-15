@@ -45,12 +45,13 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    //extracted();
+    extracted();
 
 
   }
 
   private void extracted() {
+    /* 
     //Drive Motor Encoders
     SmartDashboard.putNumber("FL Encoder Pos", Constants.Motors.DRIVE_FRONT_LEFT.getEncoder().getPosition());
     SmartDashboard.putNumber("FR Encoder Pos", Constants.Motors.DRIVE_FRONT_RIGHT.getEncoder().getPosition());
@@ -88,12 +89,15 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("TurnFrontRight Volt", Constants.Motors.ANGLE_FRONT_RIGHT.getAppliedOutput());
     SmartDashboard.putNumber("TurnBackLeft Volt", Constants.Motors.ANGLE_BACK_LEFT.getAppliedOutput());
     SmartDashboard.putNumber("TurnBackRight Volt", Constants.Motors.ANGLE_BACK_RIGHT.getAppliedOutput());
-
+*/
     //Joysticks
+    //hi good job 
     SmartDashboard.putNumber("joystick Throttle Strafe", Constants.Joysticks.DRIVE_CONTROLLER.getLeftX());
     SmartDashboard.putNumber("joystick Throttle Fwd", Constants.Joysticks.DRIVE_CONTROLLER.getLeftY());
     SmartDashboard.putNumber("joystick Turn", Constants.Joysticks.DRIVE_CONTROLLER.getRightX());
+    
     SmartDashboard.putNumber("left joystick value", Constants.Joysticks.OPERATOR_CONTROLLER.getLeftY());
+    /*
     //Gyro
     SmartDashboard.putNumber("Angle", Constants.gyro.getYaw());
 
@@ -106,6 +110,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("FR Module Speed Cmd", DriveTrain.fr_speed);
     SmartDashboard.putNumber("RL Module Speed Cmd", DriveTrain.rl_speed);
     SmartDashboard.putNumber("RR Module Speed Cmd", DriveTrain.rr_speed);
+    */
   }
 
   @Override

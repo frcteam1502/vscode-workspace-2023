@@ -10,7 +10,7 @@ public class Limelight {
     public void findDistance(){
         Target target = getTarget();
         distance = target.tx;
-        SmartDashboard.putNumber("Distance", distance);
+        //SmartDashboard.putNumber("Distance", distance);
     }
 //Limelight wont be centored so do math later when robot built, im sick and have bad brain fog get off my back for english
     public static class Target {
