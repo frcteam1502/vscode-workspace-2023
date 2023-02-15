@@ -20,7 +20,7 @@ import frc.robot.Constants;
 public class IntakeSubsystem extends SubsystemBase {
   DoubleSolenoid m_intakeDeploy = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, 0, 15);
   
-  private final CANSparkMax m_intakeMotor;
+  
   
   
   final static class INTAKE_CONSTANTS {
@@ -36,6 +36,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public final static double kMinOutput = -1;
   }
   
+
   final class IntakeMotor {
     private CANSparkMax m_intakeMotor;
     private RelativeEncoder m_encoderintake;
@@ -65,25 +66,8 @@ public class IntakeSubsystem extends SubsystemBase {
       m_targetIntake = rotations;
       m_pidControllerIntake.setReference(rotations, CANSparkMax.ControlType.kPosition);
     }
-  }
-  public IntakeSubsystem(int intakeDeviceID) {
-    m_intakeMotor = new CANSparkMax(intakeDeviceID, MotorType.kBrushless);
-
-    m_intakeMotor.restoreFactoryDefaults();
-
-    m_pidControllerIntake = m_intakeMotor.getPIDController();
-
-    // Encoder object created to display position values
-    m_encoderintake = m_intakeMotor.getEncoder();
-
-    // set PID coefficients
-    m_pidControllerIntake.setP(INTAKE_CONSTANTS.kP);
-    m_pidControllerIntake.setI(INTAKE_CONSTANTS.kI);
-    m_pidControllerIntake.setD(INTAKE_CONSTANTS.kD);
-    m_pidControllerIntake.setIZone(INTAKE_CONSTANTS.kIz);
-    m_pidControllerIntake.setFF(INTAKE_CONSTANTS.kFF);
-    m_pidControllerIntake.setOutputRange(INTAKE_CONSTANTS.kMinOutput, INTAKE_CONSTANTS.kMaxOutput);
-  }
+  
+  
   
   // below are the functions for the intake system
   // intake uses pneumatics to extend and retract
@@ -101,6 +85,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void TurnOnIntake(GamePiece gamepiece) {
+  
     // the intake pneumatic program below
     // adjust speed- acording to game piece color
     m_intakeMotor.set(0.2);
@@ -117,10 +102,7 @@ public class IntakeSubsystem extends SubsystemBase {
     m_intakeMotor.set(-0.2);
 
   }
-
-  public Command runIntakeCommand() {
-    return new StartEndCommand(() -> this.TurnOnIntake(GamePiece.cone), this::TurnOffIntake, this);
-  }
+}
 
   /**
    * An example method querying a boolean state of the subsystem (for example, a
