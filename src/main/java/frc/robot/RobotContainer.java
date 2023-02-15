@@ -42,7 +42,7 @@ public class RobotContainer {
   private void configureBindings() {
     //driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem));
   
-    //XboxButtons.BUTTON_A.whileTrue(intakeSubsystem.runIntakeCommand()); // TODO: assign trigger
+    //XboxButtons.LEFT_BUMPER.whileTrue(new InstantCommand(IntakeSubsystem::TurnOnIntake)); // TODO: assign trigger
   
     //XboxButtons.LEFT_BUMPER.onTrue(new InstantCommand(pneumaticCommand::MoveOut));
     //XboxButtons.RIGHT_BUMPER.onTrue(new InstantCommand(pneumaticCommand::MoveIn));

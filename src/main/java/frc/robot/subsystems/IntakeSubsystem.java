@@ -102,8 +102,8 @@ public class IntakeSubsystem extends SubsystemBase {
     m_intakeMotor.set(-0.2);
 
   }
-}
-
+  
+  }
   /**
    * An example method querying a boolean state of the subsystem (for example, a
    * digital sensor).
@@ -118,8 +118,9 @@ public class IntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
   }
-
+  
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
