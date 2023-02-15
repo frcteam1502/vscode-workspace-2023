@@ -1,4 +1,7 @@
 package frc.robot.subsystems;
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -86,6 +89,31 @@ public class Limelight {
    */
   public static double[] getAprilTagCoord(){
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetpose_cameraspace").getDoubleArray(new double[6]);
+  }
+
+  /**
+   * Pose relative to the robot
+   * @return (x, y, z, qw, qx, qy, qz)
+   */
+  public static double[] getTargetPose(){
+    return NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetPose").getDoubleArray(new double[7]);
+  }
+
+  /**
+   * Pitch of target in degrees (positive up)
+   * Yaw of target in degrees (positive right)
+   * Percent of bounding box in screen (0-100)
+   * Skew of target in degrees (counter-clockwise positive)
+   * 
+   * @return (targetPitch, targetYaw, targetArea, targetSkew)
+   */
+  public static double[] getTargetData(){
+    double[] ret = new double[4];
+    ret[0] = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetPitch").getDouble(0.0);
+    ret[1] = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetYaw").getDouble(0.0);
+    ret[2] = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetArea").getDouble(0.0);
+    ret[3] = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetSkew").getDouble(0.0);
+    return ret;
   }
  
 }
