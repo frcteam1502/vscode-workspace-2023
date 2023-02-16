@@ -1,5 +1,9 @@
 # WpiLib VSCode
 
+## Build
+todo
+## Deploy
+todo
 ## Build and Deploy
 Manual Build and Deploy from Terminal
 ```
