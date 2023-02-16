@@ -61,7 +61,7 @@ public class RobotContainer {
     //twoCone.put(null, null);
 
     //straightAndTurn
-    straightAndTurn.put("Stop for 2 seconds", new WaitCommand(2)); //DOES NOT WORK
+    straightAndTurn.put("Stop", new WaitCommand(2));
 
   }
 }
