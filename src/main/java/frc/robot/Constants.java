@@ -208,6 +208,7 @@ public final class Constants {
   public static final class IntakeConstants {
     public static final int FORWARD_CHANNEL = 1;
     public static final int REVERSE_CHANNEL = 0;
+    public final static int INTAKE_DEVICE_ID = 15; // TODO: TBD   
   }
 
   public static class PneumaticsConstants{
@@ -220,6 +221,5 @@ public final class Constants {
     public final static int LEAD_DEVICE_ID = 16; // TODO: TBD (get from global device map?)
     public final static int FOLOW_DEVICE_ID = 17; // TODO: TBD
     public final static int EXTEND_DEVICE_ID = 18; // TODO: TBD    
-    public final static int INTAKE_DEVICE_ID = 15; // TODO: TBD   
   }
 }

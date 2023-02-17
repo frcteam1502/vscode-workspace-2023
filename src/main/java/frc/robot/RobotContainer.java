@@ -8,6 +8,7 @@ import frc.robot.commands.Auto.EmptyAutoCommand;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.pneumaticCommand;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.Motors;
 import frc.robot.Constants.XboxButtons;
 import frc.robot.subsystems.ArmSubsystem;
@@ -27,6 +28,7 @@ public class RobotContainer {
   // private final pneumaticSubsystem pneumaticSubsystem;// = new pneumaticSubsystem();
   // private final pneumaticCommand pneumaticCommand;// = new pneumaticCommand(pneumaticSubsystem);
   private final ArmSubsystem armSubsystem = new ArmSubsystem(ArmConstants.LEAD_DEVICE_ID,ArmConstants.FOLOW_DEVICE_ID, ArmConstants.EXTEND_DEVICE_ID);
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(IntakeConstants.INTAKE_DEVICE_ID);
   
  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem(); //Motors.INTAKE_MOTOR);
   
