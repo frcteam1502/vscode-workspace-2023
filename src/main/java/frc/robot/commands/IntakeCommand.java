@@ -25,7 +25,7 @@ public class IntakeCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   public void execute() {
-  if (Joysticks.OPERATOR_CONTROLLER.getLeftBumper())
+  if (Joysticks.DRIVE_CONTROLLER.getLeftBumper())
   {m_Intakesubsystem.TurnOnIntake();}
   else 
   {m_Intakesubsystem.TurnOffIntake();}
