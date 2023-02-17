@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import frc.robot.commands.Auto.EmptyAutoCommand;
+import frc.robot.commands.ArmByController;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.pneumaticCommand;
 import frc.robot.Constants.ArmConstants;
@@ -13,6 +14,7 @@ import frc.robot.Constants.XboxButtons;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.pneumaticSubsystem;
 
@@ -26,13 +28,14 @@ public class RobotContainer {
   
   // private final pneumaticSubsystem pneumaticSubsystem;// = new pneumaticSubsystem();
   // private final pneumaticCommand pneumaticCommand;// = new pneumaticCommand(pneumaticSubsystem);
-  private final ArmSubsystem armSubsystem = new ArmSubsystem(ArmConstants.LEAD_DEVICE_ID,ArmConstants.FOLOW_DEVICE_ID, ArmConstants.EXTEND_DEVICE_ID);
+  private final ArmSubsystem armSubsystem;
   
  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem(); //Motors.INTAKE_MOTOR);
   
   public RobotContainer() {
   
     // driveSubsystem = new DriveTrain();
+    armSubsystem = new ArmSubsystem(ArmConstants.LEAD_DEVICE_ID,ArmConstants.FOLOW_DEVICE_ID, ArmConstants.EXTEND_DEVICE_ID);
     // intakeSubsystem = new IntakeSubsystem(Motors.INTAKE_MOTOR);
     // pneumaticSubsystem = new pneumaticSubsystem();
     // pneumaticCommand = new pneumaticCommand(pneumaticSubsystem);
@@ -41,7 +44,7 @@ public class RobotContainer {
 
   private void configureBindings() {
     //driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem));
-  
+    armSubsystem.setDefaultCommand(new ArmByController(armSubsystem));
     //XboxButtons.BUTTON_A.whileTrue(intakeSubsystem.runIntakeCommand()); // TODO: assign trigger
   
     //XboxButtons.LEFT_BUMPER.onTrue(new InstantCommand(pneumaticCommand::MoveOut));

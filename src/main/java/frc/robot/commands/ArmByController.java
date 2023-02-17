@@ -11,22 +11,20 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class ArmCommand extends CommandBase {
+public class ArmByController extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-  private final ArmSubsystem m_ArmSubsystem;
-  private final GripperSubsystem m_GripperSubsystem;
+  private final ArmSubsystem arm;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmCommand(ArmSubsystem subsystem_1, GripperSubsystem subsystem_2) {
-    m_ArmSubsystem = subsystem_1;
-    m_GripperSubsystem = subsystem_2;
+  public ArmByController(ArmSubsystem arm) {
+    this.arm = arm;
+
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem_1);
-    addRequirements(subsystem_2);
+    addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
@@ -39,13 +37,16 @@ public class ArmCommand extends CommandBase {
   public void execute() {
     double armFine = -Joysticks.OPERATOR_CONTROLLER.getLeftY();
     if (Math.abs(armFine) > 0.1) {
-      m_ArmSubsystem.FineTuneAngle(Math.signum(armFine));
+      arm.FineTuneAngle(Math.signum(armFine));
     }
 
     double extendFine = -Joysticks.OPERATOR_CONTROLLER.getRightY();
     if (Math.abs(extendFine) > 0.1) {
-      m_ArmSubsystem.FineTuneExtend(Math.signum(extendFine));
+      arm.FineTuneExtend(Math.signum(extendFine));
     }
+
+    arm.updateSmartDashboard();
+
   }
 
   // Called once the command ends or is interrupted.
