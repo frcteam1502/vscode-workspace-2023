@@ -4,38 +4,34 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants.Joysticks;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /** An example command that uses an example subsystem. */
 public class IntakeCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final IntakeSubsystem m_Intakesubsystem;
 
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
   public IntakeCommand(IntakeSubsystem subsystem) {
     m_Intakesubsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
-
-  // Called when the command is initially scheduled.
+ // Called when the command is initially scheduled.
+ 
   @Override
   public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   public void execute() {
-   // if(JoystickButton.OPERATOR_CONTROLLER.getLeftBumper()) {
-   //   m_Intakesubsystem.TurnOnIntake();}
-   //  else{
-   //   m_Intakesubsystem.TurnOffIntake();}
+  if (Joysticks.OPERATOR_CONTROLLER.getLeftBumper())
+  {m_Intakesubsystem.TurnOnIntake();}
+  else 
+  {m_Intakesubsystem.TurnOffIntake();}
    }
   // Called once the command ends or is interrupted.
+  
   @Override
   public void end(boolean interrupted) {}
 

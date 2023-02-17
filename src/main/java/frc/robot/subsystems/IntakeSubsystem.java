@@ -10,19 +10,26 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import frc.robot.GamePiece;
 import frc.robot.Constants;
+
+
 public class IntakeSubsystem extends SubsystemBase {
   DoubleSolenoid m_intakeDeploy = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, 0, 15);
   
   
+
+    // no need to be global/public if not used outside of this subsystemstatic class xboxcontroller.axis 
+   static class xboxcontroller {
+    //work in progress found the right buttons just need to put the values.
+  
+    public final static double kLeftX = 0;
+    public final static double kLeftY = 0;
   
   
+   } 
   final static class INTAKE_CONSTANTS {
     // Device IDs
     
@@ -37,13 +44,12 @@ public class IntakeSubsystem extends SubsystemBase {
   }
   
 
-  final class IntakeMotor {
+
     private CANSparkMax m_intakeMotor;
     private RelativeEncoder m_encoderintake;
     private SparkMaxPIDController m_pidControllerIntake;
-    private double m_targetIntake = 0;
-
-    public IntakeMotor(int intakeDeviceID) {
+  
+    public IntakeSubsystem(int intakeDeviceID) {
       m_intakeMotor = new CANSparkMax(intakeDeviceID, MotorType.kBrushless);
 
       m_intakeMotor.restoreFactoryDefaults();
@@ -63,7 +69,6 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void SetIntake(double rotations) {
-      m_targetIntake = rotations;
       m_pidControllerIntake.setReference(rotations, CANSparkMax.ControlType.kPosition);
     }
   
@@ -84,7 +89,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   }
 
-  public void TurnOnIntake(GamePiece gamepiece) {
+  public void TurnOnIntake() {
   
     // the intake pneumatic program below
     // adjust speed- acording to game piece color
@@ -102,8 +107,7 @@ public class IntakeSubsystem extends SubsystemBase {
     m_intakeMotor.set(-0.2);
 
   }
-  
-  }
+
   /**
    * An example method querying a boolean state of the subsystem (for example, a
    * digital sensor).
