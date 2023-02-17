@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import frc.robot.commands.Auto.EmptyAutoCommand;
 import frc.robot.commands.DriveByController;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.pneumaticCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.IntakeConstants;
@@ -43,7 +44,7 @@ public class RobotContainer {
 
   private void configureBindings() {
     //driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem));
-  
+    intakeSubsystem.setDefaultCommand(new IntakeCommand(intakeSubsystem));
     //XboxButtons.LEFT_BUMPER.whileTrue(new InstantCommand(IntakeSubsystem::TurnOnIntake)); // TODO: assign trigger
   
     //XboxButtons.LEFT_BUMPER.onTrue(new InstantCommand(pneumaticCommand::MoveOut));
