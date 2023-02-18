@@ -7,6 +7,7 @@ import com.ctre.phoenix.sensors.Pigeon2;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
@@ -15,6 +16,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -191,6 +193,22 @@ public class DriveTrain extends SubsystemBase{
     return odometry.getEstimatedPosition();
   }
 
+  public double getVelocity() {
+    return Math.sqrt(
+      Math.pow(ChassisSpeeds.fromFieldRelativeSpeeds(fwdSpeedCmd, strafeSpeedCmd, turnSpeedCmd, getGyroRotation2d()).vxMetersPerSecond, 2) + 
+      Math.pow(ChassisSpeeds.fromFieldRelativeSpeeds(fwdSpeedCmd, strafeSpeedCmd, turnSpeedCmd, getGyroRotation2d()).vyMetersPerSecond, 2)
+    );
+  }
+
+  public Rotation2d getHeading() {
+    return new Rotation2d(
+      Math.atan2(
+        Math.pow(ChassisSpeeds.fromFieldRelativeSpeeds(fwdSpeedCmd, strafeSpeedCmd, turnSpeedCmd, getGyroRotation2d()).vyMetersPerSecond, 2), 
+        Math.pow(ChassisSpeeds.fromFieldRelativeSpeeds(fwdSpeedCmd, strafeSpeedCmd, turnSpeedCmd, getGyroRotation2d()).vxMetersPerSecond, 2)
+      )
+    );
+  }
+
   public double getRoll() {
     if(timer.advanceIfElapsed(1)) {
       pitchOffset = gyro.getRoll();
@@ -227,18 +245,20 @@ public class DriveTrain extends SubsystemBase{
     Motors.DRIVE_BACK_RIGHT.setInverted(Constants.DriveConstants.BackRightDriveMotorReversed);
   }
 
-  public Command getPathFollowingCommand(String pathName) {
-    PathPlannerTrajectory trajectory = PathPlanner.loadPath(
-      pathName, 
-      new PathConstraints(Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND, 1) //TODO: Find MAX ACCEL
-      );
+  public Command moveToImage() {
+    PathPlannerTrajectory toImage = PathPlanner.generatePath(
+      new PathConstraints(4, 3), 
+      new PathPoint(new Translation2d(0, 0), new Rotation2d(), getGyroRotation2d(), getVelocity()),
+      new PathPoint(new Translation2d(1.0, 1.0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0))
+    );//Final PathPoint(poseFromCamera.getTranslation)
+    
     return new PPSwerveControllerCommand(
-      trajectory, 
+      toImage, 
       this::getPose2d, // Pose supplier
       Constants.DriveConstants.KINEMATICS, // SwerveDriveKinematics
-      new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-      new PIDController(0, 0, 0), // Y controller (usually the same values as X controller)
-      new PIDController(3, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+      new PIDController(4.35, 0.0, 0.09), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+      new PIDController(4.35, 0.0, 0.09), // Y controller (usually the same values as X controller)
+      new PIDController(1.3, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
       this::setDesiredState, // Module states consumer
       true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
       this // Requires this drive subsystem

@@ -39,6 +39,7 @@ public class RobotContainer {
 
     Constants.XboxButtons.BUTTON_Y.whileTrue(new AutoBalance(driveSubsystem));
     Constants.XboxButtons.BUTTON_B.whileTrue(new InstantCommand(driveSubsystem::setToBreak).repeatedly());
+    Constants.XboxButtons.BUTTON_A.whileTrue(driveSubsystem.moveToImage()); //on false?
   }
 
 
