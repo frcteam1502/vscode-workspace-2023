@@ -247,8 +247,8 @@ public class DriveTrain extends SubsystemBase{
 
   public Command moveToImage() {
     PathPlannerTrajectory toImage = PathPlanner.generatePath(
-      new PathConstraints(4, 3), 
-      new PathPoint(new Translation2d(0, 0), new Rotation2d(), getGyroRotation2d(), getVelocity()),
+      new PathConstraints(Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND * 3, 1), 
+      new PathPoint(new Translation2d(0, 0), getHeading(), getGyroRotation2d(), getVelocity()),
       new PathPoint(new Translation2d(1.0, 1.0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0))
     );//Final PathPoint(poseFromCamera.getTranslation)
     
