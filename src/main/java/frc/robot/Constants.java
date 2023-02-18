@@ -10,24 +10,24 @@ public final class Constants {
 
   public static final class Motors {
     //drive
-    public static final CANSparkMax DRIVE_FRONT_LEFT = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax DRIVE_FRONT_RIGHT = new CANSparkMax(8, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax DRIVE_BACK_LEFT = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax DRIVE_BACK_RIGHT = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
+    //public static final CANSparkMax DRIVE_FRONT_LEFT = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
+    //public static final CANSparkMax DRIVE_FRONT_RIGHT = new CANSparkMax(8, CANSparkMaxLowLevel.MotorType.kBrushless);
+    //public static final CANSparkMax DRIVE_BACK_LEFT = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
+    //public static final CANSparkMax DRIVE_BACK_RIGHT = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
     
     //turn
-    public static final CANSparkMax ANGLE_FRONT_LEFT = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax ANGLE_FRONT_RIGHT = new CANSparkMax(7, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax ANGLE_BACK_LEFT = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax ANGLE_BACK_RIGHT = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
+    //public static final CANSparkMax ANGLE_FRONT_LEFT = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
+    //public static final CANSparkMax ANGLE_FRONT_RIGHT = new CANSparkMax(7, CANSparkMaxLowLevel.MotorType.kBrushless);
+    //public static final CANSparkMax ANGLE_BACK_LEFT = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
+    //public static final CANSparkMax ANGLE_BACK_RIGHT = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     //intake
     public static final CANSparkMax INTAKE_MOTOR = new CANSparkMax(18, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     //arm
-    public static final CANSparkMax RIGHT_ARM_ANGLE = new CANSparkMax(16, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax LEFT_ARM_ANGLE = new CANSparkMax(17, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax ARM_EXTENDER = new CANSparkMax(18, CANSparkMaxLowLevel.MotorType.kBrushless);
+    //public static final CANSparkMax RIGHT_ARM_ANGLE = new CANSparkMax(16, CANSparkMaxLowLevel.MotorType.kBrushless);
+    //public static final CANSparkMax LEFT_ARM_ANGLE = new CANSparkMax(17, CANSparkMaxLowLevel.MotorType.kBrushless);
+    //public static final CANSparkMax ARM_EXTENDER = new CANSparkMax(18, CANSparkMaxLowLevel.MotorType.kBrushless);
 }
 
   public static final class Joysticks {

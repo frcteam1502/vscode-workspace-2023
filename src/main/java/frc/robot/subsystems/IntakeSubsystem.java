@@ -77,7 +77,7 @@ public class IntakeSubsystem extends SubsystemBase {
     TurnOnIntake();
     if(LimitSwitch.get()) setOut();
   }
-  
+
   public void OnReleased() {
     TurnOffIntake();
     if(!LimitSwitch.get()) setIn();
