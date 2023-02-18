@@ -54,22 +54,22 @@ public final class Constants {
     //Front Left CANCoder
     public static final CANCoder FRONT_LEFT_CAN_CODER = new CANCoder(CanConstants.FRONT_LEFT_MODULE_STEER_CANCODER);
     public static final boolean FRONT_LEFT_CAN_CODER_DIRECTION = false;
-    public static final double FRONT_LEFT_CAN_CODER_OFFSET = 3.4;
+    public static final double FRONT_LEFT_CAN_CODER_OFFSET = 111.4;
 
     //Front Right CANCoder
     public static final CANCoder FRONT_RIGHT_CAN_CODER = new CANCoder(CanConstants.FRONT_RIGHT_MODULE_STEER_CANCODER);
     public static final boolean FRONT_RIGHT_CAN_CODER_DIRECTION = false;
-    public static final double FRONT_RIGHT_CAN_CODER_OFFSET = 152.4;
+    public static final double FRONT_RIGHT_CAN_CODER_OFFSET = 104.0;
 
     //Back Left CANCoder
     public static final CANCoder BACK_LEFT_CAN_CODER = new CANCoder(CanConstants.BACK_LEFT_MODULE_STEER_CANCODER);
     public static final boolean BACK_LEFT_CAN_CODER_DIRECTION = false;
-    public static final double BACK_LEFT_CAN_CODER_OFFSET = 211.46;
+    public static final double BACK_LEFT_CAN_CODER_OFFSET = 15.0;
 
     //Back Right CANCoder
     public static final CANCoder BACK_RIGHT_CAN_CODER = new CANCoder(CanConstants.BACK_RIGHT_MODULE_STEER_CANCODER);
     public static final boolean BACK_RIGHT_CAN_CODER_DIRECTION = false;
-    public static final double BACK_RIGHT_CAN_CODER_OFFSET = 96.5; 
+    public static final double BACK_RIGHT_CAN_CODER_OFFSET = 91.4; 
   }
 
   public static final class DriveConstants {
