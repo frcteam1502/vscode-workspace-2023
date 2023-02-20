@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -75,8 +76,12 @@ public class ArmSubsystem extends SubsystemBase{
     private CANSparkMax m_leadMotor; // this one needs to match the rotations (CCW)
     private CANSparkMax m_followMotor;
     private SparkMaxPIDController m_pidControllerAngle;
+    private SparkMaxLimitSwitch m_angleFwdLimitSwitch;
+    private SparkMaxLimitSwitch m_angleRwdLimitSwitch;
     private RelativeEncoder m_encoderangle;
     private double m_targetPosition = 0;
+
+    private boolean angleLimitPressed = false;
 
     public DualMotor(int leadDeviceID, int followDeviceID) {
       m_leadMotor = new CANSparkMax(leadDeviceID, MotorType.kBrushless);
@@ -92,7 +97,10 @@ public class ArmSubsystem extends SubsystemBase{
       // Encoder object created to display position values
       m_encoderangle = m_leadMotor.getEncoder();
       m_encoderangle.setPosition(0);
-  
+
+      m_angleFwdLimitSwitch =  m_leadMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+      m_angleRwdLimitSwitch =  m_leadMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+
       // set PID coefficients
       m_pidControllerAngle.setP(ARM_CONSTANTS.kP);
       m_pidControllerAngle.setI(ARM_CONSTANTS.kI);
@@ -152,6 +160,8 @@ public class ArmSubsystem extends SubsystemBase{
       SmartDashboard.putNumber("ANGLE Arm Target Position", m_targetPosition);
       SmartDashboard.putNumber("ANGLE Arm Current Position", m_encoderangle.getPosition());
       SmartDashboard.putNumber("Elevation Target Position", elevationFineTune);
+      SmartDashboard.putBoolean("ANGLE Fwd Limit Switch", m_angleFwdLimitSwitch.isPressed());
+      SmartDashboard.putBoolean("ANGLE Rwd Limit Switch", m_angleRwdLimitSwitch.isPressed());
     }
     public double elevationFineTune;
 
@@ -166,16 +176,35 @@ public class ArmSubsystem extends SubsystemBase{
       }
     }
 
+    public void checkZeroPosition(){
+      if(m_angleRwdLimitSwitch.isPressed()){
+        if(!angleLimitPressed){
+          angleLimitPressed = true;
+          m_leadMotor.set(0);
+          m_encoderangle.setPosition(ARM_CONSTANTS.MIN_ANGLE);
+          SetElevation(ARM_CONSTANTS.MIN_ANGLE);
+        }
+      }
+      else{
+          angleLimitPressed = false;
+      }
+    }
+
   }
   
   final class ExtendMotor {
     private CANSparkMax m_extendMotor;
+    private SparkMaxLimitSwitch m_extendRwdLimitSwitch;
     private RelativeEncoder m_encoderextension;
     private SparkMaxPIDController m_pidControllerExtension;
     private double m_targetExtension = 0;
 
+    private boolean extendLimitPressed = false;
+
     public ExtendMotor(int extendDeviceID) {
       m_extendMotor = new CANSparkMax(extendDeviceID, MotorType.kBrushless);
+
+      m_extendRwdLimitSwitch = m_extendMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
 
       m_extendMotor.restoreFactoryDefaults();
 
@@ -240,6 +269,7 @@ public class ArmSubsystem extends SubsystemBase{
     {
       SmartDashboard.putNumber("EXTEND Arm Target Extension", m_targetExtension);
       SmartDashboard.putNumber("EXTEND Arm Current Position", m_encoderextension.getPosition());
+      SmartDashboard.putBoolean("EXTEND Arm Rearward Limit Pressed", m_extendRwdLimitSwitch.isPressed());
     }
 
     public void FineTune(double signum) {
@@ -247,6 +277,20 @@ public class ArmSubsystem extends SubsystemBase{
       if (EXTEND_CONSTANTS.MIN_EXTENSION < targetPosition && targetPosition < EXTEND_CONSTANTS.MAX_EXTENSION) {
         SetExtension(targetPosition);
       }
+    }
+
+    public void checkZeroPosition(){
+      //Check if Rwd Limit Pressed
+      if(m_extendRwdLimitSwitch.isPressed()){
+          if(!extendLimitPressed){
+            extendLimitPressed = true;
+            m_extendMotor.set(0);
+            m_encoderextension.setPosition(EXTEND_CONSTANTS.MIN_EXTENSION);
+            SetExtension(EXTEND_CONSTANTS.MIN_EXTENSION);
+          }
+        }else{
+          extendLimitPressed = false;
+        }
     }
   }
 
@@ -332,6 +376,13 @@ public class ArmSubsystem extends SubsystemBase{
 
   public void FineTuneAngle(double signum) {
     m_elevationMotor.FineTune(signum);
+  }
+
+  public void checkZeroAngle(){
+    m_elevationMotor.checkZeroPosition();
+  }
+  public void checkZeroExtend(){
+    m_extenderMotor.checkZeroPosition();
   }
   public void FineTuneExtend(double signum) {
     m_extenderMotor.FineTune(signum);

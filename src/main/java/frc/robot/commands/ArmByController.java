@@ -35,6 +35,7 @@ public class ArmByController extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     double armFine = -Joysticks.OPERATOR_CONTROLLER.getLeftY();
     if (Math.abs(armFine) > 0.1) {
       arm.FineTuneAngle(Math.signum(armFine));
@@ -45,6 +46,8 @@ public class ArmByController extends CommandBase {
       arm.FineTuneExtend(Math.signum(extendFine));
     }
 
+    arm.checkZeroAngle();
+    arm.checkZeroExtend();
     arm.updateSmartDashboard();
 
   }
