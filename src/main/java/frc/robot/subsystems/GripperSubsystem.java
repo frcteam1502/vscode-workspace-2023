@@ -1,39 +1,44 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class GripperSubsystem extends SubsystemBase {
-  /** Creates a new ExampleSubsystem. */
-  public GripperSubsystem() {}
+  private final CANSparkMax gripper;
+  private final CANSparkMax rotate;
+
+  private final RelativeEncoder rotateEncoder;
+  private final RelativeEncoder gripperEncoder;
+
+  private boolean Out = true;
+
+  public GripperSubsystem() {
+    gripper = Constants.Motors.GRIPPER;
+    rotate = Constants.Motors.GRIPPER_ROTATE;
+
+    rotateEncoder = rotate.getEncoder();
+    gripperEncoder = gripper.getEncoder();
+
+    rotateEncoder.setPosition(0);
+    gripperEncoder.setPosition(0);
+
+    //Ticks (42 per revolution) to degrees (360 per revolution... idiot)
+    rotateEncoder.setPositionConversionFactor(360/42);
+  }
 
   public void OpenGripper() {
     // This method will open gripper
   }
+
   public void CloseGripper() {
     // This method will close gripper
   }
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
-  }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+  public void toggleRotate() {
 
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
   }
  }
