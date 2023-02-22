@@ -5,7 +5,7 @@ Operating Mode | Idle Mode | State | Color/Pattern | Graphic
 ---|---|---|---|---
 Brushed     | Brake  | No Signal | Blue Blink | ![blue blink](\spark-max\brushed-no-signal-brake.webp)
 .           |        | Valid Signal | Blue Solid | ![blue solid](\spark-max\blue.webp)
-.           | Coast  | No Signal | Yellow Blink | ![yellow blink](\spark-max\brushed-no-signal-coast.webp)
+.           | Coast  | No Signal | Yellow Blink | ![yellow blink](spark-max/brushed-no-signal-coast.webp)
 .           |        | Valid Signal | Yellow Solid | ![yellow solid](\spark-max\yellow.webp)
 Brushless   | Brake  | No Signal | Cyan Blink | ![cyan blink](\spark-max\brushless-no-signal-brake.webp)
 .           |        | Valid Signal | Cyan Solid | ![cyan solid](\spark-max\cyan.webp)
