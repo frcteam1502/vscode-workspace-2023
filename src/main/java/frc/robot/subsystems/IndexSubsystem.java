@@ -7,16 +7,21 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ArmLengthSubsystem extends SubsystemBase {
+public class IndexSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  public ArmLengthSubsystem() {}
+  public IndexSubsystem() {}
 
-  public void Extension() {
-    // Extend the arm
+  public void PositionPiece() {
+    // move the piece into position
+
   }
-  public void Retraction() {
-    // Retract the arm
+  public void eject() {
+    // emergence eject piece
+
   }
+
+
+
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
    *
@@ -36,4 +41,4 @@ public class ArmLengthSubsystem extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
- }
+}

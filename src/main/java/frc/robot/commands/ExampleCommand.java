@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import frc.robot.Constants;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -19,11 +18,12 @@ public class ExampleCommand extends CommandBase {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    subsystem.moveMotor(0);
+  }
 
   @Override
   public void execute() {
-    subsystem.moveMotor(Constants.Controllers.DRIVE_CONTROLLER.getLeftY());
   }
 
   @Override
