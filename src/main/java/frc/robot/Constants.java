@@ -173,15 +173,15 @@ public final class Constants {
     public static final CANSparkMax ANGLE_BACK_RIGHT = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     //intake
-    public static final CANSparkMax INTAKE_MOTOR = new CANSparkMax(18, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax INTAKE_MOTOR = new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     //Arm
-    public static final CANSparkMax ARM_ANGLE = new CANSparkMax(19, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax ARM_EXTEND = new CANSparkMax(20, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax ARM_ANGLE = new CANSparkMax(10, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax ARM_EXTEND = new CANSparkMax(18, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     //Gripper
-    public static final CANSparkMax GRIPPER = new CANSparkMax(21, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax GRIPPER_ROTATE = new CANSparkMax(22, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax GRIPPER = new CANSparkMax(11, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax GRIPPER_ROTATE = new CANSparkMax(12, CANSparkMaxLowLevel.MotorType.kBrushless);
 }
 
 public static final class Joysticks {
