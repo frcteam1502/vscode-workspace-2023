@@ -12,6 +12,8 @@ public class ArmSubsystem extends SubsystemBase {
   public ArmSubsystem() {
     armAngle = Constants.Motors.ARM_ANGLE;
     armExtend = Constants.Motors.ARM_EXTEND;
+
+    Constants.Motors.ARM_ANGLE_FOLLOWER.follow(armAngle, true);
   }
 
   public void angleMove(double speed) {

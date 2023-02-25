@@ -15,7 +15,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public DoubleSolenoid DoublePH = new DoubleSolenoid(1, PneumaticsModuleType.REVPH,frc.robot.Constants.PneumaticsConstants.kforwardchannel,frc.robot.Constants.PneumaticsConstants.kreversechannel);
   public Compressor phCompressor = new Compressor(1, PneumaticsModuleType.REVPH);
   
-  public DigitalInput LimitSwitch = new DigitalInput(0); //TODO: get actual channel
+  public DigitalInput LimitSwitch = new DigitalInput(20); //TODO: get actual channel
 
   final static class INTAKE_CONSTANTS {  
     // PID coefficients (sample values, TBD)
