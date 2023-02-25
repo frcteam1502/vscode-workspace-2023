@@ -2,22 +2,28 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
+
 public class IntakeSubsystem extends SubsystemBase {
-  public DoubleSolenoid DoublePH = new DoubleSolenoid(1, PneumaticsModuleType.REVPH,frc.robot.Constants.PneumaticsConstants.kforwardchannel,frc.robot.Constants.PneumaticsConstants.kreversechannel);
+  public DoubleSolenoid DoublePH = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, INTAKE_CONSTANTS.FORWARD_CHANNEL, INTAKE_CONSTANTS.REVERSE_CHANNEL);
   public Compressor phCompressor = new Compressor(1, PneumaticsModuleType.REVPH);
   
   public DigitalInput LimitSwitch = new DigitalInput(0); //TODO: get actual channel
 
-  final static class INTAKE_CONSTANTS {  
+  public final static class INTAKE_CONSTANTS {  
+    public static final int FORWARD_CHANNEL = 15;
+    public static final int REVERSE_CHANNEL = 0;
+    public final static int INTAKE_DEVICE_ID = 18; // TODO: TBD   
+
     // PID coefficients (sample values, TBD)
     public final static double kP = 0.1;
     public final static double kI = 1e-4;
@@ -29,9 +35,12 @@ public class IntakeSubsystem extends SubsystemBase {
   }
   
   private SparkMaxPIDController pidControllerIntake;
-  private final CANSparkMax intakeMotor = Constants.Motors.INTAKE_MOTOR;
+  private final CANSparkMax intakeMotor;
   
-  public IntakeSubsystem() {
+  public IntakeSubsystem(int deviceId) {
+      //intake
+    intakeMotor = new CANSparkMax(15, MotorType.kBrushless);
+
     intakeMotor.restoreFactoryDefaults();
 
     pidControllerIntake = intakeMotor.getPIDController();

@@ -172,9 +172,6 @@ public final class Constants {
     public static final CANSparkMax ANGLE_BACK_LEFT = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static final CANSparkMax ANGLE_BACK_RIGHT = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    //intake
-    public static final CANSparkMax INTAKE_MOTOR = new CANSparkMax(15, CANSparkMaxLowLevel.MotorType.kBrushless);
-
     //arm
     public static final CANSparkMax RIGHT_ARM_ANGLE = new CANSparkMax(16, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static final CANSparkMax LEFT_ARM_ANGLE = new CANSparkMax(17, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -203,18 +200,6 @@ public final class Constants {
     //Driver Buttons
     public static final JoystickButton DRIVER_RIGHT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kRightBumper.value); 
     public static final JoystickButton DRIVER_LEFT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kLeftBumper.value); 
-  }
-
-  public static final class IntakeConstants {
-    public static final int FORWARD_CHANNEL = 1;
-    public static final int REVERSE_CHANNEL = 0;
-    public final static int INTAKE_DEVICE_ID = 18; // TODO: TBD   
-  }
-
-  public static class PneumaticsConstants{
-    // Forward piston solenoid value
-    public static final int kreversechannel = 0;
-    public static final int kforwardchannel = 15;
   }
 
   public static class ArmConstants {
