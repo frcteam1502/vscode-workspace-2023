@@ -7,16 +7,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.ArmCommand;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.Autonomous.Selection.*;
 import frc.robot.commands.Autonomous.Simple.AutoBalance;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class RobotContainer { 
   private final SendableChooser<Command> sendableChooser = new SendableChooser<>();
 
   //Subsystems
   public final DriveTrain driveSubsystem = new DriveTrain();
+
+  public final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+
+  public final ArmSubsystem armAngleSubsystem = new ArmSubsystem();
 
   //Commands
 
@@ -35,11 +42,18 @@ public class RobotContainer {
 
 
   private void configureBindings() {
+    //Drive
     driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem));
-
     Constants.XboxButtons.BUTTON_Y.whileTrue(new AutoBalance(driveSubsystem));
     Constants.XboxButtons.BUTTON_B.whileTrue(new InstantCommand(driveSubsystem::setToBreak).repeatedly());
     Constants.XboxButtons.BUTTON_A.whileTrue(driveSubsystem.moveToImage()); //on false?
+
+    //Intake
+    Constants.XboxButtons.LEFT_BUMPER.onTrue(new InstantCommand(intakeSubsystem::OnPressed));
+    Constants.XboxButtons.LEFT_BUMPER.onFalse(new InstantCommand(intakeSubsystem::OnReleased));
+
+    //Arm
+    armAngleSubsystem.setDefaultCommand(new ArmCommand(armAngleSubsystem));
   }
 
 

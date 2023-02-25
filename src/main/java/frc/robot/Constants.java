@@ -13,15 +13,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public final class Constants {
 
-  /** TODO:
-   *
-   * Configure CANCoders: Direction
-   * 
-   * Configure Motor Direction
-   * 
-   * Configure PIDs: SysID for Drive PIDs, Trial and error for turn PIDs
-   */
-
   public static final Pigeon2 gyro = new Pigeon2(14);
 
   public static final class CanConstants {
@@ -158,6 +149,16 @@ public final class Constants {
     public static final double MAX_MODULE_ROTATION_RADIANS_PER_SECOND_PER_SECOND = Math.PI;
   }
 
+  public static final class IntakeConstants {
+    public static final int FORWARD_CHANNEL = 1;
+    public static final int REVERSE_CHANNEL = 0;
+  }
+
+  public static class PneumaticsConstants{
+    public static final int kreversechannel = 0;
+    public static final int kforwardchannel = 15;
+  }
+
   public static final class Motors {
     //drive
     public static final CANSparkMax DRIVE_FRONT_LEFT = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -170,6 +171,13 @@ public final class Constants {
     public static final CANSparkMax ANGLE_FRONT_RIGHT = new CANSparkMax(7, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static final CANSparkMax ANGLE_BACK_LEFT = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static final CANSparkMax ANGLE_BACK_RIGHT = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
+
+    //intake
+    public static final CANSparkMax INTAKE_MOTOR = new CANSparkMax(18, CANSparkMaxLowLevel.MotorType.kBrushless);
+
+    //Arm
+    public static final CANSparkMax ARM_ANGLE = new CANSparkMax(19, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax ARM_EXTEND = new CANSparkMax(20, CANSparkMaxLowLevel.MotorType.kBrushless);
 }
 
 public static final class Joysticks {
