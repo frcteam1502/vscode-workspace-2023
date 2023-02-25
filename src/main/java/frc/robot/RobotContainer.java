@@ -13,6 +13,7 @@ import frc.robot.commands.Autonomous.Selection.*;
 import frc.robot.commands.Autonomous.Simple.AutoBalance;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class RobotContainer { 
@@ -24,6 +25,8 @@ public class RobotContainer {
   public final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
   public final ArmSubsystem armAngleSubsystem = new ArmSubsystem();
+
+  public final GripperSubsystem gripperSubsystem = new GripperSubsystem();
 
   //Commands
 
@@ -54,6 +57,12 @@ public class RobotContainer {
 
     //Arm
     armAngleSubsystem.setDefaultCommand(new ArmCommand(armAngleSubsystem));
+
+    //Gripper
+    Constants.XboxButtons.RIGHT_BUMPER.onTrue(new InstantCommand(gripperSubsystem::toggleRotate));
+    Constants.XboxButtons.BUTTON_X.onTrue(new InstantCommand(gripperSubsystem::CloseGripper));
+    Constants.XboxButtons.BUTTON_X.onFalse(new InstantCommand(gripperSubsystem::OpenGripper));
+
   }
 
 

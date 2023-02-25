@@ -19,7 +19,6 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void extendMove(double speed) {
-    if(speed > 0) armExtend.set(speed/10);
-    else armExtend.set(0);
+    armExtend.set(speed/10);
   }
 }

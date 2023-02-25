@@ -16,9 +16,9 @@ public class ArmCommand extends CommandBase {
 
   @Override
   public void execute() {
-    armAngleSubsystem.angleMove(MathUtil.applyDeadband(Constants.Joysticks.MANIP_CONTROLLER.getLeftY(), .1, .6));
+    armAngleSubsystem.angleMove(MathUtil.applyDeadband(Constants.Joysticks.MANIP_CONTROLLER.getLeftY(), .1));
 
-    armAngleSubsystem.extendMove(MathUtil.applyDeadband(Constants.Joysticks.MANIP_CONTROLLER.getRightY(), .1, .6));
+    armAngleSubsystem.extendMove(MathUtil.applyDeadband(Constants.Joysticks.MANIP_CONTROLLER.getRightY(), .1));
   }
 
   @Override
