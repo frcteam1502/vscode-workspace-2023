@@ -21,6 +21,7 @@ public class GripperSubsystem extends SubsystemBase {
 
   private boolean turn = true;
   private double goalRotate = 0;
+  private boolean open = true;
   private double goalOpen = 0;
 
   public GripperSubsystem() {
@@ -43,14 +44,11 @@ public class GripperSubsystem extends SubsystemBase {
     rotatePID.setFeedbackDevice(rotateEncoder);
   }
 
-  public void OpenGripper() {
-    goalOpen = 0;
-    gripperPID.setReference(goalOpen, ControlType.kPosition);
-  }
-
-  public void CloseGripper() {
-    goalOpen = 20;
-    gripperPID.setReference(goalOpen, ControlType.kPosition);
+  public void toggleGripper() {
+    if(open) goalOpen = 0;
+    else goalOpen = 10; //ARBITRATY VAUE
+    turn = !turn;
+    rotatePID.setReference(goalOpen, ControlType.kPosition);
   }
 
   public void toggleRotate() {

@@ -60,8 +60,7 @@ public class RobotContainer {
 
     //Gripper
     Constants.XboxButtons.RIGHT_BUMPER.onTrue(new InstantCommand(gripperSubsystem::toggleRotate));
-    Constants.XboxButtons.BUTTON_X.onTrue(new InstantCommand(gripperSubsystem::CloseGripper));
-    Constants.XboxButtons.BUTTON_X.onFalse(new InstantCommand(gripperSubsystem::OpenGripper));
+    Constants.XboxButtons.BUTTON_X.onTrue(new InstantCommand(gripperSubsystem::toggleGripper));
 
   }
 
