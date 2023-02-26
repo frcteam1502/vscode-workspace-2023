@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -11,8 +10,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 
 public class IntakeSubsystem extends SubsystemBase {
-  public DoubleSolenoid DoublePH = new DoubleSolenoid(1, PneumaticsModuleType.REVPH,frc.robot.Constants.PneumaticsConstants.kforwardchannel,frc.robot.Constants.PneumaticsConstants.kreversechannel);
-  public Compressor phCompressor = new Compressor(1, PneumaticsModuleType.REVPH);
+  public DoubleSolenoid DoublePH = new DoubleSolenoid(15, PneumaticsModuleType.REVPH,frc.robot.Constants.PneumaticsConstants.kforwardchannel,frc.robot.Constants.PneumaticsConstants.kreversechannel);
 
   private final CANSparkMax intakeMotor = Constants.Motors.INTAKE_MOTOR;
   

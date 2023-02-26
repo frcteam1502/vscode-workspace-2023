@@ -153,20 +153,14 @@ public final class Constants {
     public static final JoystickButton DRIVER_LEFT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kLeftBumper.value); 
   }
 
-  public static final class IntakeConstants {
-    public static final int FORWARD_CHANNEL = 1;
-    public static final int REVERSE_CHANNEL = 0;
-  }
-
   public static class PneumaticsConstants{
-    // Forward piston solenoid value
-    public static final int kreversechannel = 0;
+    public static final int kreversechannel = 8;
     public static final int kforwardchannel = 15;
   }
 
   public static class ArmConstants {
-    public final static int LEAD_DEVICE_ID = 16; // TODO: TBD (get from global device map?)
-    public final static int FOLOW_DEVICE_ID = 17; // TODO: TBD
-    public final static int EXTEND_DEVICE_ID = 18; // TODO: TBD    
+    public final static int LEAD_DEVICE_ID = 16;
+    public final static int FOLOW_DEVICE_ID = 17;
+    public final static int EXTEND_DEVICE_ID = 18; 
   }
 }

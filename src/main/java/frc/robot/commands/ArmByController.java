@@ -4,14 +4,14 @@ import frc.robot.Constants.Joysticks;
 import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ArmCommand extends CommandBase {
+public class ArmByController extends CommandBase {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-  private final ArmSubsystem m_ArmSubsystem;
+  private final ArmSubsystem arm;
 
-  public ArmCommand(ArmSubsystem subsystem_1) {
-    m_ArmSubsystem = subsystem_1;
+  public ArmByController(ArmSubsystem arm) {
+    this.arm = arm;
 
-    addRequirements(subsystem_1);
+    addRequirements(arm);
   }
 
   @Override
@@ -20,15 +20,21 @@ public class ArmCommand extends CommandBase {
 
   @Override
   public void execute() {
+    
     double armFine = -Joysticks.OPERATOR_CONTROLLER.getLeftY();
     if (Math.abs(armFine) > 0.1) {
-      m_ArmSubsystem.FineTune(Math.signum(armFine));
+      arm.FineTuneAngle(Math.signum(armFine));
     }
 
     double extendFine = -Joysticks.OPERATOR_CONTROLLER.getRightY();
     if (Math.abs(extendFine) > 0.1) {
-      m_ArmSubsystem.FineTune(Math.signum(extendFine));
+      arm.FineTuneExtend(Math.signum(extendFine));
     }
+
+    // arm.checkZeroAngle();
+    // arm.checkZeroExtend();
+    arm.updateSmartDashboard();
+
   }
 
   @Override
