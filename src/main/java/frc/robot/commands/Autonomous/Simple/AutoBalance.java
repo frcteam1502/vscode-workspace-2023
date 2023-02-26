@@ -7,7 +7,7 @@ import frc.robot.subsystems.DriveTrain;
 public class AutoBalance extends CommandBase {
   private final DriveTrain drive;
 
-  private final PIDController balancePID = new PIDController(.2, 0, 0);
+  private final PIDController balancePID = new PIDController(1, 0, 0);
 
 
   public AutoBalance(DriveTrain drive) {
@@ -21,7 +21,7 @@ public class AutoBalance extends CommandBase {
 
   @Override
   public void execute() {
-    drive.drive(-balancePID.calculate(drive.getRoll())/10.0, 0, 0, true);
+    drive.drive(-balancePID.calculate(drive.getRoll())/1.0, 0, 0, true);
   }
 
   @Override

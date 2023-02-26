@@ -40,15 +40,15 @@ public class RobotContainer {
   private void configureBindings() {
     //Drive
     driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem));
-    Constants.XboxButtons.BUTTON_Y.whileTrue(new AutoBalance(driveSubsystem)); //.repeatedly?
-    Constants.XboxButtons.BUTTON_B.whileTrue(new InstantCommand(driveSubsystem::setToBreak).repeatedly());
+    Constants.XboxButtons.BUTTON_B.whileTrue(new AutoBalance(driveSubsystem));
+    Constants.XboxButtons.BUTTON_Y.whileTrue(new InstantCommand(driveSubsystem::setToBreak).repeatedly());
 
     //Arm
     armSubsystem.setDefaultCommand(new ArmByController(armSubsystem));
-    XboxButtons.BUTTON_Y.onTrue(new InstantCommand(armSubsystem::GoToTop));
-    XboxButtons.BUTTON_B.onTrue(new InstantCommand(armSubsystem::GoToMiddle));
-    XboxButtons.BUTTON_A.onTrue(new InstantCommand(armSubsystem::GoToFloor));
-    XboxButtons.BUTTON_X.onTrue(new InstantCommand(armSubsystem::GoToStow));
+    // XboxButtons.BUTTON_Y.onTrue(new InstantCommand(armSubsystem::GoToTop));
+    // XboxButtons.BUTTON_B.onTrue(new InstantCommand(armSubsystem::GoToMiddle));
+    // XboxButtons.BUTTON_A.onTrue(new InstantCommand(armSubsystem::GoToFloor));
+    // XboxButtons.BUTTON_X.onTrue(new InstantCommand(armSubsystem::GoToStow));
 
     //Intake
     XboxButtons.DRIVER_RIGHT_BUMPER.onTrue(new InstantCommand(intakeSubsystem::OnPressed).andThen(new WaitCommand(.25)));

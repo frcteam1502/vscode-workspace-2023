@@ -9,8 +9,6 @@ public class SimpleBalance extends SequentialCommandGroup {
     addCommands(
       new MoveForwardByTime(drive, .5, 3),
 
-      new MoveForwardByTime(drive, -.5, 1),
-
       new AutoBalance(drive)
     );
   }
