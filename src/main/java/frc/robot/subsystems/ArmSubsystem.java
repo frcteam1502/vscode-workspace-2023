@@ -3,23 +3,14 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-//import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-//import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase{
-
-  // no need to be global/public if not used outside of this subsystemstatic class xboxcontroller.axis 
- static class xboxcontroller {
-  //work in progress found the right buttons just need to put the values
-  public final static double kLeftX = 0;
-  public final static double kLeftY = 0;
- }
- 
  
   final static class ARM_CONSTANTS {
 
@@ -81,7 +72,10 @@ public class ArmSubsystem extends SubsystemBase{
       m_followMotor = new CANSparkMax(followDeviceID, MotorType.kBrushless);
 
       m_leadMotor.restoreFactoryDefaults();
-      m_followMotor.restoreFactoryDefaults();                                                                            
+      m_followMotor.restoreFactoryDefaults();
+      
+      m_leadMotor.setIdleMode(IdleMode.kBrake);
+      m_followMotor.setIdleMode(IdleMode.kBrake);
 
       m_followMotor.follow(m_leadMotor, /*invert*/ true);
 
@@ -168,19 +162,20 @@ public class ArmSubsystem extends SubsystemBase{
       }
     }
 
-    // public void checkZeroPosition(){
-    //   if(m_angleRwdLimitSwitch.isPressed()){
-    //     if(!angleLimitPressed){
-    //       angleLimitPressed = true;
-    //       m_leadMotor.set(0);
-    //       m_encoderangle.setPosition(ARM_CONSTANTS.MIN_ANGLE);
-    //       SetElevation(ARM_CONSTANTS.MIN_ANGLE);
-    //     }
-    //   }
-    //   else{
-    //       angleLimitPressed = false;
-    //   }
-    // }
+    public void checkZeroPosition(){
+      if(m_angleRwdLimitSwitch.isPressed()){
+        if(!angleLimitPressed){
+          angleLimitPressed = true;
+          m_leadMotor.set(0);
+          m_encoderangle.setPosition(ARM_CONSTANTS.MIN_ANGLE);
+          SetElevation(ARM_CONSTANTS.MIN_ANGLE);
+        }
+      }
+      else{
+          angleLimitPressed = false;
+      }
+    }
+
   }
   
   final class ExtendMotor {
@@ -198,7 +193,9 @@ public class ArmSubsystem extends SubsystemBase{
       m_extendRwdLimitSwitch = m_extendMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
 
       m_extendMotor.restoreFactoryDefaults();
-
+      
+      m_extendMotor.setIdleMode(IdleMode.kBrake);
+      
       m_pidControllerExtension = m_extendMotor.getPIDController();
 
       // Encoder object created to display position values
@@ -220,6 +217,7 @@ public class ArmSubsystem extends SubsystemBase{
 
     // For Testing
     public void UpdateInformation(){ 
+      // read PID coefficients from SmartDashboard
       double p = SmartDashboard.getNumber(  "EXTEND P Gain", 0);
       double i = SmartDashboard.getNumber ( "EXTEND I Gain", 0);
       double d = SmartDashboard.getNumber ( "EXTEND D Gain", 0);
@@ -255,32 +253,30 @@ public class ArmSubsystem extends SubsystemBase{
       }
     }
 
-    // public void checkZeroPosition(){
-    //   //Check if Rwd Limit Pressed
-    //   if(m_extendRwdLimitSwitch.isPressed()){
-    //     if(!extendLimitPressed){
-    //       extendLimitPressed = true;
-    //       m_extendMotor.set(0);
-    //       m_encoderextension.setPosition(EXTEND_CONSTANTS.MIN_EXTENSION);
-    //       SetExtension(EXTEND_CONSTANTS.MIN_EXTENSION);
-    //     }
-    //   }
-    //   else{
-    //     extendLimitPressed = false;
-    //   }
-    // }
+    public void checkZeroPosition(){
+      //Check if Rwd Limit Pressed
+      if(m_extendRwdLimitSwitch.isPressed()){
+        if(!extendLimitPressed){
+          extendLimitPressed = true;
+          m_extendMotor.set(0);
+          m_encoderextension.setPosition(EXTEND_CONSTANTS.MIN_EXTENSION);
+          SetExtension(EXTEND_CONSTANTS.MIN_EXTENSION);
+        }
+      }
+      else{
+        extendLimitPressed = false;
+      }
+    }
   }
 
   private DualMotor m_elevationMotor;
   private ExtendMotor m_extenderMotor;
 
-  /* TODO: provide LEAD_DEVICE_ID, etc. */
   public ArmSubsystem(int leadDeviceID, int followDeviceID, int extendDeviceID) {
     m_elevationMotor = new DualMotor(leadDeviceID, followDeviceID);
     m_extenderMotor = new ExtendMotor(extendDeviceID);
   
     //Populate Network Tables 
-    m_elevationMotor.DisplayInformation();
     m_elevationMotor.DisplayPosition();
     m_extenderMotor.DisplayPosition();
 
@@ -311,14 +307,12 @@ public class ArmSubsystem extends SubsystemBase{
     m_elevationMotor.FineTune(signum);
   }
 
-  // public void checkZeroAngle(){
-  //   m_elevationMotor.checkZeroPosition();
-  // }
-
-  // public void checkZeroExtend(){
-  //   m_extenderMotor.checkZeroPosition();
-  // }
-
+  public void checkZeroAngle(){
+    m_elevationMotor.checkZeroPosition();
+  }
+  public void checkZeroExtend(){
+    m_extenderMotor.checkZeroPosition();
+  }
   public void FineTuneExtend(double signum) {
     m_extenderMotor.FineTune(signum);
   }
@@ -327,6 +321,4 @@ public class ArmSubsystem extends SubsystemBase{
     m_elevationMotor.DisplayPosition();
     m_extenderMotor.DisplayPosition();
   }
-
-
- }
+}

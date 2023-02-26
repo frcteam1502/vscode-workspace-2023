@@ -119,14 +119,9 @@ public final class Constants {
     //intake
     public static final CANSparkMax INTAKE_MOTOR = new CANSparkMax(19, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    //arm
-    public static final CANSparkMax RIGHT_ARM_ANGLE = new CANSparkMax(17, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax LEFT_ARM_ANGLE = new CANSparkMax(16, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax ARM_EXTENDER = new CANSparkMax(18, CANSparkMaxLowLevel.MotorType.kBrushless);
-
-    //Gripper
-    public static final CANSparkMax GRIPPER = new CANSparkMax(23, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax GRIPPER_ROTATE = new CANSparkMax(22, CANSparkMaxLowLevel.MotorType.kBrushless);
+    // //Gripper
+    // public static final CANSparkMax GRIPPER = new CANSparkMax(23, CANSparkMaxLowLevel.MotorType.kBrushless);
+    // public static final CANSparkMax GRIPPER_ROTATE = new CANSparkMax(22, CANSparkMaxLowLevel.MotorType.kBrushless);
 }
 
   public static final class Joysticks {
@@ -159,8 +154,8 @@ public final class Constants {
   }
 
   public static class ArmConstants {
-    public final static int LEAD_DEVICE_ID = 16;
-    public final static int FOLOW_DEVICE_ID = 17;
+    public final static int LEAD_DEVICE_ID = 17;
+    public final static int FOLOW_DEVICE_ID = 16;
     public final static int EXTEND_DEVICE_ID = 18; 
   }
 }
