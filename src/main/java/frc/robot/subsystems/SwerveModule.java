@@ -29,6 +29,9 @@ public class SwerveModule {
     this.turningMotor = turnMotor;
     this.absEncoder = absEncoder;
 
+    driveMotor.setClosedLoopRampRate(.25);
+    driveMotor.setSmartCurrentLimit(60);
+
     driveEncoder = driveMotor.getEncoder();
 
     // Set the distance per pulse for the drive encoder. 
@@ -47,12 +50,10 @@ public class SwerveModule {
     this.turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
     this.drivePIDController = this.driveMotor.getPIDController();
-    this.drivePIDController.setP(.1);
+    this.drivePIDController.setP(.08);
     this.drivePIDController.setI(0);
     this.drivePIDController.setD(0);
     this.drivePIDController.setFF(1);
-
-
   }
 
   /**
@@ -62,6 +63,14 @@ public class SwerveModule {
    */
   public SwerveModuleState getState() {
     return new SwerveModuleState(driveEncoder.getVelocity(), new Rotation2d(getAbsPositionZeroed(true)));
+  }
+
+  public double getVelocity() {
+    return driveEncoder.getVelocity();
+  }
+
+  public Rotation2d geRotation2d() {
+    return new Rotation2d(Units.degreesToRadians(absEncoder.getAbsolutePosition()));
   }
 
   /**
@@ -78,12 +87,6 @@ public class SwerveModule {
   }
 
   public double getAbsPositionZeroed(boolean inRadians) {
-    // if (inRadians) {
-    //   double radians = Units.degreesToRadians(getAbsPositionZeroed(false));// is this the right API???
-    //   if(radians <= Math.PI) return radians;
-    //   else return radians - (2 * Math.PI);
-    // } 
-    // else return absEncoder.getAbsolutePosition() - AbsOffset;
     return Units.degreesToRadians(absEncoder.getAbsolutePosition());
   }
 
@@ -95,11 +98,6 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(getAbsPositionZeroed(true)));
-
-    // Calculate the drive output from the drive PID controller.
-    //final double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity(), state.speedMetersPerSecond);
-
-    //final double driveFeedforward = this.driveFeedforward.calculate(state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput = turningPIDController.calculate(getAbsPositionZeroed(true), state.angle.getRadians());

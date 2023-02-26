@@ -1,39 +1,60 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class GripperSubsystem extends SubsystemBase {
-  /** Creates a new ExampleSubsystem. */
-  public GripperSubsystem() {}
+  private final CANSparkMax gripper;
+  private final CANSparkMax rotate;
 
-  public void OpenGripper() {
-    // This method will open gripper
-  }
-  public void CloseGripper() {
-    // This method will close gripper
-  }
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
+  private final RelativeEncoder gripperEncoder;
+  private final RelativeEncoder rotateEncoder;
+
+  private final SparkMaxPIDController gripperPID;
+  private final SparkMaxPIDController rotatePID;
+
+  private boolean turn = true;
+  private double goalRotate = 0;
+  private boolean open = true;
+  private double goalOpen = 0;
+
+  public GripperSubsystem() {
+    //Motors
+    gripper = Constants.Motors.GRIPPER;
+    rotate = Constants.Motors.GRIPPER_ROTATE;
+
+    //Encoders
+    rotateEncoder = rotate.getEncoder();
+    gripperEncoder = gripper.getEncoder();
+
+    rotateEncoder.setPosition(0);
+    gripperEncoder.setPosition(0);
+    
+    //PIDs
+    gripperPID = gripper.getPIDController();
+    rotatePID = rotate.getPIDController();
+
+    gripperPID.setFeedbackDevice(gripperEncoder);
+    rotatePID.setFeedbackDevice(rotateEncoder);
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public void toggleGripper() {
+    if(open) goalOpen = 0;
+    else goalOpen = 10; //ARBITRATY VAUE
+    turn = !turn;
+    rotatePID.setReference(goalOpen, ControlType.kPosition);
   }
 
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
+  public void toggleRotate() {
+    if(turn) goalRotate = 0;
+    else goalRotate = 10; //ARBITRATY VAUE
+    turn = !turn;
+    rotatePID.setReference(goalRotate, ControlType.kPosition);
   }
  }

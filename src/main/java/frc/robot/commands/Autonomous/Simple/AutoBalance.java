@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.Autonomous.Simple;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -7,7 +7,7 @@ import frc.robot.subsystems.DriveTrain;
 public class AutoBalance extends CommandBase {
   private final DriveTrain drive;
 
-  private final PIDController balancePID = new PIDController(0, 0, 0, 0);
+  private final PIDController balancePID = new PIDController(.2, 0, 0);
 
 
   public AutoBalance(DriveTrain drive) {
@@ -15,13 +15,13 @@ public class AutoBalance extends CommandBase {
 
     addRequirements(drive);
 
-    balancePID.setIntegratorRange(-.1, .1);
-    balancePID.setTolerance(2, 0.05);
+    balancePID.setTolerance(2);
+    balancePID.setSetpoint(0);
   }
 
   @Override
   public void execute() {
-    drive.drive(balancePID.calculate(drive.getPitch()), 0, 0, true);
+    drive.drive(-balancePID.calculate(drive.getRoll())/10.0, 0, 0, true);
   }
 
   @Override
@@ -29,6 +29,6 @@ public class AutoBalance extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return balancePID.atSetpoint();
+    return false;
   }
 }

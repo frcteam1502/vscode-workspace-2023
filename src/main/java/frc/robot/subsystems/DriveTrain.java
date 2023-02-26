@@ -1,20 +1,32 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.Pigeon2;
+import java.util.HashMap;
+import java.util.List;
 
+import com.ctre.phoenix.sensors.Pigeon2;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.Motors;
-import frc.robot.Constants.CANCoders;
-import static frc.robot.Constants.DriveConstants.*;
 
 public class DriveTrain extends SubsystemBase{
   //Debug variables - CL
@@ -39,49 +51,55 @@ public class DriveTrain extends SubsystemBase{
 
   private final SwerveModule frontLeft = new SwerveModule(
     Motors.DRIVE_FRONT_LEFT, Motors.ANGLE_FRONT_LEFT, 
-    CANCoders.FRONT_LEFT_CAN_CODER, 
-    CANCoders.FRONT_LEFT_CAN_CODER_OFFSET,
-    CANCoders.FRONT_LEFT_CAN_CODER_DIRECTION);
+    Constants.CANCoders.FRONT_LEFT_CAN_CODER, 
+    Constants.CANCoders.FRONT_LEFT_CAN_CODER_OFFSET,
+    Constants.CANCoders.FRONT_LEFT_CAN_CODER_DIRECTION);
 
   private final SwerveModule frontRight = new SwerveModule(
     Motors.DRIVE_FRONT_RIGHT, Motors.ANGLE_FRONT_RIGHT, 
-    CANCoders.FRONT_RIGHT_CAN_CODER, 
-    CANCoders.FRONT_RIGHT_CAN_CODER_OFFSET,
-    CANCoders.FRONT_RIGHT_CAN_CODER_DIRECTION);
+    Constants.CANCoders.FRONT_RIGHT_CAN_CODER, 
+    Constants.CANCoders.FRONT_RIGHT_CAN_CODER_OFFSET,
+    Constants.CANCoders.FRONT_RIGHT_CAN_CODER_DIRECTION);
 
   private final SwerveModule backLeft = new SwerveModule(
     Motors.DRIVE_BACK_LEFT, Motors.ANGLE_BACK_LEFT, 
-    CANCoders.BACK_LEFT_CAN_CODER, 
-    CANCoders.BACK_LEFT_CAN_CODER_OFFSET,
-    CANCoders.BACK_LEFT_CAN_CODER_DIRECTION);
+    Constants.CANCoders.BACK_LEFT_CAN_CODER, 
+    Constants.CANCoders.BACK_LEFT_CAN_CODER_OFFSET,
+    Constants.CANCoders.BACK_LEFT_CAN_CODER_DIRECTION);
 
   private final SwerveModule backRight = new SwerveModule(
     Motors.DRIVE_BACK_RIGHT, Motors.ANGLE_BACK_RIGHT, 
-    CANCoders.BACK_RIGHT_CAN_CODER, 
-    CANCoders.BACK_RIGHT_CAN_CODER_OFFSET,
-    CANCoders.BACK_RIGHT_CAN_CODER_DIRECTION);
+    Constants.CANCoders.BACK_RIGHT_CAN_CODER, 
+    Constants.CANCoders.BACK_RIGHT_CAN_CODER_OFFSET,
+    Constants.CANCoders.BACK_RIGHT_CAN_CODER_DIRECTION);
 
   private final Pigeon2 gyro = Constants.gyro;
 
+  private final SwerveDriveKinematics kinematics = Constants.DriveConstants.KINEMATICS;
 
-  private final SwerveDriveKinematics kinematics = KINEMATICS;
+  public final SwerveDrivePoseEstimator odometry;
 
-  private final SwerveDriveOdometry odometry;
+  private Pose2d pose = new Pose2d();
+  
+  private double pitchOffset;
+
+  private final Timer timer = new Timer();
 
   public DriveTrain() {
-    this.odometry = new SwerveDriveOdometry(
-      kinematics,
-      getGyroRotation2d(),
-      new SwerveModulePosition[] {
-        frontLeft.getPosition(),
-        frontRight.getPosition(),
-        backLeft.getPosition(),
-        backRight.getPosition()
-      });
+    pitchOffset = 0;
 
-      reset();
+    this.odometry = new SwerveDrivePoseEstimator(kinematics, getGyroRotation2d(), getModulePositions(), pose);
 
-      ConfigMotorDirections();
+    timer.start();
+
+    reset();
+
+    ConfigMotorDirections();
+  }
+
+  @Override
+  public void periodic() {
+    updateOdometry();
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
@@ -96,7 +114,7 @@ public class DriveTrain extends SubsystemBase{
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getGyroRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, MAX_SPEED_METERS_PER_SECOND);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND);
     
     fl_speed = swerveModuleStates[0].speedMetersPerSecond;
     fr_speed = swerveModuleStates[1].speedMetersPerSecond;
@@ -108,15 +126,18 @@ public class DriveTrain extends SubsystemBase{
     bl_angle = swerveModuleStates[2].angle.getDegrees();
     br_angle = swerveModuleStates[3].angle.getDegrees();
   
+    setDesiredState(swerveModuleStates);
+  }
+
+  public void setDesiredState(SwerveModuleState[] swerveModuleStates) {
     frontLeft.setDesiredState(swerveModuleStates[0]);
     frontRight.setDesiredState(swerveModuleStates[1]);
     backLeft.setDesiredState(swerveModuleStates[2]);
     backRight.setDesiredState(swerveModuleStates[3]);
-
   }
 
   public void updateOdometry() {
-    odometry.update(
+    pose = odometry.update(
         getGyroRotation2d(),
         new SwerveModulePosition[] {
           frontLeft.getPosition(),
@@ -126,42 +147,74 @@ public class DriveTrain extends SubsystemBase{
         });
   }
 
+  public void resetOdometry(Pose2d pose) {
+    odometry.resetPosition(getGyroRotation2d(), getModulePositions(), pose);
+  }
+  
+  public SwerveModulePosition[] getModulePositions() {
+    return new SwerveModulePosition[] {
+      frontLeft.getPosition(),
+      frontRight.getPosition(),
+      backLeft.getPosition(),
+      backRight.getPosition()
+    };
+  }
+
+  public SwerveModuleState[] getModuleStates() {
+    return new SwerveModuleState[] {
+      new SwerveModuleState(frontLeft.getVelocity(), frontLeft.geRotation2d()),
+      new SwerveModuleState(frontRight.getVelocity(), frontRight.geRotation2d()),
+      new SwerveModuleState(backLeft.getVelocity(), backLeft.geRotation2d()),
+      new SwerveModuleState(backRight.getVelocity(), backRight.geRotation2d())
+    };
+  }
+  
+
   //Make individual states for each swerve module to be set to break
   public SwerveModuleState[] makeSwerveModuleState(double[] speeds, double[] angles) {
     SwerveModuleState[] moduleStates = new SwerveModuleState[angles.length];
-    for(int i = 0; i <= angles.length; i++) moduleStates[i] = new SwerveModuleState(speeds[i], new Rotation2d(Units.degreesToRadians(angles[i])));
+    for(int i = 0; i < angles.length; i++) moduleStates[i] = new SwerveModuleState(speeds[i], new Rotation2d(Units.degreesToRadians(angles[i])));
     return moduleStates;
   }
 
   public void setToBreak() {
     resetModules();
-    double[] speeds = {.1, .1, .1, .1};
-    double[] angles = {-135, 135, -45, 45};
+    double[] speeds = {0, 0, 0, 0};
+    double[] angles = {90, 90, 90, 90};
     SwerveModuleState[] moduleStates = makeSwerveModuleState(speeds, angles);
-    frontLeft.setDesiredState(moduleStates[0]);
-    frontRight.setDesiredState(moduleStates[1]);
-    backLeft.setDesiredState(moduleStates[2]);
-    backRight.setDesiredState(moduleStates[3]);
+    setDesiredState(moduleStates);
   }
 
-  public void setWheelsForward() {
-    resetModules();
-    double[] speeds = {.001, .001, .001, .001};
-    double[] angles = {0, 0, 0, 0};
-    SwerveModuleState[] moduleStates = makeSwerveModuleState(speeds, angles);
-    frontLeft.setDesiredState(moduleStates[0]);
-    frontRight.setDesiredState(moduleStates[1]);
-    backLeft.setDesiredState(moduleStates[2]);
-    backRight.setDesiredState(moduleStates[3]);
-  }
-
-  //Get Rotation2d from the Pigeon
   public Rotation2d getGyroRotation2d() {
     return new Rotation2d(Units.degreesToRadians(gyro.getYaw()));
   }
 
-  public double getPitch() {
-    return gyro.getPitch();
+  public Pose2d getPose2d() {
+    return odometry.getEstimatedPosition();
+  }
+
+  public double getVelocity() {
+    return Math.sqrt(
+      Math.pow(ChassisSpeeds.fromFieldRelativeSpeeds(fwdSpeedCmd, strafeSpeedCmd, turnSpeedCmd, getGyroRotation2d()).vxMetersPerSecond, 2) + 
+      Math.pow(ChassisSpeeds.fromFieldRelativeSpeeds(fwdSpeedCmd, strafeSpeedCmd, turnSpeedCmd, getGyroRotation2d()).vyMetersPerSecond, 2)
+    );
+  }
+
+  public Rotation2d getHeading() {
+    return new Rotation2d(
+      Math.atan2(
+        Math.pow(ChassisSpeeds.fromFieldRelativeSpeeds(fwdSpeedCmd, strafeSpeedCmd, turnSpeedCmd, getGyroRotation2d()).vyMetersPerSecond, 2), 
+        Math.pow(ChassisSpeeds.fromFieldRelativeSpeeds(fwdSpeedCmd, strafeSpeedCmd, turnSpeedCmd, getGyroRotation2d()).vxMetersPerSecond, 2)
+      )
+    );
+  }
+
+  public double getRoll() {
+    if(timer.advanceIfElapsed(1)) {
+      pitchOffset = gyro.getRoll();
+      timer.stop();
+    }  
+    return gyro.getRoll() - pitchOffset;
   }
 
   public void resetGyro() {
@@ -178,16 +231,57 @@ public class DriveTrain extends SubsystemBase{
   public void reset() {
     resetGyro();
     resetModules();
+    resetOdometry(pose);
   }  
 
   public void ConfigMotorDirections() {
-    Motors.ANGLE_FRONT_LEFT.setInverted(DriveConstants.Front_Left_Turning_Motor_Reversed);
-    Motors.ANGLE_FRONT_RIGHT.setInverted(DriveConstants.Front_Right_Turning_Motor_Reversed);
-    Motors.ANGLE_BACK_LEFT.setInverted(DriveConstants.Back_Left_Turning_Motor_Reversed);
-    Motors.ANGLE_BACK_RIGHT.setInverted(DriveConstants.Back_Right_Turning_Motor_Reversed);
-    Motors.DRIVE_FRONT_LEFT.setInverted(DriveConstants.Front_Left_Drive_Motor_Reversed);
-    Motors.DRIVE_FRONT_RIGHT.setInverted(DriveConstants.Front_Right_Drive_Motor_Reversed);
-    Motors.DRIVE_BACK_LEFT.setInverted(DriveConstants.Back_Left_Drive_Motor_Reversed);
-    Motors.DRIVE_BACK_RIGHT.setInverted(DriveConstants.Back_Right_Drive_Motor_Reversed);
+    Motors.ANGLE_FRONT_LEFT.setInverted(Constants.DriveConstants.FrontLeftTurningMotorReversed);
+    Motors.ANGLE_FRONT_RIGHT.setInverted(Constants.DriveConstants.FrontRightTurningMotorReversed);
+    Motors.ANGLE_BACK_LEFT.setInverted(Constants.DriveConstants.BackLeftTurningMotorReversed);
+    Motors.ANGLE_BACK_RIGHT.setInverted(Constants.DriveConstants.BackRightTurningMotorReversed);
+    Motors.DRIVE_FRONT_LEFT.setInverted(Constants.DriveConstants.FrontLeftDriveMotorReversed);
+    Motors.DRIVE_FRONT_RIGHT.setInverted(Constants.DriveConstants.FrontRightDriveMotorReversed);
+    Motors.DRIVE_BACK_LEFT.setInverted(Constants.DriveConstants.BackLeftDriveMotorReversed);
+    Motors.DRIVE_BACK_RIGHT.setInverted(Constants.DriveConstants.BackRightDriveMotorReversed);
+  }
+
+  public Command moveToImage() {
+    PathPlannerTrajectory toImage = PathPlanner.generatePath(
+      new PathConstraints(Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND * 3, 1), 
+      new PathPoint(new Translation2d(0, 0), getHeading(), getGyroRotation2d(), getVelocity()),
+      new PathPoint(new Translation2d(1.0, 1.0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0))
+    );//Final PathPoint(poseFromCamera.getTranslation)
+    
+    return new PPSwerveControllerCommand(
+      toImage, 
+      this::getPose2d, // Pose supplier
+      Constants.DriveConstants.KINEMATICS, // SwerveDriveKinematics
+      new PIDController(4.35, 0.0, 0.09), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+      new PIDController(4.35, 0.0, 0.09), // Y controller (usually the same values as X controller)
+      new PIDController(1.3, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+      this::setDesiredState, // Module states consumer
+      true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+      this // Requires this drive subsystem
+    ); //TODO: Fix these PIDControllers
+  }
+
+  public Command buildAuto(HashMap<String, Command> eventMap, String pathName) {
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
+      pathName, 
+      new PathConstraints(Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND * 3, 1)); //TODO: Find MAX ACCEL
+
+    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+      this::getPose2d, // Pose2d supplier
+      this::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
+      Constants.DriveConstants.KINEMATICS, // SwerveDriveKinematics
+      new PIDConstants(4.35, 0.0, 0.09), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+      new PIDConstants(1.3, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+      this::setDesiredState, // Module states consumer used to output to the drive subsystem
+      eventMap,
+      true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+      this // The drive subsystem. Used to properly set the requirements of path following commands
+    ); //TODO: Check Drive PIDs. P is good
+    
+    return autoBuilder.fullAuto(pathGroup);
   }
 }
