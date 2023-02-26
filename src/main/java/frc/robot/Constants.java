@@ -116,9 +116,12 @@ public final class Constants {
     public static final CANSparkMax ANGLE_BACK_LEFT = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static final CANSparkMax ANGLE_BACK_RIGHT = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
 
+<<<<<<< HEAD
     //intake
     public static final CANSparkMax INTAKE_MOTOR = new CANSparkMax(19, CANSparkMaxLowLevel.MotorType.kBrushless);
 
+=======
+>>>>>>> 72c65a52494c1eabe4ecb90afd5428a5c5de8bba
     //arm
     public static final CANSparkMax RIGHT_ARM_ANGLE = new CANSparkMax(17, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static final CANSparkMax LEFT_ARM_ANGLE = new CANSparkMax(16, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -153,6 +156,7 @@ public final class Constants {
     public static final JoystickButton DRIVER_LEFT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kLeftBumper.value); 
   }
 
+<<<<<<< HEAD
   public static final class IntakeConstants {
     public static final int FORWARD_CHANNEL = 1;
     public static final int REVERSE_CHANNEL = 0;
@@ -164,6 +168,8 @@ public final class Constants {
     public static final int kforwardchannel = 15;
   }
 
+=======
+>>>>>>> 72c65a52494c1eabe4ecb90afd5428a5c5de8bba
   public static class ArmConstants {
     public final static int LEAD_DEVICE_ID = 16; // TODO: TBD (get from global device map?)
     public final static int FOLOW_DEVICE_ID = 17; // TODO: TBD

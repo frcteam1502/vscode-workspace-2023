@@ -9,6 +9,7 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
+
 public class IntakeSubsystem extends SubsystemBase {
   public DoubleSolenoid DoublePH = new DoubleSolenoid(1, PneumaticsModuleType.REVPH,frc.robot.Constants.PneumaticsConstants.kforwardchannel,frc.robot.Constants.PneumaticsConstants.kreversechannel);
   public Compressor phCompressor = new Compressor(1, PneumaticsModuleType.REVPH);
@@ -43,5 +44,15 @@ public class IntakeSubsystem extends SubsystemBase {
   public void OnReleased() {
     TurnOffIntake();
     setIn();
+  }
+
+  public void OnPressed() {
+    TurnOnIntake();
+    if(LimitSwitch.get()) setOut();
+  }
+
+  public void OnReleased() {
+    TurnOffIntake();
+    if(!LimitSwitch.get()) setIn();
   }
 }
