@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -88,7 +89,10 @@ public class ArmSubsystem extends SubsystemBase{
       m_followMotor = new CANSparkMax(followDeviceID, MotorType.kBrushless);
 
       m_leadMotor.restoreFactoryDefaults();
-      m_followMotor.restoreFactoryDefaults();                                                                            
+      m_followMotor.restoreFactoryDefaults();
+      
+      m_leadMotor.setIdleMode(IdleMode.kBrake);
+      m_followMotor.setIdleMode(IdleMode.kBrake);
 
       m_followMotor.follow(m_leadMotor, /*invert*/ true);
 
@@ -207,7 +211,9 @@ public class ArmSubsystem extends SubsystemBase{
       m_extendRwdLimitSwitch = m_extendMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
 
       m_extendMotor.restoreFactoryDefaults();
-
+      
+      m_extendMotor.setIdleMode(IdleMode.kBrake);
+      
       m_pidControllerExtension = m_extendMotor.getPIDController();
 
       // Encoder object created to display position values
