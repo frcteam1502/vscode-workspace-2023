@@ -8,9 +8,9 @@ import frc.robot.subsystems.DriveTrain;
 public class AutoBalance extends CommandBase {
   private final DriveTrain drive;
 
-  private final PIDController balancePID = new PIDController(.3, 0, 0);
+  private final PIDController balancePID = new PIDController(.4, 0, 0);
 
-  private final double MAXSPEED = .1;
+  private final double MAXSPEED = .08;
 
 
   public AutoBalance(DriveTrain drive) {
@@ -24,7 +24,8 @@ public class AutoBalance extends CommandBase {
 
   @Override
   public void execute() {
-    drive.drive(MathUtil.clamp(-balancePID.calculate(drive.getRoll())*5, -MAXSPEED, MAXSPEED), 0, 0, true);
+
+    drive.drive(MathUtil.clamp(balancePID.calculate(drive.getRoll())*5, -MAXSPEED, MAXSPEED), 0, 0, true);
   }
 
   @Override
