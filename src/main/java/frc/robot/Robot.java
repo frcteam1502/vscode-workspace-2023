@@ -51,9 +51,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("tv", LimelightHelpers.getTV("limelight"));
     SmartDashboard.putNumber("tagID", LimelightHelpers.getFiducialID("limelight"));
 
-    //extracted();
-
-
+    extracted();
   }
 
   private void extracted() {
@@ -62,11 +60,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("FR Encoder Pos", Constants.Motors.DRIVE_FRONT_RIGHT.getEncoder().getPosition());
     SmartDashboard.putNumber("RL Encoder Pos", Constants.Motors.DRIVE_BACK_LEFT.getEncoder().getPosition());
     SmartDashboard.putNumber("RR Encoder Pos", Constants.Motors.DRIVE_BACK_RIGHT.getEncoder().getPosition());
-
-    SmartDashboard.putNumber("FL Encoder Vel", Constants.Motors.DRIVE_FRONT_LEFT.getEncoder().getVelocity());
-    SmartDashboard.putNumber("FR Encoder Vel", Constants.Motors.DRIVE_FRONT_RIGHT.getEncoder().getVelocity());
-    SmartDashboard.putNumber("RL Encoder Vel", Constants.Motors.DRIVE_BACK_LEFT.getEncoder().getVelocity());
-    SmartDashboard.putNumber("RR Encoder Vel", Constants.Motors.DRIVE_BACK_RIGHT.getEncoder().getVelocity());
 
     //Drive Motor Volts
     SmartDashboard.putNumber("FrontLeft Volt", Constants.Motors.DRIVE_FRONT_LEFT.getAppliedOutput());
@@ -79,15 +72,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("FrontRight Angle", Constants.CANCoders.FRONT_RIGHT_CAN_CODER.getAbsolutePosition());
     SmartDashboard.putNumber("BackLeft Angle", Constants.CANCoders.BACK_LEFT_CAN_CODER.getAbsolutePosition());
     SmartDashboard.putNumber("BackRight Angle", Constants.CANCoders.BACK_RIGHT_CAN_CODER.getAbsolutePosition());
-
-    SmartDashboard.putNumber("BackRight Angle Velocity", Constants.CANCoders.BACK_RIGHT_CAN_CODER.getVelocity());
-
-
-    //Turn Angle Commanded
-    SmartDashboard.putNumber("FL Angle Cmd", DriveTrain.fl_angle);
-    SmartDashboard.putNumber("FR Angle Cmd", DriveTrain.fr_angle);
-    SmartDashboard.putNumber("BL Angle Cmd", DriveTrain.bl_angle);
-    SmartDashboard.putNumber("BR Angle Cmd", DriveTrain.br_angle);
 
     //Turn Motor Volts
     SmartDashboard.putNumber("TurnFrontLeft Volt", Constants.Motors.ANGLE_FRONT_LEFT.getAppliedOutput());
@@ -102,16 +86,12 @@ public class Robot extends TimedRobot {
 
     //Gyro
     SmartDashboard.putNumber("Angle", Constants.gyro.getYaw());
+    SmartDashboard.putNumber("Tilt", Constants.gyro.getRoll());
 
     //Calc Power
     SmartDashboard.putNumber("Foward Speed Cmd", DriveTrain.fwdSpeedCmd);
     SmartDashboard.putNumber("Strafe Speed Cmd", DriveTrain.strafeSpeedCmd);
     SmartDashboard.putNumber("Turn Speed Command", DriveTrain.turnSpeedCmd);
-
-    SmartDashboard.putNumber("FL Module Speed Cmd", DriveTrain.fl_speed);
-    SmartDashboard.putNumber("FR Module Speed Cmd", DriveTrain.fr_speed);
-    SmartDashboard.putNumber("RL Module Speed Cmd", DriveTrain.rl_speed);
-    SmartDashboard.putNumber("RR Module Speed Cmd", DriveTrain.rr_speed);
   }
 
   @Override
@@ -122,7 +102,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

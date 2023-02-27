@@ -13,7 +13,7 @@ public class DriveByController extends CommandBase {
   //Setup SlewRateLimiters for fwd and strafe speeds
   private final SlewRateLimiter fwdspeedlimiter = new SlewRateLimiter(1.7);
   private final SlewRateLimiter strafespeedlimiter = new SlewRateLimiter(1.7);
-  private final SlewRateLimiter turnrateLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter turnrateLimiter = new SlewRateLimiter(2.5);
 
   public DriveByController(DriveTrain drive) {
     this.drive = drive;
@@ -49,7 +49,7 @@ public class DriveByController extends CommandBase {
             * Constants.DriveConstants.MAX_ROTATION_RADIANS_PER_SECOND;
     
     //Set up the Drivetrain setpoints
-    if(Constants.XboxButtons.DRIVER_RIGHT_BUMPER.getAsBoolean()) drive.drive(fwdSpeed/2, strafeSpeed/2, rot/2, true);
+    if(Constants.XboxButtons.DRIVER_LEFT_BUMPER.getAsBoolean()) drive.drive(fwdSpeed/2, strafeSpeed/2, rot/2, true);
     else drive.drive(fwdSpeed, strafeSpeed, rot, true);
 
   }

@@ -145,7 +145,11 @@ public final class Constants {
 
     //Driver Buttons
     public static final JoystickButton DRIVER_RIGHT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kRightBumper.value); 
-    public static final JoystickButton DRIVER_LEFT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kLeftBumper.value); 
+    public static final JoystickButton DRIVER_LEFT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kLeftBumper.value);
+    public static final JoystickButton DRIVER_BUTTON_Y = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kY.value); 
+    public static final JoystickButton DRIVER_BUTTON_A = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kA.value); 
+    public static final JoystickButton DRIVER_BUTTON_X = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kX.value); 
+    public static final JoystickButton DRIVER_BUTTON_B = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kB.value);  
   }
 
   public static class PneumaticsConstants{

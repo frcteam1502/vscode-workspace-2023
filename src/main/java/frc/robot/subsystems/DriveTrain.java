@@ -22,32 +22,15 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Motors;
 
 public class DriveTrain extends SubsystemBase{
-  //Debug variables - CL
   public static double fwdSpeedCmd    = 0;
   public static double strafeSpeedCmd = 0;
   public static double turnSpeedCmd   = 0;
-
-  public static double fl_speed = 0;
-  public static double fr_speed = 0;
-  public static double rl_speed = 0;
-  public static double rr_speed = 0;
-
-  public static double fl_angle = 0;
-  public static double fr_angle = 0;
-  public static double bl_angle = 0;
-  public static double br_angle = 0;
-
-  public static double fl_encoder_speed = 0;
-  public static double fr_encoder_speed = 0;
-  public static double rl_encoder_speed = 0;
-  public static double rr_encoder_speed = 0;
 
   private final SwerveModule frontLeft = new SwerveModule(
     Motors.DRIVE_FRONT_LEFT, Motors.ANGLE_FRONT_LEFT, 
@@ -83,14 +66,12 @@ public class DriveTrain extends SubsystemBase{
   
   private double pitchOffset;
 
-  private final Timer timer = new Timer();
-
   public DriveTrain() {
     pitchOffset = 0;
 
     this.odometry = new SwerveDrivePoseEstimator(kinematics, getGyroRotation2d(), getModulePositions(), pose);
 
-    timer.start();
+    pitchOffset = gyro.getRoll();
 
     reset();
 
@@ -103,28 +84,12 @@ public class DriveTrain extends SubsystemBase{
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    
-    //Log commanded speed inputs
-    fwdSpeedCmd = xSpeed;
-    strafeSpeedCmd = ySpeed;
-    turnSpeedCmd = rot;
-
     var swerveModuleStates =
         kinematics.toSwerveModuleStates(
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getGyroRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND);
-    
-    fl_speed = swerveModuleStates[0].speedMetersPerSecond;
-    fr_speed = swerveModuleStates[1].speedMetersPerSecond;
-    rl_speed = swerveModuleStates[2].speedMetersPerSecond;
-    rr_speed = swerveModuleStates[3].speedMetersPerSecond;
-
-    fl_angle = swerveModuleStates[0].angle.getDegrees();
-    fr_angle = swerveModuleStates[1].angle.getDegrees();
-    bl_angle = swerveModuleStates[2].angle.getDegrees();
-    br_angle = swerveModuleStates[3].angle.getDegrees();
   
     setDesiredState(swerveModuleStates);
   }
@@ -210,10 +175,6 @@ public class DriveTrain extends SubsystemBase{
   }
 
   public double getRoll() {
-    if(timer.advanceIfElapsed(1)) {
-      pitchOffset = gyro.getRoll();
-      timer.stop();
-    }  
     return gyro.getRoll() - pitchOffset;
   }
 

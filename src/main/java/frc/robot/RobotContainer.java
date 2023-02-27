@@ -39,9 +39,13 @@ public class RobotContainer {
 
   private void configureBindings() {
     //Drive
-    driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem));
-    Constants.XboxButtons.BUTTON_B.whileTrue(new AutoBalance(driveSubsystem));
-    Constants.XboxButtons.BUTTON_Y.whileTrue(new InstantCommand(driveSubsystem::setToBreak).repeatedly());
+    driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem)); //USES THE LEFT BUMPER TO SLOW DOWN
+    Constants.XboxButtons.DRIVER_BUTTON_Y.whileTrue(new AutoBalance(driveSubsystem));
+    Constants.XboxButtons.DRIVER_BUTTON_B.whileTrue(new InstantCommand(driveSubsystem::setToBreak).repeatedly());
+  
+    //Intake
+    XboxButtons.DRIVER_RIGHT_BUMPER.onTrue(new InstantCommand(intakeSubsystem::OnPressed).andThen(new WaitCommand(.25)));
+    XboxButtons.DRIVER_RIGHT_BUMPER.onFalse(new InstantCommand(intakeSubsystem::OnReleased).andThen(new WaitCommand(.25)));
 
     //Arm
     armSubsystem.setDefaultCommand(new ArmByController(armSubsystem));
@@ -49,10 +53,6 @@ public class RobotContainer {
     // XboxButtons.BUTTON_B.onTrue(new InstantCommand(armSubsystem::GoToMiddle));
     // XboxButtons.BUTTON_A.onTrue(new InstantCommand(armSubsystem::GoToFloor));
     // XboxButtons.BUTTON_X.onTrue(new InstantCommand(armSubsystem::GoToStow));
-
-    //Intake
-    XboxButtons.DRIVER_RIGHT_BUMPER.onTrue(new InstantCommand(intakeSubsystem::OnPressed).andThen(new WaitCommand(.25)));
-    XboxButtons.DRIVER_RIGHT_BUMPER.onFalse(new InstantCommand(intakeSubsystem::OnReleased).andThen(new WaitCommand(.25)));
 
     // //Gripper
     // XboxButtons.RIGHT_BUMPER.onTrue(new InstantCommand(gripperSubsystem::toggleGripper));
@@ -73,5 +73,9 @@ public class RobotContainer {
 
     //straightAndTurn
     straightAndTurn.put("Stop", new WaitCommand(2));
+  }
+
+  public Command getAutonomousCommand() {
+    return sendableChooser.getSelected();
   }
 }
