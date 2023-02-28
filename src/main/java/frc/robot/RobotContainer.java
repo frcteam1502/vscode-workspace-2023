@@ -62,8 +62,8 @@ public class RobotContainer {
   private void setUpSendableChooser() {
     createAutoHashMaps();
     sendableChooser.setDefaultOption("Balance", simpleBalance);
-    sendableChooser.addOption("2 Cone", driveSubsystem.buildAuto(twoCone, "twoCone"));
-    sendableChooser.addOption("Straight and Turn", driveSubsystem.buildAuto(straightAndTurn, "straightAndTurn"));
+    // sendableChooser.addOption("2 Cone", driveSubsystem.buildAuto(twoCone, "twoCone"));
+    // sendableChooser.addOption("Straight and Turn", driveSubsystem.buildAuto(straightAndTurn, "straightAndTurn"));
     SmartDashboard.putData(sendableChooser);
   }
 
