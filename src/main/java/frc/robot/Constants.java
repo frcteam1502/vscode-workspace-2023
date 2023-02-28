@@ -119,10 +119,10 @@ public final class Constants {
     //intake
     public static final CANSparkMax INTAKE_MOTOR = new CANSparkMax(19, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    // //Gripper
-    // public static final CANSparkMax GRIPPER = new CANSparkMax(23, CANSparkMaxLowLevel.MotorType.kBrushless);
-    // public static final CANSparkMax GRIPPER_ROTATE = new CANSparkMax(22, CANSparkMaxLowLevel.MotorType.kBrushless);
-}
+    //Gripper
+    public static final CANSparkMax GRIPPER_ROTATE = new CANSparkMax(22, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax GRIPPER = new CANSparkMax(23, CANSparkMaxLowLevel.MotorType.kBrushless);
+  }
 
   public static final class Joysticks {
     public static final XboxController OPERATOR_CONTROLLER = new XboxController(0);
@@ -142,6 +142,8 @@ public final class Constants {
     public static final JoystickButton RIGHT_JOYSTICK = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 13);
     public static final JoystickButton LEFT_STICK = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 14);
     public static final JoystickButton RIGHT_STICK = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 15);
+    // public static final JoystickButton DPAD_UP = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 15);
+    // public static final JoystickButton DPAD_DOWN = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 15);
 
     //Driver Buttons
     public static final JoystickButton DRIVER_RIGHT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kRightBumper.value); 
