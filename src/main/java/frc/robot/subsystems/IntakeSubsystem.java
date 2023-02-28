@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }  
   
   public void setOut() {
-      DoublePH.set(Value.kForward);
+    DoublePH.set(Value.kForward);
   }
 
   public void TurnOnIntake() {

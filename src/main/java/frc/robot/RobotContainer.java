@@ -43,12 +43,12 @@ public class RobotContainer {
     Constants.XboxButtons.DRIVER_BUTTON_Y.whileTrue(new AutoBalance(driveSubsystem));
     Constants.XboxButtons.DRIVER_BUTTON_B.whileTrue(new InstantCommand(driveSubsystem::setToBreak).repeatedly());
   
-    //Intake
-    XboxButtons.DRIVER_RIGHT_BUMPER.onTrue(new InstantCommand(intakeSubsystem::OnPressed).andThen(new WaitCommand(.25)));
-    XboxButtons.DRIVER_RIGHT_BUMPER.onFalse(new InstantCommand(intakeSubsystem::OnReleased).andThen(new WaitCommand(.25)));
+    // //Intake
+    // XboxButtons.DRIVER_RIGHT_BUMPER.onTrue(new InstantCommand(intakeSubsystem::OnPressed).andThen(new WaitCommand(.25)));
+    // XboxButtons.DRIVER_RIGHT_BUMPER.onFalse(new InstantCommand(intakeSubsystem::OnReleased).andThen(new WaitCommand(.25)));
 
-    //Arm
-    armSubsystem.setDefaultCommand(new ArmByController(armSubsystem));
+    // //Arm
+    // armSubsystem.setDefaultCommand(new ArmByController(armSubsystem));
     // XboxButtons.BUTTON_Y.onTrue(new InstantCommand(armSubsystem::GoToTop));
     // XboxButtons.BUTTON_B.onTrue(new InstantCommand(armSubsystem::GoToMiddle));
     // XboxButtons.BUTTON_A.onTrue(new InstantCommand(armSubsystem::GoToFloor));
