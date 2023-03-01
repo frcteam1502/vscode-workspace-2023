@@ -160,6 +160,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void toLimitSwitch() {
     if(!limit.get()) goalExtend -= EXTEND_CHANGE;
+    else extendEncoder.setPosition(0);
   }
 
   public boolean isBetweenPoints(double[] position1, double[] position2, double currentPose) {
