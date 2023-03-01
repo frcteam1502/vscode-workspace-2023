@@ -20,14 +20,15 @@ public class ArmSubsystem extends SubsystemBase {
   private final RelativeEncoder rotateEncoder;
   private final RelativeEncoder extendEncoder;
 
-  private final DigitalInput limit = new DigitalInput(0); //TODO: get IDs
+  private final DigitalInput limit = new DigitalInput(21);
 
   private double goalExtend = 0;
   private double goalRotate = 0;
 
-  private final double MAX_ROTATE = 20; //TODO: get Max/Min
-  private final double MIN_ROTATE = -20;
-  private final double ROTATE_CHANGE = .1;
+  private final double MAX_ROTATE = 91;
+  private final double MIN_ROTATE = -30;
+  private final double DEGREES_PER_ROTATION = 360 / 12;
+  private final double ROTATE_CHANGE = .1; //TODO: Too high/low
   private final double EXTEND_CHANGE = .1;
 
   //Test points in order of {Angle position, extend position}
@@ -35,7 +36,7 @@ public class ArmSubsystem extends SubsystemBase {
   {
     {0, 0}, //Stow position
     {1, 0}, //Enter "To limit switch" section
-    {2, 0}, //initial pose
+    {2, 0}, //Straight down position
     {3, 0}, //Leave "To limit switch" section
     {4, 0}, //Ground score
     {5, 0}, //Medium score
@@ -52,18 +53,20 @@ public class ArmSubsystem extends SubsystemBase {
     rotateEncoder = rotate.getEncoder();
     extendEncoder = extend.getEncoder();
 
+    rotateEncoder.setPositionConversionFactor(DEGREES_PER_ROTATION);
+
     rotatePID = rotate.getPIDController();
     extendPID = extend.getPIDController();
 
     rotatePID.setFeedbackDevice(rotateEncoder);
     extendPID.setFeedbackDevice(extendEncoder);
 
-    rotatePID.setP(0);
+    rotatePID.setP(0.1); //TODO: Get PID values
     rotatePID.setI(0);
     rotatePID.setD(0);
-    rotatePID.setFF(0);
+    rotatePID.setFF(0); //TODO: Add logic for variable FF
 
-    extendPID.setP(0);
+    extendPID.setP(0.1);
     extendPID.setI(0);
     extendPID.setD(0);
     extendPID.setFF(0);
@@ -91,7 +94,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void rotateManually(double input) {
-    double change = Math.signum(input) * .1;
+    double change = Math.signum(input) * ROTATE_CHANGE;
     if(input > .8) change *= 2;
     rotateArm(goalRotate + change);
   }
@@ -143,7 +146,7 @@ public class ArmSubsystem extends SubsystemBase {
    * and calculates linear function between the 2 points
    * starting with slope then finding the constant
    * then using these to calculate the final goalExtend
-   * 
+   *  
    * @param position1
    * @param position2
    * @param currentPose
@@ -156,18 +159,17 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void toLimitSwitch() {
-    if(!limit.get()) goalExtend -= EXTEND_CHANGE; //TODO: Too high/low?
-    else extendEncoder.setPosition(0);
+    if(!limit.get()) goalExtend -= EXTEND_CHANGE;
   }
 
   public boolean isBetweenPoints(double[] position1, double[] position2, double currentPose) {
     return (position1[0] <= currentPose && currentPose <= position2[0]);
   }
 
-  @Override
-  public void periodic() {
-    checkAngle();
-    extendPID.setReference(goalExtend, ControlType.kPosition);
-    rotatePID.setReference(goalRotate, ControlType.kPosition);
-  }
+  // @Override
+  // public void periodic() {
+  //   checkAngle();
+  //   extendPID.setReference(goalExtend, ControlType.kPosition);
+  //   rotatePID.setReference(goalRotate, ControlType.kPosition);
+  // }
 }
