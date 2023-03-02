@@ -15,8 +15,11 @@ public class IntakeSubsystem extends SubsystemBase {
   private final CANSparkMax intakeMotor = Constants.Motors.INTAKE_MOTOR;
   
   public IntakeSubsystem() {
-    intakeMotor.restoreFactoryDefaults();
-    intakeMotor.setSmartCurrentLimit(60);
+    if (Constants.SystemMap.IntakeSubsystem.IsEnabled) {
+      intakeMotor.restoreFactoryDefaults();
+      intakeMotor.setSmartCurrentLimit(60);
+      DoublePH.set(Value.kReverse);
+    }
   }
 
   public void setIn() {
@@ -33,6 +36,17 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public void TurnOffIntake() {
     intakeMotor.set(0);
+  }
+
+  public void Toggle() {
+    if (DoublePH.get() == Value.kForward)
+    {
+      DoublePH.set(Value.kReverse);
+    }
+    else
+    {
+      DoublePH.set(Value.kForward);
+    }
   }
 
   public void OnPressed() {
