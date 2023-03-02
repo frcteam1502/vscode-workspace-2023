@@ -28,6 +28,7 @@ public class ArmSubsystem extends SubsystemBase {
   private final double MAX_ROTATE = 91;
   private final double MIN_ROTATE = -30;
   private final double DEGREES_PER_ROTATION = 360 / 12;
+  private final double MAX_ROTATE_FEEDFORWARD = 0; //TODO: get actual value
   private final double ROTATE_CHANGE = .1; //TODO: Too high/low
   private final double EXTEND_CHANGE = .1;
 
@@ -64,7 +65,7 @@ public class ArmSubsystem extends SubsystemBase {
     rotatePID.setP(0.1); //TODO: Get PID values
     rotatePID.setI(0);
     rotatePID.setD(0);
-    rotatePID.setFF(0); //TODO: Add logic for variable FF
+    rotatePID.setFF(0);
 
     extendPID.setP(0.1);
     extendPID.setI(0);
@@ -167,9 +168,14 @@ public class ArmSubsystem extends SubsystemBase {
     return (position1[0] <= currentPose && currentPose <= position2[0]);
   }
 
+  public double dynamicFeedForward(double angle) {
+    return MAX_ROTATE_FEEDFORWARD * Math.cos(angle);
+  }
+
   // @Override
   // public void periodic() {
   //   checkAngle();
+  //   rotatePID.setFF(dynamicFeedForward(rotateEncoder.getPosition()));
   //   extendPID.setReference(goalExtend, ControlType.kPosition);
   //   rotatePID.setReference(goalRotate, ControlType.kPosition);
   // }
