@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 
+import com.ctre.phoenix.ErrorCode;
+import com.ctre.phoenix.Logger;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -44,7 +46,10 @@ public class GripperSubsystem extends SubsystemBase {
     gripperPID = gripper.getPIDController();
     gripperPID.setP(0.1);
     rotatePID = rotate.getPIDController();
-
+    rotatePID.setP(0.2);
+    rotatePID.setI(0.005);
+    rotatePID.setD(0.01);
+    rotatePID.setOutputRange(-0.1, 0.1);
     gripperPID.setFeedbackDevice(gripperEncoder);
     rotatePID.setFeedbackDevice(rotateEncoder);
   }
@@ -58,13 +63,15 @@ public class GripperSubsystem extends SubsystemBase {
 
   public void toggleRotate() {
     if(turn) goalRotate = 0;
-    else goalRotate = 120; //ARBITRATY VAUE
+    else goalRotate = 0.5; //ARBITRATY VAUE
     turn = !turn;
     rotatePID.setReference(goalRotate, ControlType.kPosition);
   }
 
   public void DisplayInfo()
   {
+    //Logger.log(ErrorCode.OK, getName())
+    System.out.print("WRIST");
     SmartDashboard.putNumber("GRIPPER Position", gripperEncoder.getPosition());
     SmartDashboard.putNumber("GRIPPER PID", gripperPID.getP());
     SmartDashboard.putBoolean("GRIPPER Open", open);

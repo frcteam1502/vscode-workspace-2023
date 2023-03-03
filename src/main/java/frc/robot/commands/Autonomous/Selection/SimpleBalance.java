@@ -9,9 +9,16 @@ import frc.robot.subsystems.DriveTrain;
 public class SimpleBalance extends SequentialCommandGroup {
   public SimpleBalance(DriveTrain drive) {
     addCommands(
-      new ParallelRaceGroup(new Move(drive, .5, 0), new WaitCommand(2)),
+      //Deposite the game element
+      new ParallelRaceGroup(new Move(drive, -.1, 0), new WaitCommand(.5)),
 
-      new AutoBalance(drive)
+      //Traverse the Charging Station
+      new ParallelRaceGroup(new Move(drive, .5, 0), new WaitCommand(3))//,
+
+      // //Drive backwards onto balance
+      // new ParallelRaceGroup(new Move(drive, -.1, 0), new WaitCommand(3)),
+
+      // new AutoBalance(drive)
     );
   }
 }
