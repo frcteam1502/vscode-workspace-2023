@@ -42,8 +42,8 @@ public class RobotContainer {
   }
 
   public static SystemMap ConfigureSystem(SystemMap map) { // sample config for drive train testing
-    return ConfigureForCompetition(map, 1);
-    //return ConfigureForArmTest(map, 1);
+    //return ConfigureForCompetition(map, 1);
+    return ConfigureForArmTest(map, 2);
   }
 
   private static SystemMap ConfigureForCompetition(SystemMap map, int driveDiagnostics) {
@@ -61,9 +61,9 @@ public class RobotContainer {
     map.ArmSubsystem.Enable().EnableDiagnostics(armDiagnostic);
   
     // disable these
-    map.DriveSubsystem.Disable();
+    //map.DriveSubsystem.Disable();
     map.IntakeSubsystem.Disable();
-    map.GripperSubsystem.Disable();
+    //map.GripperSubsystem.Disable();
   
     return map;
   }
