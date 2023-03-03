@@ -1,7 +1,5 @@
 package frc.robot;
 
-import frc.robot.subsystems.IntakeSubsystem;
-
 public final class SystemMap {
     public SubsystemConfiguration ArmSubsystem = new SubsystemConfiguration();
     public SubsystemConfiguration DriveSubsystem = new SubsystemConfiguration();

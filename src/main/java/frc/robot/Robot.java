@@ -1,9 +1,7 @@
 package frc.robot;
 
-import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Limelight;
@@ -23,16 +21,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
-
-    Constants.Motors.DRIVE_FRONT_LEFT.setIdleMode(IdleMode.kBrake);
-    Constants.Motors.DRIVE_FRONT_RIGHT.setIdleMode(IdleMode.kBrake);
-    Constants.Motors.DRIVE_BACK_LEFT.setIdleMode(IdleMode.kBrake);
-    Constants.Motors.DRIVE_BACK_RIGHT.setIdleMode(IdleMode.kBrake);
-
-    Constants.Motors.ANGLE_FRONT_LEFT.setIdleMode(IdleMode.kCoast);
-    Constants.Motors.ANGLE_FRONT_RIGHT.setIdleMode(IdleMode.kCoast);
-    Constants.Motors.ANGLE_BACK_LEFT.setIdleMode(IdleMode.kCoast);
-    Constants.Motors.ANGLE_BACK_RIGHT.setIdleMode(IdleMode.kCoast);
+  
+    if (Constants.SystemMap.DriveSubsystem.IsEnabled) {
+      DriveTrain.Init();
+    }
   }
 
   /**
@@ -45,53 +37,13 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    SmartDashboard.putNumber("tx", LimelightHelpers.getTX("limelight"));
-    SmartDashboard.putNumber("ty", LimelightHelpers.getTY("limelight"));
-    SmartDashboard.putNumber("ta", LimelightHelpers.getTA("limelight"));
-    SmartDashboard.putBoolean("tv", LimelightHelpers.getTV("limelight"));
-    SmartDashboard.putNumber("tagID", LimelightHelpers.getFiducialID("limelight"));
 
-    extracted();
-  }
-
-  private void extracted() {
-    //Drive Motor Encoders
-    SmartDashboard.putNumber("FL Encoder Pos", Constants.Motors.DRIVE_FRONT_LEFT.getEncoder().getPosition());
-    SmartDashboard.putNumber("FR Encoder Pos", Constants.Motors.DRIVE_FRONT_RIGHT.getEncoder().getPosition());
-    SmartDashboard.putNumber("RL Encoder Pos", Constants.Motors.DRIVE_BACK_LEFT.getEncoder().getPosition());
-    SmartDashboard.putNumber("RR Encoder Pos", Constants.Motors.DRIVE_BACK_RIGHT.getEncoder().getPosition());
-
-    //Drive Motor Volts
-    SmartDashboard.putNumber("FrontLeft Volt", Constants.Motors.DRIVE_FRONT_LEFT.getAppliedOutput());
-    SmartDashboard.putNumber("FrontRight Volt", Constants.Motors.DRIVE_FRONT_RIGHT.getAppliedOutput());
-    SmartDashboard.putNumber("BackLeft Volt", Constants.Motors.DRIVE_BACK_LEFT.getAppliedOutput());
-    SmartDashboard.putNumber("BackRight Volt", Constants.Motors.DRIVE_BACK_RIGHT.getAppliedOutput());
-
-    //Turn Motor Angles
-    SmartDashboard.putNumber("FrontLeft Angle", Constants.CANCoders.FRONT_LEFT_CAN_CODER.getAbsolutePosition());
-    SmartDashboard.putNumber("FrontRight Angle", Constants.CANCoders.FRONT_RIGHT_CAN_CODER.getAbsolutePosition());
-    SmartDashboard.putNumber("BackLeft Angle", Constants.CANCoders.BACK_LEFT_CAN_CODER.getAbsolutePosition());
-    SmartDashboard.putNumber("BackRight Angle", Constants.CANCoders.BACK_RIGHT_CAN_CODER.getAbsolutePosition());
-
-    //Turn Motor Volts
-    SmartDashboard.putNumber("TurnFrontLeft Volt", Constants.Motors.ANGLE_FRONT_LEFT.getAppliedOutput());
-    SmartDashboard.putNumber("TurnFrontRight Volt", Constants.Motors.ANGLE_FRONT_RIGHT.getAppliedOutput());
-    SmartDashboard.putNumber("TurnBackLeft Volt", Constants.Motors.ANGLE_BACK_LEFT.getAppliedOutput());
-    SmartDashboard.putNumber("TurnBackRight Volt", Constants.Motors.ANGLE_BACK_RIGHT.getAppliedOutput());
-
-    //Joysticks
-    SmartDashboard.putNumber("joystick Throttle Strafe", Constants.Joysticks.DRIVE_CONTROLLER.getLeftX());
-    SmartDashboard.putNumber("joystick Throttle Fwd", Constants.Joysticks.DRIVE_CONTROLLER.getLeftY());
-    SmartDashboard.putNumber("joystick Turn", Constants.Joysticks.DRIVE_CONTROLLER.getRightX());
-
-    //Gyro
-    SmartDashboard.putNumber("Angle", Constants.gyro.getYaw());
-    SmartDashboard.putNumber("Tilt", Constants.gyro.getRoll());
-
-    //Calc Power
-    SmartDashboard.putNumber("Foward Speed Cmd", DriveTrain.fwdSpeedCmd);
-    SmartDashboard.putNumber("Strafe Speed Cmd", DriveTrain.strafeSpeedCmd);
-    SmartDashboard.putNumber("Turn Speed Command", DriveTrain.turnSpeedCmd);
+    if (Constants.SystemMap.DriveSubsystem.IsEnabled) {
+      DriveTrain.DisplayDiagnostics();
+    }
+    if (Constants.SystemMap.LimelighteSubsystem.IsEnabled) {
+      Limelight.DisplayDiagnostics();
+    }
   }
 
   @Override

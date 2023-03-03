@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import frc.robot.Constants;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -13,17 +15,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ArmSubsystem extends SubsystemBase{
  
   final static class ARM_CONSTANTS {
+    public final static int LEAD_DEVICE_ID = 17;
+    public final static int FOLLOW_DEVICE_ID = 16;
+    public final static int EXTEND_DEVICE_ID = 18; 
 
     private static final double GEAR_BOX_RATIO = 12.0;
 
-    // ARM POSITION/ELEVATION (rotations)
+    // ARM POSITION/ELEVATION (degrees)
     private static final double STOW_ANGLE = 0;
-    private static final double FLOOR_ANGLE = 2;
-    private static final double MIDDLE_ANGLE = 3;
-    private static final double TOP_ANGLE = 5;
+    private static final double FLOOR_ANGLE = 10;
+    private static final double MIDDLE_ANGLE = 60;
+    private static final double TOP_ANGLE = 90;
     
-    private static final double MIN_ANGLE = 0.0;
-    private static final double MAX_ANGLE = 5;
+    private static final double MIN_ANGLE = -30;
+    private static final double MAX_ANGLE = 91;
     
     // PID coefficients (sample values, TBD)
     public final static double kP = 0.1;
@@ -153,7 +158,7 @@ public class ArmSubsystem extends SubsystemBase{
 
     // TODO: Cancel previous target position from button? Some sort of adaptive fine-tune
     public void FineTune(double signum) {
-      double targetElevation = m_targetPosition + signum * 0.05;
+      double targetElevation = m_targetPosition + signum;
 
       elevationFineTune = targetElevation;
 
@@ -272,13 +277,18 @@ public class ArmSubsystem extends SubsystemBase{
   private DualMotor m_elevationMotor;
   private ExtendMotor m_extenderMotor;
 
-  public ArmSubsystem(int leadDeviceID, int followDeviceID, int extendDeviceID) {
-    m_elevationMotor = new DualMotor(leadDeviceID, followDeviceID);
-    m_extenderMotor = new ExtendMotor(extendDeviceID);
-  
-    //Populate Network Tables 
-    m_elevationMotor.DisplayPosition();
-    m_extenderMotor.DisplayPosition();
+  public ArmSubsystem(/*int leadDeviceID, int followDeviceID, int extendDeviceID*/) {
+    if (Constants.SystemMap.ArmSubsystem.IsEnabled) {
+      m_elevationMotor = new DualMotor(ARM_CONSTANTS.LEAD_DEVICE_ID, ARM_CONSTANTS.FOLLOW_DEVICE_ID);
+      m_extenderMotor = new ExtendMotor(ARM_CONSTANTS.EXTEND_DEVICE_ID);
+      
+      
+      if (Constants.SystemMap.ArmSubsystem.DiagnosticLevel > 0) {
+        //Populate Network Tables 
+        m_elevationMotor.DisplayPosition();
+        m_extenderMotor.DisplayPosition();
+      }
+    }
 
   }
 
@@ -318,7 +328,15 @@ public class ArmSubsystem extends SubsystemBase{
   }
 
   public void updateSmartDashboard(){
-    m_elevationMotor.DisplayPosition();
-    m_extenderMotor.DisplayPosition();
+    if (Constants.SystemMap.ArmSubsystem.DiagnosticLevel > 0)
+    {
+      m_elevationMotor.DisplayPosition();
+      m_extenderMotor.DisplayPosition();
+    }
+    if (Constants.SystemMap.ArmSubsystem.DiagnosticLevel > 1)
+    {
+      m_elevationMotor.UpdateInformation();
+      m_extenderMotor.UpdateInformation();
+    }
   }
 }

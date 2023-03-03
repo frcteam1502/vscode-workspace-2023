@@ -1,8 +1,5 @@
 package frc.robot.subsystems;
 
-
-import com.ctre.phoenix.ErrorCode;
-import com.ctre.phoenix.Logger;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;

@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.Pigeon2;
@@ -144,9 +143,8 @@ public final class Constants {
     public static final JoystickButton RIGHT_JOYSTICK = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 13);
     public static final JoystickButton LEFT_STICK = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 14);
     public static final JoystickButton RIGHT_STICK = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 15);
-    public static final POVButton DPAD_UP = new POVButton(Joysticks.OPERATOR_CONTROLLER, 0);
-    // public static final JoystickButton DPAD_DOWN = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 15);
-
+    //public static final POVButton DPAD_UP = new POVButton(Joysticks.OPERATOR_CONTROLLER, 0);
+   
     //Driver Buttons
     public static final JoystickButton DRIVER_RIGHT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kRightBumper.value); 
     public static final JoystickButton DRIVER_LEFT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kLeftBumper.value);
@@ -161,9 +159,5 @@ public final class Constants {
     public static final int kforwardchannel = 15;
   }
 
-  public static class ArmConstants {
-    public final static int LEAD_DEVICE_ID = 17;
-    public final static int FOLOW_DEVICE_ID = 16;
-    public final static int EXTEND_DEVICE_ID = 18; 
-  }
+
 }

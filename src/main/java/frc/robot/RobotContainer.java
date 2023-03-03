@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.XboxButtons;
 import frc.robot.commands.ArmByController;
 import frc.robot.commands.DriveByController;
@@ -25,7 +24,7 @@ public class RobotContainer {
 
 
   //Subsystems
-  private final ArmSubsystem armSubsystem = new ArmSubsystem(ArmConstants.LEAD_DEVICE_ID, ArmConstants.FOLOW_DEVICE_ID, ArmConstants.EXTEND_DEVICE_ID);
+  private final ArmSubsystem armSubsystem = new ArmSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final GripperSubsystem gripperSubsystem = new GripperSubsystem();
   private final DriveTrain driveSubsystem = new DriveTrain();
@@ -38,18 +37,37 @@ public class RobotContainer {
 
   
   public RobotContainer() {
-    //configureSystem(systemMap);
     configureBindings();
     setUpSendableChooser();
   }
 
   public static SystemMap ConfigureSystem(SystemMap map) { // sample config for drive train testing
+    return ConfigureForCompetition(map, 1);
+    //return ConfigureForArmTest(map, 1);
+  }
+
+  private static SystemMap ConfigureForCompetition(SystemMap map, int driveDiagnostics) {
+    map.DriveSubsystem.Enable().EnableDiagnostics(driveDiagnostics);
+  
+    // disable these
     map.ArmSubsystem.Disable();
+    map.IntakeSubsystem.Disable();
+    map.GripperSubsystem.Disable();
+  
+    return map;
+  }
+
+  private static SystemMap ConfigureForArmTest(SystemMap map, int armDiagnostic) {
+    map.ArmSubsystem.Enable().EnableDiagnostics(armDiagnostic);
+  
+    // disable these
     map.DriveSubsystem.Disable();
     map.IntakeSubsystem.Disable();
     map.GripperSubsystem.Disable();
+  
     return map;
   }
+
 
   private void configureBindings() {
 
@@ -103,6 +121,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return sendableChooser.getSelected();
+    return simpleBalance;
+    //return sendableChooser.getSelected();
   }
 }

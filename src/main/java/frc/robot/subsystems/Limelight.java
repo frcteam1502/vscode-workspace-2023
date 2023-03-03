@@ -113,5 +113,15 @@ public class Limelight {
     ret[3] = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetSkew").getDouble(0.0);
     return ret;
   }
+
+  public static void DisplayDiagnostics() {
+    if (frc.robot.Constants.SystemMap.LimelighteSubsystem.DiagnosticLevel == 0) return;
+    
+    SmartDashboard.putNumber("tx", LimelightHelpers.getTX("limelight"));
+    SmartDashboard.putNumber("ty", LimelightHelpers.getTY("limelight"));
+    SmartDashboard.putNumber("ta", LimelightHelpers.getTA("limelight"));
+    SmartDashboard.putBoolean("tv", LimelightHelpers.getTV("limelight"));
+    SmartDashboard.putNumber("tagID", LimelightHelpers.getFiducialID("limelight"));
+  }
  
 }
