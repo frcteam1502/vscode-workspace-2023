@@ -19,8 +19,10 @@ public class ArmSubsystem extends SubsystemBase{
     public final static int FOLLOW_DEVICE_ID = 16;
     public final static int EXTEND_DEVICE_ID = 18; 
 
-    private static final double GEAR_BOX_RATIO = 12.0;
-
+    private final static double DEGREES_PER_ROTATION = 360 / 12;
+    private final static double INCHES_PER_ROTATION = 0.88 * Math.PI;
+    private final static double MAX_ROTATE_FEEDFORWARD = 0; //TODO: get actual value
+  
     // ARM POSITION/ELEVATION (degrees)
     private static final double STOW_ANGLE = 0;
     private static final double FLOOR_ANGLE = 10;
@@ -44,12 +46,12 @@ public class ArmSubsystem extends SubsystemBase{
 
     // ARM POSITION/ELEVATION (rotations)
     private static final double STOW_EXTENSION = 0;
-    private static final double FLOOR_EXTENSION = 0.1;
-    private static final double MIDDLE_EXTENSION = 0.25;
-    private static final double TOP_EXTENSION = 0.5;
+    private static final double FLOOR_EXTENSION = 6;
+    private static final double MIDDLE_EXTENSION = 12;
+    private static final double TOP_EXTENSION = 24;
 
     private static final double MIN_EXTENSION = 0.0;
-    private static final double MAX_EXTENSION = 4.0;
+    private static final double MAX_EXTENSION = 24.0;
    
     // PID coefficients (sample values, TBD)
     public final static double kP = 0.1;
@@ -88,6 +90,7 @@ public class ArmSubsystem extends SubsystemBase{
 
       // Encoder object created to display position values
       m_encoderangle = m_leadMotor.getEncoder();
+      m_encoderangle.setPositionConversionFactor(ARM_CONSTANTS.DEGREES_PER_ROTATION);
       m_encoderangle.setPosition(0);
 
       m_angleFwdLimitSwitch =  m_leadMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
@@ -106,7 +109,9 @@ public class ArmSubsystem extends SubsystemBase{
       m_targetPosition = rotations;
       m_pidControllerAngle.setReference(m_targetPosition, CANSparkMax.ControlType.kPosition);
     }
-    
+    public double dynamicFeedForward(double angle) {
+      return ARM_CONSTANTS.MAX_ROTATE_FEEDFORWARD * Math.cos(angle);
+    }
     // For Testing
     public void UpdateInformation(){ 
       // read PID coefficients from SmartDashboard
@@ -117,7 +122,7 @@ public class ArmSubsystem extends SubsystemBase{
       double ff =        SmartDashboard.getNumber("ANGLE Feed Forward", 0);
       double max =       SmartDashboard.getNumber("ANGLE Max Output", 0);
       double min =       SmartDashboard.getNumber("ANGLE Min Output", 0);
-      double rotations = SmartDashboard.getNumber("ANGLE Set Position", 0);
+      double degrees = SmartDashboard.getNumber("ANGLE Set Position", 0);
   
       // if PID coefficients on SmartDashboard have changed, write new values to controller
       if((p != m_pidControllerAngle.getP())) { m_pidControllerAngle.setP(p); }
@@ -129,7 +134,7 @@ public class ArmSubsystem extends SubsystemBase{
         m_pidControllerAngle.setOutputRange(min, max); 
       }
       
-      SetElevation(rotations / ARM_CONSTANTS.GEAR_BOX_RATIO);
+      SetElevation(degrees);
     }
     
     // For Testing
@@ -205,6 +210,7 @@ public class ArmSubsystem extends SubsystemBase{
 
       // Encoder object created to display position values
       m_encoderextension = m_extendMotor.getEncoder();
+      m_encoderextension.setPositionConversionFactor(ARM_CONSTANTS.INCHES_PER_ROTATION);
 
       // set PID coefficients
       m_pidControllerExtension.setP(EXTEND_CONSTANTS.kP);
@@ -252,7 +258,7 @@ public class ArmSubsystem extends SubsystemBase{
     }
 
     public void FineTune(double signum) {
-      double targetPosition = m_targetExtension + signum * 0.05;
+      double targetPosition = m_targetExtension + signum;
       if (EXTEND_CONSTANTS.MIN_EXTENSION < targetPosition && targetPosition < EXTEND_CONSTANTS.MAX_EXTENSION) {
         SetExtension(targetPosition);
       }
