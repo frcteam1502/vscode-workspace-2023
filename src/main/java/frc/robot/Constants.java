@@ -72,7 +72,7 @@ public final class Constants {
           BACK_RIGHT_MODULE
         );
 
-    public static final double MAX_SPEED_METERS_PER_SECOND = 1; //IF YOU UP THE SPEED CHANGE ACCELERATION
+    public static final double MAX_SPEED_METERS_PER_SECOND = 1.25; //IF YOU UP THE SPEED CHANGE ACCELERATION
 
     public static final double MAX_ROTATION_RADIANS_PER_SECOND = (Math.PI/2);
     public static final double MAX_ROTATION_RADIANS_PER_SECOND_PER_SECOND = Math.PI;

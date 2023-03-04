@@ -42,8 +42,8 @@ public class RobotContainer {
   }
 
   public static SystemMap ConfigureSystem(SystemMap map) { // sample config for drive train testing
-    //return ConfigureForCompetition(map, 1);
-    return ConfigureForArmTest(map, 2);
+    return ConfigureForCompetition(map, 1);
+    //return ConfigureForArmTest(map, 2);
   }
 
   private static SystemMap ConfigureForCompetition(SystemMap map, int driveDiagnostics) {
