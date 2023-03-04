@@ -5,10 +5,10 @@ import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -71,6 +71,7 @@ public class ArmSubsystem extends SubsystemBase{
     private SparkMaxLimitSwitch m_angleRwdLimitSwitch;
     private RelativeEncoder m_encoderangle;
     private double m_targetPosition = 0;
+    private double m_testPosition = 0;
 
     private boolean angleLimitPressed = false;
 
@@ -112,6 +113,7 @@ public class ArmSubsystem extends SubsystemBase{
     public double dynamicFeedForward(double angle) {
       return ARM_CONSTANTS.MAX_ROTATE_FEEDFORWARD * Math.cos(angle);
     }
+
     // For Testing
     public void UpdateInformation(){ 
       // read PID coefficients from SmartDashboard
@@ -134,12 +136,16 @@ public class ArmSubsystem extends SubsystemBase{
         m_pidControllerAngle.setOutputRange(min, max); 
       }
       
-      SetElevation(degrees);
+      if (m_testPosition != degrees) {
+        m_testPosition = degrees;
+        SetElevation(m_testPosition);
+      }
     }
-    
+    //private void SetAngle() {}
     // For Testing
     public void DisplayInformation(){
       // display PID coefficients on SmartDashboard
+      SmartDashboard.putNumber("ANGLE Set Position", 0);
       SmartDashboard.putNumber("ANGLE P Gain", m_pidControllerAngle.getP());
       SmartDashboard.putNumber("ANGLE I Gain", m_pidControllerAngle.getI());
       SmartDashboard.putNumber("ANGLE D Gain", m_pidControllerAngle.getD());
@@ -147,15 +153,11 @@ public class ArmSubsystem extends SubsystemBase{
       SmartDashboard.putNumber("ANGLE Feed Forward", m_pidControllerAngle.getFF());
       SmartDashboard.putNumber("ANGLE Max Output", m_pidControllerAngle.getOutputMax());
       SmartDashboard.putNumber("ANGLE Min Output", m_pidControllerAngle.getOutputMin());
-
-      SmartDashboard.putNumber("ANGLE Set Position", 0);
-
     }
     
     public void DisplayPosition() {
       SmartDashboard.putNumber("ANGLE Arm Target Position", m_targetPosition);
       SmartDashboard.putNumber("ANGLE Arm Current Position", m_encoderangle.getPosition());
-      SmartDashboard.putNumber("Elevation Target Position", elevationFineTune);
       SmartDashboard.putBoolean("ANGLE Fwd Limit Switch", m_angleFwdLimitSwitch.isPressed());
       SmartDashboard.putBoolean("ANGLE Rwd Limit Switch", m_angleRwdLimitSwitch.isPressed());
     }
@@ -194,6 +196,7 @@ public class ArmSubsystem extends SubsystemBase{
     private RelativeEncoder m_encoderextension;
     private SparkMaxPIDController m_pidControllerExtension;
     private double m_targetExtension = 0;
+    private double m_testExtension = 0;
 
     private boolean extendLimitPressed = false;
 
@@ -236,7 +239,7 @@ public class ArmSubsystem extends SubsystemBase{
       double ff = SmartDashboard.getNumber( "EXTEND Feed Forward", 0);
       double max = SmartDashboard.getNumber("EXTEND Max Output", 0);
       double min = SmartDashboard.getNumber("EXTEND Min Output", 0);
-      double rotations = SmartDashboard.getNumber("EXTEND Set Position", 0);
+      double extension = SmartDashboard.getNumber("EXTEND Set Position", 0);
   
       // if PID coefficients on SmartDashboard have changed, write new values to controller
       if((p != m_pidControllerExtension.getP())) { m_pidControllerExtension.setP(p); }
@@ -247,10 +250,24 @@ public class ArmSubsystem extends SubsystemBase{
       if((max != m_pidControllerExtension.getOutputMax()) || (min != m_pidControllerExtension.getOutputMin())) { 
         m_pidControllerExtension.setOutputRange(min, max); 
       }
-      
-      SetExtension(rotations);
+      if (m_testExtension != extension) {
+        m_testExtension = extension;
+        SetExtension(m_testExtension);
+      }
     }
+    // For Testing
+    public void DisplayInformation() {
+      // display PID coefficients on SmartDashboard
+      SmartDashboard.putNumber("EXTEND P Gain", m_pidControllerExtension.getP());
+      SmartDashboard.putNumber("EXTEND I Gain", m_pidControllerExtension.getI());
+      SmartDashboard.putNumber("EXTEND D Gain", m_pidControllerExtension.getD());
+      SmartDashboard.putNumber("EXTEND I Zone", m_pidControllerExtension.getIZone());
+      SmartDashboard.putNumber("EXTEND Feed Forward", m_pidControllerExtension.getFF());
+      SmartDashboard.putNumber("EXTEND Max Output", m_pidControllerExtension.getOutputMax());
+      SmartDashboard.putNumber("EXTEND Min Output", m_pidControllerExtension.getOutputMin());
 
+      SmartDashboard.putNumber("EXTEND Set Position", 0);
+    }
     public void DisplayPosition() {
       SmartDashboard.putNumber("EXTEND Arm Target Extension", m_targetExtension);
       SmartDashboard.putNumber("EXTEND Arm Current Position", m_encoderextension.getPosition());
@@ -261,6 +278,7 @@ public class ArmSubsystem extends SubsystemBase{
       double targetPosition = m_targetExtension + signum;
       if (EXTEND_CONSTANTS.MIN_EXTENSION < targetPosition && targetPosition < EXTEND_CONSTANTS.MAX_EXTENSION) {
         SetExtension(targetPosition);
+        m_targetExtension = targetPosition;
       }
     }
 
@@ -293,6 +311,11 @@ public class ArmSubsystem extends SubsystemBase{
         //Populate Network Tables 
         m_elevationMotor.DisplayPosition();
         m_extenderMotor.DisplayPosition();
+      }
+      if (Constants.SystemMap.ArmSubsystem.DiagnosticLevel > 1) {
+        //Populate Network Tables 
+        m_elevationMotor.DisplayInformation();
+        m_extenderMotor.DisplayInformation();
       }
     }
 

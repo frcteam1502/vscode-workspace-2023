@@ -24,6 +24,8 @@ public class Robot extends TimedRobot {
   
     if (Constants.SystemMap.DriveSubsystem.IsEnabled) {
       DriveTrain.Init();
+    } else {
+      DriveTrain.Init(); // DriveTrain seem to start on their own when trying to keep them disabled
     }
   }
 
@@ -38,10 +40,10 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    if (Constants.SystemMap.DriveSubsystem.IsEnabled) {
+    if (Constants.SystemMap.DriveSubsystem.DiagnosticLevel > 0) {
       DriveTrain.DisplayDiagnostics();
     }
-    if (Constants.SystemMap.LimelighteSubsystem.IsEnabled) {
+    if (Constants.SystemMap.LimelighteSubsystem.DiagnosticLevel > 0) {
       Limelight.DisplayDiagnostics();
     }
   }

@@ -6,4 +6,8 @@ public final class SystemMap {
     public SubsystemConfiguration GripperSubsystem = new SubsystemConfiguration();
     public SubsystemConfiguration IntakeSubsystem = new SubsystemConfiguration();
     public SubsystemConfiguration LimelighteSubsystem = new SubsystemConfiguration();
+
+    public boolean IsDriveEnabled() {
+        return DriveSubsystem.IsEnabled;
+    } 
 }

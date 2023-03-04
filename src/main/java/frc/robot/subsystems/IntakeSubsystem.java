@@ -41,11 +41,13 @@ public class IntakeSubsystem extends SubsystemBase {
   public void Toggle() {
     if (DoublePH.get() == Value.kForward)
     {
-      DoublePH.set(Value.kReverse);
+      setIn();
+      TurnOffIntake();
     }
     else
     {
-      DoublePH.set(Value.kForward);
+      setOut();
+      TurnOnIntake();
     }
   }
 

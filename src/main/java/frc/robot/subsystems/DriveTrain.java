@@ -261,7 +261,7 @@ public class DriveTrain extends SubsystemBase{
   }
 
   public static void DisplayDiagnostics() {
-    if (Constants.SystemMap.DriveSubsystem.DiagnosticLevel < 2) return;
+    if (Constants.SystemMap.DriveSubsystem.DiagnosticLevel < 1) return;
     
     //Drive Motor Encoders
     SmartDashboard.putNumber("FL Encoder Pos", Constants.Motors.DRIVE_FRONT_LEFT.getEncoder().getPosition());
