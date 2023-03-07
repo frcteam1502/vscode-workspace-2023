@@ -30,7 +30,7 @@ public class SwerveModule {
     this.absEncoder = absEncoder;
 
     driveMotor.setClosedLoopRampRate(.25);
-    driveMotor.setSmartCurrentLimit(60);
+    driveMotor.setSmartCurrentLimit(40);
 
     driveEncoder = driveMotor.getEncoder();
 
