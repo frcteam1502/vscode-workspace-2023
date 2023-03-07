@@ -54,9 +54,9 @@ public class ArmSubsystem extends SubsystemBase{
     private static final double MAX_EXTENSION = 24.0;
    
     // PID coefficients (sample values, TBD)
-    public final static double kP = 0.1;
-    public final static double kI = 1e-4;
-    public final static double kD = 1;
+    public final static double kP = 0.01;
+    public final static double kI = 0;//1e-4;
+    public final static double kD = 0; //1;
     public final static double kIz = 0;
     public final static double kFF = 0;
     public final static double kMaxOutput = 1;

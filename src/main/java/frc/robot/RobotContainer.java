@@ -19,9 +19,9 @@ public class RobotContainer {
 
   // would like to be able to set the "target" during the Deploy (e.g., deploy Comp or deploy Test)
   public static SystemMap ConfigureSystem(SystemMap map) { // sample config for drive train testing
-    return ConfigureForCompetition(map, 1);
+    //return ConfigureForCompetition(map, 1);
     //return ConfigureForDriveTest(map, 1);
-    //return ConfigureForArmTest(map, 1);
+    return ConfigureForArmTest(map, 0);
   }
 
   //Subsystems
@@ -40,7 +40,7 @@ public class RobotContainer {
 
   private static SystemMap ConfigureForCompetition(SystemMap map, int driveDiagnostics) {
     map.DriveSubsystem.Enable();
-  
+    
     // disable these until working
     map.ArmSubsystem.Disable();
     map.GripperSubsystem.Disable();
