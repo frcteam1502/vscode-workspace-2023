@@ -10,7 +10,7 @@ public class GripperSubsystem extends SubsystemBase {
   public DoubleSolenoid DoublePH = new DoubleSolenoid(15, PneumaticsModuleType.REVPH, PneumaticsConstants.kforwardchannel, PneumaticsConstants.kreversechannel);
  //TODO: Get CanID Change
   public GripperSubsystem() {
-    DoublePH.set(Value.kForward);
+    DoublePH.set(Value.kReverse);
   }
 
   public void toggleGripper() {
