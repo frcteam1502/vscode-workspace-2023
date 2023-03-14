@@ -8,9 +8,15 @@ import frc.robot.Constants;
 
 public class MotorTestSubsystem extends SubsystemBase {
   private final CANSparkMax TEST;
+  private final CANSparkMax TEST_FOLLOWER;
 
   public MotorTestSubsystem() {
     TEST = Constants.Motors.TEST;
+    TEST_FOLLOWER = Constants.Motors.TEST_FOLLOWER;
+    TEST_FOLLOWER.follow(TEST, true);
+
+    TEST.setSmartCurrentLimit(40);
+    TEST_FOLLOWER.setSmartCurrentLimit(40);
   }
 
   public void FORWARD() {

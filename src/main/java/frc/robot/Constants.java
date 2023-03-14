@@ -9,7 +9,8 @@ import com.revrobotics.CANSparkMaxLowLevel;
 public final class Constants {
 
   public static final class Motors {
-    public static final CANSparkMax TEST = new CANSparkMax(18, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax TEST = new CANSparkMax(16, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax TEST_FOLLOWER = new CANSparkMax(17, CANSparkMaxLowLevel.MotorType.kBrushless);
   }
 
   public static final class Joysticks {
