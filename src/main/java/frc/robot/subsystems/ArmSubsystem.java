@@ -27,7 +27,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   private final double MAX_ROTATE = 91;
   private final double MIN_ROTATE = -30;
-  private final double DEGREES_PER_ROTATION = 360 / 12;
+  private final double DEGREES_PER_ROTATION = 360 / 12; //TODO: Change gearing value
   private final double MAX_ROTATE_FEEDFORWARD = 0; //TODO: get actual value
   private final double ROTATE_CHANGE = .1; //TODO: Too high/low
   private final double EXTEND_CHANGE = .1;
@@ -50,6 +50,10 @@ public class ArmSubsystem extends SubsystemBase {
     extend = Constants.Motors.EXTEND;
 
     rotateFollower.follow(rotate, true);
+
+    rotate.setSmartCurrentLimit(40);
+    rotateFollower.setSmartCurrentLimit(40);
+    extend.setSmartCurrentLimit(40);
 
     rotateEncoder = rotate.getEncoder();
     extendEncoder = extend.getEncoder();
