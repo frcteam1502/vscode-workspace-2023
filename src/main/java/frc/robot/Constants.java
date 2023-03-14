@@ -10,9 +10,9 @@ public final class Constants {
 
   public static final class Motors {
     //Arm
-    public static final CANSparkMax ARM_LEAD = new CANSparkMax(17, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax ARM_FOLLOW = new CANSparkMax(16, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax EXTEND = new CANSparkMax(18, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax ARM_LEAD = new CANSparkMax(16, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax ARM_FOLLOW = new CANSparkMax(17, CANSparkMaxLowLevel.MotorType.kBrushless);
+    //public static final CANSparkMax EXTEND = new CANSparkMax(18, CANSparkMaxLowLevel.MotorType.kBrushless);
   }
 
   public static final class Joysticks {

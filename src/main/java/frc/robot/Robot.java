@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,6 +21,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
+    //Constants.Motors.EXTEND.setIdleMode(IdleMode.kBrake);
+    Constants.Motors.ARM_LEAD.setIdleMode(IdleMode.kBrake);
+    Constants.Motors.ARM_FOLLOW.setIdleMode(IdleMode.kBrake);
   }  
 
   /**
@@ -33,7 +38,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     SmartDashboard.putNumber("Rotate Pose", Constants.Motors.ARM_LEAD.getEncoder().getPosition());
-    SmartDashboard.putNumber("Extend Pose", Constants.Motors.EXTEND.getEncoder().getPosition());
+    //SmartDashboard.putNumber("Extend Pose", Constants.Motors.EXTEND.getEncoder().getPosition());
   }
 
 

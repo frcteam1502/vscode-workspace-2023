@@ -19,10 +19,10 @@ public class RobotContainer {
   private void configureBindings() {
     //Arm
     armSubsystem.setDefaultCommand(new ArmByController(armSubsystem));
-    XboxButtons.BUTTON_Y.onTrue(new InstantCommand(armSubsystem::rotateToStow));
-    XboxButtons.BUTTON_B.onTrue(new InstantCommand(armSubsystem::rotateToLow));
-    XboxButtons.BUTTON_A.onTrue(new InstantCommand(armSubsystem::rotateToMid));
-    XboxButtons.BUTTON_X.onTrue(new InstantCommand(armSubsystem::rotateToHigh));
+    XboxButtons.BUTTON_X.onTrue(new InstantCommand(armSubsystem::rotateToStow));
+    XboxButtons.BUTTON_A.onTrue(new InstantCommand(armSubsystem::rotateToLow));
+    XboxButtons.BUTTON_B.onTrue(new InstantCommand(armSubsystem::rotateToMid));
+    XboxButtons.BUTTON_Y.onTrue(new InstantCommand(armSubsystem::rotateToHigh));
   }
 
   public Command getAutonomousCommand() {

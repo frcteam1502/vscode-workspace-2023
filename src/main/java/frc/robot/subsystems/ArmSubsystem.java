@@ -12,22 +12,22 @@ import frc.robot.Constants;
 public class ArmSubsystem extends SubsystemBase {
   private final CANSparkMax rotate;
   private final CANSparkMax rotateFollower;
-  private final CANSparkMax extend;
+  //private final CANSparkMax extend;
 
   private final SparkMaxPIDController rotatePID;
-  private final SparkMaxPIDController extendPID;
+  //private final SparkMaxPIDController extendPID;
 
   private final RelativeEncoder rotateEncoder;
-  private final RelativeEncoder extendEncoder;
+  //private final RelativeEncoder extendEncoder;
 
   private final DigitalInput limit = new DigitalInput(21);
 
   private double goalExtend = 0;
   private double goalRotate = 0;
 
-  private final double MAX_ROTATE = 91;
-  private final double MIN_ROTATE = -30;
-  private final double DEGREES_PER_ROTATION = 360 / 12; //TODO: Change gearing value
+  private final double MAX_ROTATE = 95;
+  private final double MIN_ROTATE = -35;
+  private final double DEGREES_PER_ROTATION = 360 / 12;//28.5; //TODO: Change gearing value
   private final double MAX_ROTATE_FEEDFORWARD = 0; //TODO: get actual value
   private final double ROTATE_CHANGE = .1; //TODO: Too high/low
   private final double EXTEND_CHANGE = .1;
@@ -35,46 +35,47 @@ public class ArmSubsystem extends SubsystemBase {
   //Test points in order of {Angle position, extend position}
   private final double[][] positionTable = 
   {
-    {0, 0}, //Stow position
-    {1, 0}, //Enter "To limit switch" section
-    {2, 0}, //Straight down position
-    {3, 0}, //Leave "To limit switch" section
-    {4, 0}, //Ground score
-    {5, 0}, //Medium score
-    {6, 0}  //High score
+    {-30, 0}, //Stow position
+    {-15, 0}, //Enter "To limit switch" section
+    {0, 0}, //Straight down position
+    {15, 0}, //Leave "To limit switch" section
+    {30, 0}, //Ground score
+    {45, 0}, //Medium score
+    {90, 0}  //High score
   };
   
   public ArmSubsystem() {
     rotate = Constants.Motors.ARM_LEAD;
     rotateFollower = Constants.Motors.ARM_FOLLOW;
-    extend = Constants.Motors.EXTEND;
+    //extend = Constants.Motors.EXTEND;
 
     rotateFollower.follow(rotate, true);
 
     rotate.setSmartCurrentLimit(40);
     rotateFollower.setSmartCurrentLimit(40);
-    extend.setSmartCurrentLimit(40);
+    //extend.setSmartCurrentLimit(40);
 
     rotateEncoder = rotate.getEncoder();
-    extendEncoder = extend.getEncoder();
+    //extendEncoder = extend.getEncoder();
 
     rotateEncoder.setPositionConversionFactor(DEGREES_PER_ROTATION);
+    rotateEncoder.setPosition(0);
 
     rotatePID = rotate.getPIDController();
-    extendPID = extend.getPIDController();
+    //extendPID = extend.getPIDController();
 
     rotatePID.setFeedbackDevice(rotateEncoder);
-    extendPID.setFeedbackDevice(extendEncoder);
+    //extendPID.setFeedbackDevice(extendEncoder);
 
     rotatePID.setP(0.1); //TODO: Get PID values
     rotatePID.setI(0);
     rotatePID.setD(0);
     rotatePID.setFF(0);
 
-    extendPID.setP(0.1);
-    extendPID.setI(0);
-    extendPID.setD(0);
-    extendPID.setFF(0);
+    // extendPID.setP(0.1);
+    // extendPID.setI(0);
+    // extendPID.setD(0);
+    // extendPID.setFF(0);
   }
 
   public void rotateArm(double Pose) {
@@ -129,10 +130,10 @@ public class ArmSubsystem extends SubsystemBase {
       goalExtend = calcBetweenPoints(positionTable[0], positionTable[1], currentPose);
     } 
     else if(isBetweenPoints(positionTable[1], positionTable[2], currentPose)) {
-      toLimitSwitch();
+      //toLimitSwitch();
     } 
     else if(isBetweenPoints(positionTable[2], positionTable[3], currentPose)) {
-      toLimitSwitch();
+      //toLimitSwitch();
     } 
     else if(isBetweenPoints(positionTable[3], positionTable[4], currentPose)) {
       goalExtend = calcBetweenPoints(positionTable[3], positionTable[4], currentPose);
@@ -163,10 +164,10 @@ public class ArmSubsystem extends SubsystemBase {
     return slope * currentPose + constant;
   }
 
-  public void toLimitSwitch() {
-    if(!limit.get()) goalExtend -= EXTEND_CHANGE;
-    else extendEncoder.setPosition(0);
-  }
+  // public void toLimitSwitch() {
+  //   if(!limit.get()) goalExtend -= EXTEND_CHANGE;
+  //   else extendEncoder.setPosition(0);
+  // }
 
   public boolean isBetweenPoints(double[] position1, double[] position2, double currentPose) {
     return (position1[0] <= currentPose && currentPose <= position2[0]);
@@ -176,11 +177,11 @@ public class ArmSubsystem extends SubsystemBase {
     return MAX_ROTATE_FEEDFORWARD * Math.cos(angle);
   }
 
-  // @Override
-  // public void periodic() {
-  //   checkAngle();
-  //   rotatePID.setFF(dynamicFeedForward(rotateEncoder.getPosition()));
-  //   extendPID.setReference(goalExtend, ControlType.kPosition);
-  //   rotatePID.setReference(goalRotate, ControlType.kPosition);
-  // }
+  @Override
+  public void periodic() {
+    checkAngle();
+    //rotatePID.setFF(dynamicFeedForward(rotateEncoder.getPosition()));
+    //extendPID.setReference(goalExtend, ControlType.kPosition);
+    rotatePID.setReference(goalRotate, ControlType.kPosition);
+  }
 }
