@@ -8,7 +8,9 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public final class Constants {
@@ -23,6 +25,7 @@ public final class Constants {
    */
 
   public static final Pigeon2 gyro = new Pigeon2(14);
+  public static final PowerDistribution revPDH = new PowerDistribution(9, ModuleType.kRev);
 
   public static final class CanConstants {
     //FRONT LEFT MODULE
