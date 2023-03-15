@@ -12,13 +12,13 @@ import frc.robot.Constants;
 public class ArmSubsystem extends SubsystemBase {
   private final CANSparkMax rotate;
   private final CANSparkMax rotateFollower;
-  //private final CANSparkMax extend;
+  private final CANSparkMax extend;
 
   private final SparkMaxPIDController rotatePID;
-  //private final SparkMaxPIDController extendPID;
+  private final SparkMaxPIDController extendPID;
 
   private final RelativeEncoder rotateEncoder;
-  //private final RelativeEncoder extendEncoder;
+  private final RelativeEncoder extendEncoder;
 
   private final DigitalInput limit = new DigitalInput(21);
 
@@ -27,6 +27,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   private final double MAX_ROTATE = 95;
   private final double MIN_ROTATE = -5;
+  private final double MAX_EXTEND = 44.7;
   private final double DEGREES_PER_ROTATION = 360 / 12;//28.5; //TODO: Change gearing value
   private final double MAX_ROTATE_FEEDFORWARD = 0; //TODO: get actual value
   private final double ROTATE_CHANGE = 1; 
@@ -37,43 +38,44 @@ public class ArmSubsystem extends SubsystemBase {
   {
     {0, 0}, //Straight down position
     {15, 0}, //Enter "To limit switch" section
-    {30, 0}, //Ground score
-    {45, 0}, //Medium score
-    {90, 0}  //High score
+    {30, 11}, //Ground score
+    {45, 22}, //Medium score
+    {90, 44}  //High score
   };
   
   public ArmSubsystem() {
     rotate = Constants.Motors.ARM_LEAD;
     rotateFollower = Constants.Motors.ARM_FOLLOW;
-    // extend = Constants.Motors.EXTEND;
+    extend = Constants.Motors.EXTEND;
 
     rotateFollower.follow(rotate, true);
 
     rotate.setSmartCurrentLimit(40);
     rotateFollower.setSmartCurrentLimit(40);
-    //extend.setSmartCurrentLimit(40);
+    extend.setSmartCurrentLimit(40);
 
     rotateEncoder = rotate.getEncoder();
-    //extendEncoder = extend.getEncoder();
+    extendEncoder = extend.getEncoder();
 
     rotateEncoder.setPositionConversionFactor(DEGREES_PER_ROTATION);
     rotateEncoder.setPosition(0);
+    extendEncoder.setPosition(0);
 
     rotatePID = rotate.getPIDController();
-    //extendPID = extend.getPIDController();
+    extendPID = extend.getPIDController();
 
     rotatePID.setFeedbackDevice(rotateEncoder);
-    //extendPID.setFeedbackDevice(extendEncoder);
+    extendPID.setFeedbackDevice(extendEncoder);
 
     rotatePID.setP(0.1); //TODO: Get PID values
     rotatePID.setI(0);
     rotatePID.setD(0);
     rotatePID.setFF(0);
 
-    // extendPID.setP(0.1);
-    // extendPID.setI(0);
-    // extendPID.setD(0);
-    // extendPID.setFF(0);
+    extendPID.setP(0.1);
+    extendPID.setI(0);
+    extendPID.setD(0);
+    extendPID.setFF(0);
   }
 
   public void rotateArm(double Pose) {
@@ -103,9 +105,10 @@ public class ArmSubsystem extends SubsystemBase {
     rotateArm(goalRotate + change);
   }
 
-  public void checkAngle() {
+  public void checkMaxAndMin() {
     if(rotateEncoder.getPosition() > MAX_ROTATE) goalRotate -= ROTATE_CHANGE;
     else if(rotateEncoder.getPosition() < MIN_ROTATE) goalRotate += ROTATE_CHANGE;
+    if(extendEncoder.getPosition() > MAX_EXTEND) goalExtend -= EXTEND_CHANGE;
   }
 
   //BELOW THIS IS ALL RELATED TO EXTENSION (And there a periodic function)
@@ -167,10 +170,10 @@ public class ArmSubsystem extends SubsystemBase {
    * 0 thus resetting the position of the encoder and eliminating
    * drift
    */
-  // public void toLimitSwitch() {
-  //   if(!limit.get()) goalExtend -= EXTEND_CHANGE;
-  //   else extendEncoder.setPosition(0);
-  // }
+  public void toLimitSwitch() {
+    if(!limit.get()) goalExtend -= EXTEND_CHANGE;
+    else extendEncoder.setPosition(0);
+  }
 
   /**
    * Based upon the position array this method
@@ -221,9 +224,9 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    checkAngle();
+    checkMaxAndMin();
     //rotatePID.setFF(dynamicFeedForward(rotateEncoder.getPosition()));
-    //extendPID.setReference(goalExtend, ControlType.kPosition);
+    extendPID.setReference(goalExtend, ControlType.kPosition);
     rotatePID.setReference(goalRotate, ControlType.kPosition);
   }
 }
