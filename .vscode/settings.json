@@ -26,5 +26,5 @@
     },
   ],
   "java.test.defaultConfig": "WPIlibUnitTests",
-  "terminal.integrated.fontFamily": "CaskaydiaCove NF Mono"
+  "terminal.integrated.fontFamily": "'CaskaydiaCove NF Mono', monospace"
 }
