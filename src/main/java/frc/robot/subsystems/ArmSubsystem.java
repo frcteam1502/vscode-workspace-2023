@@ -26,19 +26,17 @@ public class ArmSubsystem extends SubsystemBase {
   private double goalRotate = 0;
 
   private final double MAX_ROTATE = 95;
-  private final double MIN_ROTATE = -35;
+  private final double MIN_ROTATE = -5;
   private final double DEGREES_PER_ROTATION = 360 / 12;//28.5; //TODO: Change gearing value
   private final double MAX_ROTATE_FEEDFORWARD = 0; //TODO: get actual value
-  private final double ROTATE_CHANGE = .1; //TODO: Too high/low
-  private final double EXTEND_CHANGE = .1;
+  private final double ROTATE_CHANGE = 1; 
+  private final double EXTEND_CHANGE = .1; //TODO: Too high/low
 
   //Test points in order of {Angle position, extend position}
   private final double[][] positionTable = 
   {
-    {-30, 0}, //Stow position
-    {-15, 0}, //Enter "To limit switch" section
     {0, 0}, //Straight down position
-    {15, 0}, //Leave "To limit switch" section
+    {15, 0}, //Enter "To limit switch" section
     {30, 0}, //Ground score
     {45, 0}, //Medium score
     {90, 0}  //High score
@@ -47,7 +45,7 @@ public class ArmSubsystem extends SubsystemBase {
   public ArmSubsystem() {
     rotate = Constants.Motors.ARM_LEAD;
     rotateFollower = Constants.Motors.ARM_FOLLOW;
-    //extend = Constants.Motors.EXTEND;
+    // extend = Constants.Motors.EXTEND;
 
     rotateFollower.follow(rotate, true);
 
@@ -88,15 +86,15 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void rotateToLow() {
-    rotateArm(positionTable[4][0]);
+    rotateArm(positionTable[2][0]);
   }
 
   public void rotateToMid() {
-    rotateArm(positionTable[5][0]);
+    rotateArm(positionTable[3][0]);
   }
 
   public void rotateToHigh() {
-    rotateArm(positionTable[6][0]);
+    rotateArm(positionTable[4][0]);
   }
 
   public void rotateManually(double input) {
@@ -118,63 +116,107 @@ public class ArmSubsystem extends SubsystemBase {
    * the current angle of the arm
    * 
    * checks in this order:
-   * between stow and enter - calc
-   * enter to 0 - limit
-   * 0 to exit - limit
-   * exit to low - calc
-   * low to mid - calc
-   * mid to high - calc
+   * between stow and enter,
+   * enter to low,
+   * low to mid,
+   * mid to high
+   * 
+   * @param currentAngle The current angle returned by the rotation encoder
    */
-  public void calculateGoalExtend(double currentPose) {
-    if(isBetweenPoints(positionTable[0], positionTable[1], currentPose)) {
-      goalExtend = calcBetweenPoints(positionTable[0], positionTable[1], currentPose);
-    } 
-    else if(isBetweenPoints(positionTable[1], positionTable[2], currentPose)) {
+  public void calculateGoalExtend(double currentAngle) {
+    if(isBetweenPoints(positionTable[0], positionTable[1], currentAngle)) {
       //toLimitSwitch();
     } 
-    else if(isBetweenPoints(positionTable[2], positionTable[3], currentPose)) {
-      //toLimitSwitch();
+    else if(isBetweenPoints(positionTable[1], positionTable[2], currentAngle)) {
+      if(isWithinExtendRange(rotateEncoder.getPosition())) 
+      goalExtend = calcBetweenPoints(positionTable[1], positionTable[2], currentAngle);
     } 
-    else if(isBetweenPoints(positionTable[3], positionTable[4], currentPose)) {
-      goalExtend = calcBetweenPoints(positionTable[3], positionTable[4], currentPose);
+    else if(isBetweenPoints(positionTable[2], positionTable[3], currentAngle)) {
+      if(isWithinExtendRange(rotateEncoder.getPosition())) 
+      goalExtend = calcBetweenPoints(positionTable[2], positionTable[3], currentAngle);
     } 
-    else if(isBetweenPoints(positionTable[4], positionTable[5], currentPose)) {
-      goalExtend = calcBetweenPoints(positionTable[4], positionTable[5], currentPose);
-    } 
-    else if(isBetweenPoints(positionTable[5], positionTable[6], currentPose)) {
-      goalExtend = calcBetweenPoints(positionTable[5], positionTable[6], currentPose);
+    else if(isBetweenPoints(positionTable[3], positionTable[4], currentAngle)) {
+      if(isWithinExtendRange(rotateEncoder.getPosition())) 
+      goalExtend = calcBetweenPoints(positionTable[3], positionTable[4], currentAngle);
     } 
   }
 
   /**
-   * 
    * Takes in the coordinates from the positionTable
    * and calculates linear function between the 2 points
    * starting with slope then finding the constant
    * then using these to calculate the final goalExtend
    *  
-   * @param position1
-   * @param position2
-   * @param currentPose
+   * @param position1 First position in the position array
+   * 
+   * @param position2 Second position in the position array
+   * 
+   * @param currentAngle The current angle returned by the rotation encoder
+   * 
    * @return goalExtend for the extension motor 
    */
-  public double calcBetweenPoints(double[] position1, double[] position2, double currentPose) {
+  public double calcBetweenPoints(double[] position1, double[] position2, double currentAngle) {
     double slope = (position2[1] - position1[1])/(position2[0] - position1[0]);
     double constant = position1[1] - slope * position1[0];
-    return slope * currentPose + constant;
+    return slope * currentAngle + constant;
   }
 
+  /**
+   * Iterates the goalExtension negatively until it reaches the
+   * limit switch. At which point it sets the extend encoder to
+   * 0 thus resetting the position of the encoder and eliminating
+   * drift
+   */
   // public void toLimitSwitch() {
   //   if(!limit.get()) goalExtend -= EXTEND_CHANGE;
   //   else extendEncoder.setPosition(0);
   // }
 
-  public boolean isBetweenPoints(double[] position1, double[] position2, double currentPose) {
-    return (position1[0] <= currentPose && currentPose <= position2[0]);
+  /**
+   * Based upon the position array this method
+   * decides wether the current angle is within
+   * the two points in the array
+   * 
+   * @param position1 First position in the position array
+   * 
+   * @param position2 Second position in the position array
+   * 
+   * @param currentAngle The current angle returned by the rotation encoder
+   * 
+   * @return Wether or not the current angle is within the two points on the array
+   */
+  public boolean isBetweenPoints(double[] position1, double[] position2, double currentAngle) {
+    return (position1[0] <= currentAngle && currentAngle <= position2[0]);
   }
 
-  public double dynamicFeedForward(double angle) {
-    return MAX_ROTATE_FEEDFORWARD * Math.cos(angle);
+  /**
+   * Takes in the current angle to be used to calculate
+   * the necesary feedforward based on the maximum
+   * feedforward to hold the arm ar 90 degrees
+   * 
+   * @param currentAngle the current angle returned by the rotation encoder
+   * 
+   * @return the feedforward value to use to hold up the arm at the given angle
+   */
+  public double dynamicFeedForward(double currentAngle) {
+    return MAX_ROTATE_FEEDFORWARD * Math.cos(currentAngle);
+  }
+
+  /**
+   * Takes in the current angle of the angle motor
+   * and based upon that it determines if the
+   * current angle is within the extend range 
+   * provided by the constant: 
+   * 
+   * {@value range}
+   * 
+   * @param currentAngle the current angle returned by the rotation encoder
+   * 
+   * @return whether or not the current angle is within our alloted range to begin extending
+   */
+  public boolean isWithinExtendRange(double currentAngle) {
+    final double range = 7;
+    return (currentAngle >= goalRotate - range && currentAngle <= goalRotate + range);
   }
 
   @Override
