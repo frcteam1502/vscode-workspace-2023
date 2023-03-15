@@ -15,7 +15,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    XboxButtons.RIGHT_BUMPER.toggleOnTrue(new InstantCommand(gripperSubsystem::toggleGripper));
+    XboxButtons.RIGHT_BUMPER.onTrue(new InstantCommand(gripperSubsystem::turnOn)).onFalse(new InstantCommand(gripperSubsystem::turnOff));
   }
 
   public Command getAutonomousCommand() {

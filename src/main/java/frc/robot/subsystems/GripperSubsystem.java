@@ -1,19 +1,23 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PneumaticsConstants;
 
 public class GripperSubsystem extends SubsystemBase {
-  public DoubleSolenoid DoublePH = new DoubleSolenoid(15, PneumaticsModuleType.REVPH, PneumaticsConstants.kforwardchannel, PneumaticsConstants.kreversechannel);
+  public Solenoid solenoid = new Solenoid(20, PneumaticsModuleType.REVPH, PneumaticsConstants.channel);
  //TODO: Get CanID Change
+
   public GripperSubsystem() {
-    DoublePH.set(Value.kReverse);
+    solenoid.set(false);
   }
 
-  public void toggleGripper() {
-    DoublePH.toggle();
+  public void turnOn() {
+    solenoid.set(true);
+  }
+
+  public void turnOff() {
+    solenoid.set(false);
   }
 }

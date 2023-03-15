@@ -35,7 +35,6 @@ public final class Constants {
   }
 
   public static class PneumaticsConstants{ //TODO: Get any channel changes
-    public static final int kreversechannel = 8;
-    public static final int kforwardchannel = 15;
+    public static final int channel = 15;
   }
 }
