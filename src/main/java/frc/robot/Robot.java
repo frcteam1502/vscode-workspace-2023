@@ -52,19 +52,6 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    pdhVoltage = Constants.revPDH.getVoltage();
-    currentLF_Drive = Constants.revPDH.getCurrent(0);
-    currentRF_Drive = Constants.revPDH.getCurrent(19);
-    currentRL_Drive = Constants.revPDH.getCurrent(2);
-    currentRR_Drive = Constants.revPDH.getCurrent(17);
-
-    //Drive Motor Currents
-    SmartDashboard.putNumber("PDH Voltage", pdhVoltage);
-    SmartDashboard.putNumber("FL Drive Current", currentLF_Drive);
-    SmartDashboard.putNumber("FR Drive Current", currentRF_Drive);
-    SmartDashboard.putNumber("RL Drive Current", currentRL_Drive);
-    SmartDashboard.putNumber("RR Drive Current", currentRR_Drive);
-
     //Drive Motor Encoders
     /*SmartDashboard.putNumber("FL Encoder Pos", Constants.Motors.DRIVE_FRONT_LEFT.getEncoder().getPosition());
     SmartDashboard.putNumber("FR Encoder Pos", Constants.Motors.DRIVE_FRONT_RIGHT.getEncoder().getPosition());

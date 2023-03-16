@@ -25,7 +25,6 @@ public final class Constants {
    */
 
   public static final Pigeon2 gyro = new Pigeon2(14);
-  public static final PowerDistribution revPDH = new PowerDistribution(9, ModuleType.kRev);
 
   public static final class CanConstants {
     //FRONT LEFT MODULE
