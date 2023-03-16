@@ -13,8 +13,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
-  public static final SystemMap SystemMap = RobotContainer.ConfigureSystem(new SystemMap());
-
   public static final Pigeon2 gyro = new Pigeon2(14);
 
   public static final class CANCoders {
@@ -117,12 +115,10 @@ public final class Constants {
     public static final CANSparkMax ANGLE_BACK_LEFT = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
     public static final CANSparkMax ANGLE_BACK_RIGHT = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    //intake
-    public static final CANSparkMax INTAKE_MOTOR = new CANSparkMax(19, CANSparkMaxLowLevel.MotorType.kBrushless);
-
-    //Gripper
-    public static final CANSparkMax GRIPPER_ROTATE = new CANSparkMax(22, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax GRIPPER = new CANSparkMax(23, CANSparkMaxLowLevel.MotorType.kBrushless);
+    //Arm
+    public static final CANSparkMax ARM_LEAD = new CANSparkMax(16, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax ARM_FOLLOWER = new CANSparkMax(17, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax EXTEND = new CANSparkMax(18, CANSparkMaxLowLevel.MotorType.kBrushless);
   }
 
   public static final class Joysticks {
@@ -143,7 +139,6 @@ public final class Constants {
     public static final JoystickButton RIGHT_JOYSTICK = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 13);
     public static final JoystickButton LEFT_STICK = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 14);
     public static final JoystickButton RIGHT_STICK = new JoystickButton(Joysticks.OPERATOR_CONTROLLER, 15);
-    //public static final POVButton DPAD_UP = new POVButton(Joysticks.OPERATOR_CONTROLLER, 0);
    
     //Driver Buttons
     public static final JoystickButton DRIVER_RIGHT_BUMPER = new JoystickButton(Joysticks.DRIVE_CONTROLLER, XboxController.Button.kRightBumper.value); 
@@ -155,9 +150,6 @@ public final class Constants {
   }
 
   public static class PneumaticsConstants{
-    public static final int kreversechannel = 8;
-    public static final int kforwardchannel = 15;
+    public static final int channel = 8;
   }
-
-
 }

@@ -13,6 +13,7 @@ public class Limelight {
         distance = target.tx;
         SmartDashboard.putNumber("Distance", distance);
     }
+    
 //Limelight wont be centored so do math later when robot built, im sick and have bad brain fog get off my back for english
     public static class Target {
         public double tx;
@@ -113,15 +114,4 @@ public class Limelight {
     ret[3] = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetSkew").getDouble(0.0);
     return ret;
   }
-
-  public static void DisplayDiagnostics() {
-    if (frc.robot.Constants.SystemMap.LimelighteSubsystem.DiagnosticLevel == 0) return;
-    
-    SmartDashboard.putNumber("tx", LimelightHelpers.getTX("limelight"));
-    SmartDashboard.putNumber("ty", LimelightHelpers.getTY("limelight"));
-    SmartDashboard.putNumber("ta", LimelightHelpers.getTA("limelight"));
-    SmartDashboard.putBoolean("tv", LimelightHelpers.getTV("limelight"));
-    SmartDashboard.putNumber("tagID", LimelightHelpers.getFiducialID("limelight"));
-  }
- 
 }
