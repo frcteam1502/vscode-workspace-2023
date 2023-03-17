@@ -25,14 +25,14 @@ public class ArmSubsystem extends SubsystemBase {
   private double goalExtend = 0;
   private double goalRotate = 0;
 
-  private final double MAX_ROTATE = 95; //TODO: Change
+  private final double MAX_ROTATE = 120; //TODO: Change
   private final double MIN_ROTATE = -5;
   private final double MAX_EXTEND = 44.7;
   private final double DEGREES_PER_ROTATION = 360 / 28.5; 
-  private final double MAX_ROTATE_FEEDFORWARD = 0; //TODO: get actual value
-  private final double ROTATE_CHANGE = .5; 
+  private final double MAX_ROTATE_FEEDFORWARD = .06; //TODO: increase?
+  private final double ROTATE_CHANGE = .3; 
   private final double EXTEND_CHANGE = .1;
-  private final double MAX_ROTATION_SPEED = .5; //TODO: too high/low?
+  private final double MAX_ROTATION_SPEED = .08;
 
   //Test points in order of {Angle position, extend position}
   private final double[][] positionTable = 
@@ -68,9 +68,10 @@ public class ArmSubsystem extends SubsystemBase {
     rotatePID.setFeedbackDevice(rotateEncoder);
     extendPID.setFeedbackDevice(extendEncoder);
 
-    rotatePID.setP(0.1); //TODO: Get PID values
+    rotatePID.setP(.2); //TODO: Get PID values
     rotatePID.setI(0);
     rotatePID.setD(0);
+    rotatePID.setFF(MAX_ROTATE_FEEDFORWARD);
     rotatePID.setOutputRange(-MAX_ROTATION_SPEED, MAX_ROTATION_SPEED);
 
     extendPID.setP(0.1);
@@ -218,7 +219,7 @@ public class ArmSubsystem extends SubsystemBase {
    * @return whether or not the current angle is within our alloted range to begin extending
    */
   public boolean isWithinExtendRange(double currentAngle) {
-    final double range = 7;
+    final double range = 10;
     return (currentAngle >= goalRotate - range && currentAngle <= goalRotate + range);
   }
 

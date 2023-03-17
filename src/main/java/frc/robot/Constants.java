@@ -150,6 +150,6 @@ public final class Constants {
   }
 
   public static class PneumaticsConstants{
-    public static final int channel = 8;
+    public static final int channel = 0;
   }
 }
