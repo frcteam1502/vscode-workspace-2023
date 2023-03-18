@@ -7,9 +7,10 @@ import edu.wpi.first.wpilibj.simulation.PDPSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Joysticks;
+import frc.robot.IBrownOutDetector;
 import frc.robot.Robot;
 
-public class PdpSubsystem extends SubsystemBase {
+public class PdpSubsystem extends SubsystemBase implements IBrownOutDetector {
     PowerDistribution m_pdp;
     PDPSim m_simPdp;
 
@@ -23,6 +24,7 @@ public class PdpSubsystem extends SubsystemBase {
     }
 
     double voltage = 0;
+    double minVoltage = 13.0;
     double totalCurrent = 0;
     double totalPower = 0;
     double totalEnergy = 0;
@@ -32,6 +34,10 @@ public class PdpSubsystem extends SubsystemBase {
     public void periodic() {
         voltage = m_pdp.getVoltage();
         SmartDashboard.putNumber("V (bat)", voltage);
+        if (minVoltage > voltage) {
+            minVoltage = voltage;
+        }
+        SmartDashboard.putNumber("V (min)", minVoltage);
 
         // Get the total current of all channels.
         totalCurrent = m_pdp.getTotalCurrent();
@@ -39,15 +45,26 @@ public class PdpSubsystem extends SubsystemBase {
 
         // Get the total power of all channels.
         // Power is the bus voltage multiplied by the current with the units Watts.
-        totalPower = m_pdp.getTotalPower();
+        var reportedPower = m_pdp.getTotalPower(); // 0 during sim / teleop ??
+        if (reportedPower > 1.0) {
+            totalPower = reportedPower;
+        } else {
+            totalPower = totalCurrent * voltage;
+        }
         SmartDashboard.putNumber("Total Power (W)", totalPower);
         
         energySum += totalPower * 0.02; // may be equal to getTotalEnergy() -- not tested
         batteryEnergy -= energySum;
         // Get the total energy of all channels.
         // Energy is the power summed over time with units Joules.
-        totalEnergy = m_pdp.getTotalEnergy();  // 0 during sim ??
+        var reportedEnergy = m_pdp.getTotalEnergy();  // 0 during sim / teleop ??
+        if (reportedEnergy > 1.0) {
+            totalEnergy = reportedEnergy;
+        } else {
+            totalEnergy = energySum;
+        }
         SmartDashboard.putNumber("Total Energy (J)", totalEnergy);
+        SmartDashboard.putNumber("Temperature (C)", m_pdp.getTemperature());
         
         SmartDashboard.putData(m_pdp);
 
@@ -55,16 +72,19 @@ public class PdpSubsystem extends SubsystemBase {
         // see https://docs.wpilib.org/en/stable/docs/software/roborio-info/roborio-brownouts.html for more brownout info
 
         // From earlier commit [lesserc]
-        var currentLF_Drive = m_pdp.getCurrent(0);
-        var currentRF_Drive = m_pdp.getCurrent(19);
-        var currentRL_Drive = m_pdp.getCurrent(2);
+        /*
+         * 
+         var currentLF_Drive = m_pdp.getCurrent(0);
+         var currentRF_Drive = m_pdp.getCurrent(19);
+         var currentRL_Drive = m_pdp.getCurrent(2);
         var currentRR_Drive = m_pdp.getCurrent(17);
-    
+        
         //Drive Motor Currents
         SmartDashboard.putNumber("FL Drive Current", currentLF_Drive);
         SmartDashboard.putNumber("FR Drive Current", currentRF_Drive);
         SmartDashboard.putNumber("RL Drive Current", currentRL_Drive);
         SmartDashboard.putNumber("RR Drive Current", currentRR_Drive);
+        */
     
     }
     
@@ -106,4 +126,20 @@ public class PdpSubsystem extends SubsystemBase {
 
         batteryVoltage -= (batteryEnergyStart - batteryEnergy)/batteryEnergyStart/5000.0;
     }
+
+    double minBrownout = 7.5;
+
+    @Override
+    public Boolean HasBrownout() { // means "needs limiting", slew or total??
+        if (voltage < 7.5) {
+            if (minBrownout > voltage) {
+                minBrownout = voltage;
+                return true;
+            }
+            return false;
+        } else {
+            minBrownout = 7.5;
+            return false;
+        }  
+    }  
 }
