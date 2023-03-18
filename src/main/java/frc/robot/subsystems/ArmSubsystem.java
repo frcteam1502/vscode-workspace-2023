@@ -20,8 +20,6 @@ public class ArmSubsystem extends SubsystemBase {
   private final RelativeEncoder rotateEncoder;
   private final RelativeEncoder extendEncoder;
 
-  private final DigitalInput limit = new DigitalInput(21);
-
   private double goalExtend = 0;
   private double goalRotate = 0;
 
@@ -134,19 +132,22 @@ public class ArmSubsystem extends SubsystemBase {
    */
   public void calculateGoalExtend(double currentAngle) {
     if(isBetweenPoints(positionTable[0], positionTable[1], currentAngle)) {
+      goalExtend = 0;
       if(isWithinExtendRange(rotateEncoder.getPosition())) 
       goalExtend = calcBetweenPoints(positionTable[0], positionTable[1], currentAngle);
-      //toLimitSwitch();
     } 
     else if(isBetweenPoints(positionTable[1], positionTable[2], currentAngle)) {
+      goalExtend = 0;
       if(isWithinExtendRange(rotateEncoder.getPosition())) 
       goalExtend = calcBetweenPoints(positionTable[1], positionTable[2], currentAngle);
     } 
     else if(isBetweenPoints(positionTable[2], positionTable[3], currentAngle)) {
+      goalExtend = 0;
       if(isWithinExtendRange(rotateEncoder.getPosition())) 
       goalExtend = calcBetweenPoints(positionTable[2], positionTable[3], currentAngle);
     } 
     else if(isBetweenPoints(positionTable[3], positionTable[4], currentAngle)) {
+      goalExtend = 0;
       if(isWithinExtendRange(rotateEncoder.getPosition())) 
       goalExtend = calcBetweenPoints(positionTable[3], positionTable[4], currentAngle);
     } 
@@ -170,17 +171,6 @@ public class ArmSubsystem extends SubsystemBase {
     double slope = (position2[1] - position1[1])/(position2[0] - position1[0]);
     double constant = position1[1] - slope * position1[0];
     return slope * currentAngle + constant;
-  }
-
-  /**
-   * Iterates the goalExtension negatively until it reaches the
-   * limit switch. At which point it sets the extend encoder to
-   * 0 thus resetting the position of the encoder and eliminating
-   * drift
-   */
-  public void toLimitSwitch() {
-    if(!limit.get()) goalExtend -= EXTEND_CHANGE;
-    else extendEncoder.setPosition(0);
   }
 
   /**

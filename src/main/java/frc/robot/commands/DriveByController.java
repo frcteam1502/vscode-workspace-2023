@@ -13,7 +13,7 @@ public class DriveByController extends CommandBase {
   //TODO: Setup SlewRateLimiters for fwd and strafe speeds
   private final SlewRateLimiter fwdspeedlimiter = new SlewRateLimiter(1.25);
   private final SlewRateLimiter strafespeedlimiter = new SlewRateLimiter(1.25);
-  private final SlewRateLimiter turnrateLimiter = new SlewRateLimiter(2.5);
+  private final SlewRateLimiter turnrateLimiter = new SlewRateLimiter(2.1);
 
   public DriveByController(DriveTrain drive) {
     this.drive = drive;

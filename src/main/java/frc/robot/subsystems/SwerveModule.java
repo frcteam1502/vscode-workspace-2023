@@ -22,7 +22,7 @@ public class SwerveModule {
   private final CANCoder absEncoder;
 
   private final SparkMaxPIDController drivePIDController;
-  private final PIDController turningPIDController = new PIDController(3, 0, 0);
+  private final PIDController turningPIDController = new PIDController(3.4, 0, 0);
 
   public SwerveModule(CANSparkMax driveMotor, CANSparkMax turnMotor, CANCoder absEncoder, double absOffset, boolean CANCoderDirection) {
     this.driveMotor = driveMotor;
