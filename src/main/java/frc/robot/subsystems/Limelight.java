@@ -55,6 +55,9 @@ public class Limelight {
     String result= "Only 0 and 1 are valid pipelines!";
     if(pipe == 0) result= "April Tag Pipeline";
     else if (pipe == 1) result= "RetroReflector Pipeline";
+    else{
+      result="Light off";
+    }
     return result;
   }
 
