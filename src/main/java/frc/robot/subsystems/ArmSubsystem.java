@@ -25,13 +25,18 @@ public class ArmSubsystem extends SubsystemBase {
   private double goalExtend = 0;
   private double goalRotate = 0;
 
-  private final double MAX_ROTATE = 120; //TODO: Change
-  private final double MIN_ROTATE = -5;
-  private final double MAX_EXTEND = 44.7;
+  //Rotation bounds
+  private final double MAX_ROTATE = 115;
+  private final double MIN_ROTATE = -7;
+
+  private final double MAX_EXTEND = 57;
+
   private final double DEGREES_PER_ROTATION = 360 / 28.5; 
   private final double MAX_ROTATE_FEEDFORWARD = .06; //TODO: increase?
+  
   private final double ROTATE_CHANGE = .3; 
   private final double EXTEND_CHANGE = .1;
+
   private final double MAX_ROTATION_SPEED = .08;
 
   //Test points in order of {Angle position, extend position}
@@ -39,9 +44,9 @@ public class ArmSubsystem extends SubsystemBase {
   {
     {0, 0}, //Straight down position
     {20, 0}, //Enter "To limit switch" section
-    {30, 11}, //Ground score
-    {45, 22}, //Medium score
-    {90, 44}  //High score
+    {25, 23}, //Ground score
+    {85, 1.2}, //Medium score
+    {103.5, 54}  //High score
   };
   
   public ArmSubsystem() {
@@ -68,13 +73,13 @@ public class ArmSubsystem extends SubsystemBase {
     rotatePID.setFeedbackDevice(rotateEncoder);
     extendPID.setFeedbackDevice(extendEncoder);
 
-    rotatePID.setP(.2); //TODO: Get PID values
+    rotatePID.setP(.25); //TODO: Get PID values
     rotatePID.setI(0);
     rotatePID.setD(0);
     rotatePID.setFF(MAX_ROTATE_FEEDFORWARD);
     rotatePID.setOutputRange(-MAX_ROTATION_SPEED, MAX_ROTATION_SPEED);
 
-    extendPID.setP(0.1);
+    extendPID.setP(0.15);
     extendPID.setI(0);
     extendPID.setD(0);
   }
@@ -129,6 +134,8 @@ public class ArmSubsystem extends SubsystemBase {
    */
   public void calculateGoalExtend(double currentAngle) {
     if(isBetweenPoints(positionTable[0], positionTable[1], currentAngle)) {
+      if(isWithinExtendRange(rotateEncoder.getPosition())) 
+      goalExtend = calcBetweenPoints(positionTable[0], positionTable[1], currentAngle);
       //toLimitSwitch();
     } 
     else if(isBetweenPoints(positionTable[1], positionTable[2], currentAngle)) {
@@ -219,7 +226,7 @@ public class ArmSubsystem extends SubsystemBase {
    * @return whether or not the current angle is within our alloted range to begin extending
    */
   public boolean isWithinExtendRange(double currentAngle) {
-    final double range = 10;
+    final double range = 15;
     return (currentAngle >= goalRotate - range && currentAngle <= goalRotate + range);
   }
 
