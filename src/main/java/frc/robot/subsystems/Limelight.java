@@ -3,12 +3,17 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 
-public class Limelight {
-    double distance;
+public class Limelight extends SubsystemBase{
+
+static int pipe=0;
+static double distance;
+
    
-    public void findDistance(){
+   
+    public static void findDistance(){
         Target target = getTarget();
         distance = target.tx;
         SmartDashboard.putNumber("Distance", distance);
@@ -46,13 +51,18 @@ public class Limelight {
 
   // April Tag Things
 
-
-  public void setPipeline(int pipe){
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipe);
+  public static void changePipeline(){
+  pipe++;
+  badPipeline(pipe);
+  setPipeline(pipe);
   }
 
-  public String whatPipeline(int pipe){
-    String result= "Only 0 and 1 are valid pipelines!";
+  public static void setPipeline(int pipe){
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipe);    
+  }
+
+  public static String whatPipeline(int pipe){
+    String result= "Only 0 and 1 and 2 are valid pipelines!";
     if(pipe == 0) result= "April Tag Pipeline";
     else if (pipe == 1) result= "RetroReflector Pipeline";
     else{
@@ -61,6 +71,9 @@ public class Limelight {
     return result;
   }
 
+  public static void badPipeline(int pipe){
+    if(pipe >2) pipe = 0;
+  }
   /**
    * Outputs the primary in-view April Tag seen by the robot
    * PIPELINE MUST BE SET TO 0
