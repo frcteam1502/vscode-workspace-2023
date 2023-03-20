@@ -10,17 +10,16 @@ public class SimpleBalance extends SequentialCommandGroup {
   public SimpleBalance(DriveTrain drive) {
     addCommands(
         // Deposite the game element
-        new ParallelRaceGroup(new Move(drive,.5,0), new WaitCommand(.25)),
-        new ParallelRaceGroup(new Move(drive, -.1, 0), new WaitCommand(1.5)),
+        new ParallelRaceGroup(new Move(drive,-.5, 0), new WaitCommand(.25)),
 
-        // Traverse the Charging Station
-        new ParallelRaceGroup(new Move(drive, .25, 0), new WaitCommand(4))// ,
+        //Traverse the charge station
+        new ParallelRaceGroup(new Move(drive, .3, 0), new WaitCommand(2)),
+        new ParallelRaceGroup(new Move(drive, .5, 0), new WaitCommand(2.1)),
 
-    // //Drive backwards onto balance
-    // new ParallelRaceGroup(new Move(drive, -.1, 0), new WaitCommand(3)),
+        //Drive backwards onto balance
+        new ParallelRaceGroup(new Move(drive, -.3, 0), new WaitCommand(2.44)),
 
-    // new AutoBalance(drive)
- // new AutoBalance(drive)//,
+        new ParallelRaceGroup(new AutoBalance(drive), new WaitCommand(7))
     );
   }
 }

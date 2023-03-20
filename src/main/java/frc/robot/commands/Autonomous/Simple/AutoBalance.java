@@ -14,7 +14,7 @@ public class AutoBalance extends CommandBase {
 
   private final SlewRateLimiter balanceSlew = new SlewRateLimiter(.09);
 
-  private final double MAXSPEED = .13;
+  private final double MAXSPEED = .15;
 
   private double lastPose = 0;
 
@@ -29,7 +29,7 @@ public class AutoBalance extends CommandBase {
 
   @Override
   public void execute() {
-    drive.drive(balanceSlew.calculate(MathUtil.clamp(balancePID.calculate(drive.getRoll())*4, -MAXSPEED, MAXSPEED)), 0, 0, true);
+    drive.drive(balanceSlew.calculate(MathUtil.clamp(balancePID.calculate(drive.getRoll())*5, -MAXSPEED, MAXSPEED)), 0, 0, true);
     if(Math.abs(drive.getRoll() - lastPose) > .5) {
       drive.drive(0, 0, 0, true);
       Timer.delay(1.1);

@@ -97,7 +97,7 @@ public final class Constants {
 
     public static final double MODULE_DRIVE_PID_CONTROLLER_P = 1.0;
 
-    public static final double MAX_MODULE_ROTATION_RADIANS_PER_SECOND = Math.PI;
+    public static final double MAX_MODULE_ROTATION_RADIANS_PER_SECOND = Math.PI/2;
 
     public static final double MAX_MODULE_ROTATION_RADIANS_PER_SECOND_PER_SECOND = Math.PI;
   }
