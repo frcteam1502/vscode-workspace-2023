@@ -1,9 +1,8 @@
-package frc.robot.commands.Autonomous.Selection;
+package frc.robot.commands.Autonomous;
 
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.Autonomous.Simple.*;
 import frc.robot.subsystems.DriveTrain;
 
 public class SimpleBalance extends SequentialCommandGroup {

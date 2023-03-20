@@ -1,4 +1,4 @@
-package frc.robot.commands.Autonomous.Simple;
+package frc.robot.commands.Autonomous;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;

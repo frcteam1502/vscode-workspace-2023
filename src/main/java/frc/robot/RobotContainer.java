@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.XboxButtons;
 import frc.robot.commands.ArmByController;
 import frc.robot.commands.DriveByController;
-import frc.robot.commands.Autonomous.Selection.SimpleBalance;
+import frc.robot.commands.Autonomous.SimpleBalance;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.GripperSubsystem;
@@ -24,7 +24,8 @@ public class RobotContainer {
   //Autonomous Commands
   private final SendableChooser<Command> sendableChooser = new SendableChooser<>();
   private final SimpleBalance simpleBalance = new SimpleBalance(driveSubsystem);
-  private final HashMap<String, Command> twoElement = new HashMap<>();
+  private final HashMap<String, Command> A1 = new HashMap<>();
+  private final HashMap<String, Command> Temp = new HashMap<>();
 
   
   public RobotContainer() {
@@ -53,31 +54,30 @@ public class RobotContainer {
   private void setUpSendableChooser() {
     createAutoHashMaps();
     sendableChooser.setDefaultOption("Balance", simpleBalance);
-    //sendableChooser.addOption("2 Element", driveSubsystem.buildAuto(twoElement, "twoElement"));
+    sendableChooser.addOption("1A", driveSubsystem.buildAuto(A1, "1A"));
+    sendableChooser.addOption("Test", driveSubsystem.buildAuto(Temp, "Temp"));
     SmartDashboard.putData(sendableChooser);
   }
 
   private void createAutoHashMaps() {
-    //twoElement
-    // //sequential
-    // twoElement.put("Close Gripper", new InstantCommand(gripperSubsystem::turnOn)); //Close the gripper
-    // twoElement.put("Wait", new WaitCommand(.5)); //Let the gripper close
-    // twoElement.put("To Top", new InstantCommand(armSubsystem::rotateToHigh)); //Move arm to high
+    //1A
+    //sequential
+    A1.put("Close Gripper", new InstantCommand(gripperSubsystem::turnOn).andThen(new WaitCommand(.1))); //Close the gripper
+    A1.put("To Top", new InstantCommand(armSubsystem::rotateToHigh).andThen(new WaitCommand(1.5))); //Move arm to high
+    A1.put("Open Gripper", new InstantCommand(gripperSubsystem::turnOff).andThen(new WaitCommand(.2))); //Open the gripper and drop cone
 
-    // //sequential
-    // twoElement.put("Wait", new WaitCommand(.5)); //Let arm get to high
+    //Marker
+    A1.put("To Low", new InstantCommand(armSubsystem::rotateToLow)); //rotate arm to low
 
-    // //parallel deadline
-    // twoElement.put("Wait", new WaitCommand(1)); //Wait while gripper places
-    // twoElement.put("Open Gripper", new InstantCommand(gripperSubsystem::turnOff)); //Open the gripper and drop cone
+    //sequential
+    A1.put("Wait", new WaitCommand(.1)); //Wait before closing gripper
+    A1.put("Close Gripper", new InstantCommand(gripperSubsystem::turnOn).andThen(new WaitCommand(1))); //Close the gripper and grab cube
 
-    // //sequential
-    // twoElement.put("To Low", new InstantCommand(armSubsystem::rotateToLow)); //rotate arm to low
+    //Marker
+    A1.put("To High", new InstantCommand(armSubsystem::rotateToHigh)); //rotate arm to High
 
-    // //parallel deadline
-    // twoElement.put("Close Gripper", new InstantCommand(gripperSubsystem::turnOn)); //Close the gripper and grab cube
-    // twoElement.put("Wait", new WaitCommand(1)); //Wait while gripper grabs piece
-    
+    //Sequential
+    A1.put("Open Gripper", new InstantCommand(gripperSubsystem::turnOff).andThen(new WaitCommand(.2))); //Open the gripper and drop cube
   }
 
   public Command getAutonomousCommand() {
