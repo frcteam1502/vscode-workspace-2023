@@ -8,14 +8,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.DriveTrain;
 
+import edu.wpi.first.cameraserver.CameraServer;
+
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
 
-
   @Override
   public void robotInit() {
+
+    CameraServer.startAutomaticCapture();
+
     m_robotContainer = new RobotContainer();
+
     Constants.Motors.DRIVE_FRONT_LEFT.setIdleMode(IdleMode.kBrake);
     Constants.Motors.DRIVE_FRONT_RIGHT.setIdleMode(IdleMode.kBrake);
     Constants.Motors.DRIVE_BACK_LEFT.setIdleMode(IdleMode.kBrake);
