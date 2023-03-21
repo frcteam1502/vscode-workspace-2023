@@ -40,8 +40,8 @@ public class DriveByController extends CommandBase {
       this.brakeRatio = brakeRatio;
       this.maxRatio = maxRatio;
       forwardSpeedlimiter = new AdaptiveSlewRateLimiter(slewRate);
-      strafespeedlimiter = new AdaptiveSlewRateLimiter(slewRate);
-      turnrateLimiter = new AdaptiveSlewRateLimiter(slewRate);
+      strafespeedlimiter = new AdaptiveSlewRateLimiter(slewRate * .95);
+      turnrateLimiter = new AdaptiveSlewRateLimiter(slewRate * 1.8);
     }
     
     public SpeedCommand GetSpeedCommand(double forward, double strafe, double rotation, Boolean brake) {
@@ -72,7 +72,7 @@ public class DriveByController extends CommandBase {
 
     void ChangeSlewRate(double rate) {
       forwardSpeedlimiter.ChangeRate(rate);
-      strafespeedlimiter.ChangeRate(rate);
+      strafespeedlimiter.ChangeRate(rate * .95);
       turnrateLimiter.ChangeRate(rate * 1.8);
     }
   }
@@ -99,7 +99,7 @@ public class DriveByController extends CommandBase {
 
   public DriveByController(DriveTrain drive, IBrownOutDetector brownOutDetector) {
     this.drive = drive;
-    this.speedController = new AdaptiveSpeedController(brownOutDetector, 3.0, 0.5, Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND);
+    this.speedController = new AdaptiveSpeedController(brownOutDetector, 3.0, 0.3, Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND);
     addRequirements(drive);
   }
 
@@ -112,7 +112,7 @@ public class DriveByController extends CommandBase {
       Joysticks.DRIVE_CONTROLLER.getLeftY(), // Forward
       Joysticks.DRIVE_CONTROLLER.getLeftX(), // Strafe
       Joysticks.DRIVE_CONTROLLER.getRightX(), // Rotate
-      Constants.XboxButtons.DRIVER_RIGHT_BUMPER.getAsBoolean()); // brake
+      Constants.XboxButtons.DRIVER_LEFT_BUMPER.getAsBoolean()); // brake
   
     drive.drive(-speedCommand.forwardSpeed, -speedCommand.strafeSpeed, -speedCommand.rotationSpeed, true);
   }

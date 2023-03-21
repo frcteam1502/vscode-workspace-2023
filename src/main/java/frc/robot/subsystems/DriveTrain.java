@@ -28,12 +28,13 @@ import frc.robot.Constants;
 import frc.robot.Constants.Motors;
 
 public class DriveTrain extends SubsystemBase{
-  public double forwardCommand    = 0;
-  public double strafeCommand = 0;
+  
 
   public boolean isTurning = false;
   public double targetAngle = 0.0;
   public double turnCommand = 0.0;
+  public double forwardCommand = 0;
+  public double strafeCommand = 0;
 
   private final SwerveModule frontLeft = new SwerveModule(
     Motors.DRIVE_FRONT_LEFT, Motors.ANGLE_FRONT_LEFT, 
@@ -97,7 +98,7 @@ public class DriveTrain extends SubsystemBase{
     else turnCommand = (targetAngle - gyro.getYaw()) * Constants.DriveConstants.GO_STRAIGHT_GAIN;
 
     forwardCommand = xSpeed;
-    turnCommand = ySpeed;
+    strafeCommand = ySpeed;
 
     var swerveModuleStates =
         kinematics.toSwerveModuleStates(
