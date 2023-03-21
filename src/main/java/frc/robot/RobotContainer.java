@@ -62,6 +62,9 @@ public class RobotContainer {
   }
 
   private void createAutoHashMaps() {
+    //Temp
+    Temp.put("Wait", new WaitCommand(5));
+    
     //1A
     //sequential
     A1.put("Close Gripper", new InstantCommand(gripperSubsystem::turnOn).andThen(new WaitCommand(.1))); //Close the gripper

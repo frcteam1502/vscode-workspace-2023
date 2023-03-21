@@ -29,6 +29,7 @@ import frc.robot.Constants.Motors;
 
 public class DriveTrain extends SubsystemBase{
   
+  public static boolean isTeleOp = false;
 
   public boolean isTurning = false;
   public double targetAngle = 0.0;
@@ -88,17 +89,20 @@ public class DriveTrain extends SubsystemBase{
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    if(Math.abs(rot) > 0){
-      isTurning = true;
-      targetAngle = gyro.getYaw();
+    if(isTeleOp) {
+      if(Math.abs(rot) > 0){
+        isTurning = true;
+        targetAngle = gyro.getYaw();
+      } 
+      else if(rot == 0 && isTurning) isTurning = false;
+
+      if(isTurning) turnCommand = rot;
+      else turnCommand = (targetAngle - gyro.getYaw()) * Constants.DriveConstants.GO_STRAIGHT_GAIN;
+
+      forwardCommand = xSpeed;
+      strafeCommand = ySpeed;
     }
-    else if(rot == 0 && isTurning) isTurning = false;
-
-    if(isTurning) turnCommand = rot;
-    else turnCommand = (targetAngle - gyro.getYaw()) * Constants.DriveConstants.GO_STRAIGHT_GAIN;
-
-    forwardCommand = xSpeed;
-    strafeCommand = ySpeed;
+    
 
     var swerveModuleStates =
         kinematics.toSwerveModuleStates(
