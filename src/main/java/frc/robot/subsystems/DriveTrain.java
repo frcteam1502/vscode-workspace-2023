@@ -28,9 +28,12 @@ import frc.robot.Constants;
 import frc.robot.Constants.Motors;
 
 public class DriveTrain extends SubsystemBase{
-  public static double fwdSpeedCmd    = 0;
-  public static double strafeSpeedCmd = 0;
-  public static double turnSpeedCmd   = 0;
+  public double forwardCommand    = 0;
+  public double strafeCommand = 0;
+
+  public boolean isTurning = false;
+  public double targetAngle = 0.0;
+  public double turnCommand = 0.0;
 
   private final SwerveModule frontLeft = new SwerveModule(
     Motors.DRIVE_FRONT_LEFT, Motors.ANGLE_FRONT_LEFT, 
@@ -84,10 +87,22 @@ public class DriveTrain extends SubsystemBase{
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    if(Math.abs(rot) > 0){
+      isTurning = true;
+      targetAngle = gyro.getYaw();
+    }
+    else if(rot == 0 && isTurning) isTurning = false;
+
+    if(isTurning) turnCommand = rot;
+    else turnCommand = (targetAngle - gyro.getYaw()) * Constants.DriveConstants.GO_STRAIGHT_GAIN;
+
+    forwardCommand = xSpeed;
+    turnCommand = ySpeed;
+
     var swerveModuleStates =
         kinematics.toSwerveModuleStates(
             fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getGyroRotation2d())
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turnCommand, getGyroRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND);
   
@@ -149,16 +164,16 @@ public class DriveTrain extends SubsystemBase{
 
   public double getVelocity() {
     return Math.sqrt(
-      Math.pow(ChassisSpeeds.fromFieldRelativeSpeeds(fwdSpeedCmd, strafeSpeedCmd, turnSpeedCmd, getGyroRotation2d()).vxMetersPerSecond, 2) + 
-      Math.pow(ChassisSpeeds.fromFieldRelativeSpeeds(fwdSpeedCmd, strafeSpeedCmd, turnSpeedCmd, getGyroRotation2d()).vyMetersPerSecond, 2)
+      Math.pow(ChassisSpeeds.fromFieldRelativeSpeeds(forwardCommand, strafeCommand, turnCommand, getGyroRotation2d()).vxMetersPerSecond, 2) + 
+      Math.pow(ChassisSpeeds.fromFieldRelativeSpeeds(forwardCommand, strafeCommand, turnCommand, getGyroRotation2d()).vyMetersPerSecond, 2)
     );
   }
 
   public Rotation2d getHeading() {
     return new Rotation2d(
       Math.atan2(
-        Math.pow(ChassisSpeeds.fromFieldRelativeSpeeds(fwdSpeedCmd, strafeSpeedCmd, turnSpeedCmd, getGyroRotation2d()).vyMetersPerSecond, 2), 
-        Math.pow(ChassisSpeeds.fromFieldRelativeSpeeds(fwdSpeedCmd, strafeSpeedCmd, turnSpeedCmd, getGyroRotation2d()).vxMetersPerSecond, 2)
+        Math.pow(ChassisSpeeds.fromFieldRelativeSpeeds(forwardCommand, strafeCommand, turnCommand, getGyroRotation2d()).vyMetersPerSecond, 2), 
+        Math.pow(ChassisSpeeds.fromFieldRelativeSpeeds(forwardCommand, strafeCommand, turnCommand, getGyroRotation2d()).vxMetersPerSecond, 2)
       )
     );
   }

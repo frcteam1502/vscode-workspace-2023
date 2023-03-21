@@ -1,43 +1,120 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.IBrownOutDetector;
 import frc.robot.Constants.Joysticks;
 import frc.robot.subsystems.DriveTrain;
 
 public class DriveByController extends CommandBase {
   private final DriveTrain drive;
+  private final AdaptiveSpeedController speedController;
   
-  //TODO: Setup SlewRateLimiters for fwd and strafe speeds
-  private final SlewRateLimiter fwdspeedlimiter = new SlewRateLimiter(1.25);
-  private final SlewRateLimiter strafespeedlimiter = new SlewRateLimiter(1.25);
-  private final SlewRateLimiter turnrateLimiter = new SlewRateLimiter(2.1);
+  class SpeedCommand {
+    public double forwardSpeed;
+    public double strafeSpeed;
+    public double rotationSpeed;
 
-  public DriveByController(DriveTrain drive) {
-    this.drive = drive;
-    addRequirements(drive);
+    public SpeedCommand(double forwardSpeed, double strafeSpeed, double rotationSpeed) {
+      this.forwardSpeed = forwardSpeed;
+      this.strafeSpeed = strafeSpeed;
+      this.rotationSpeed = rotationSpeed;
+    }
+  }
+
+  class AdaptiveSpeedController {
+    private final IBrownOutDetector brownOutDetector;
+    private double slewRate;
+    private double brakeRatio;
+    private double maxRatio;
+    private AdaptiveSlewRateLimiter forwardSpeedlimiter;
+    private AdaptiveSlewRateLimiter strafespeedlimiter;
+    private AdaptiveSlewRateLimiter turnrateLimiter;
+
+    public AdaptiveSpeedController(IBrownOutDetector brownOutDetector, double slewRate, double brakeRatio, double maxRatio) {
+      this.brownOutDetector = brownOutDetector;
+      this.slewRate = slewRate;
+      this.brakeRatio = brakeRatio;
+      this.maxRatio = maxRatio;
+      forwardSpeedlimiter = new AdaptiveSlewRateLimiter(slewRate);
+      strafespeedlimiter = new AdaptiveSlewRateLimiter(slewRate);
+      turnrateLimiter = new AdaptiveSlewRateLimiter(slewRate);
+    }
     
+    public SpeedCommand GetSpeedCommand(double forward, double strafe, double rotation, Boolean brake) {
+      var ratio = maxRatio;
+      if (brake) {
+        ratio *= brakeRatio;
+      }
+      var forwardSpeed = forwardSpeedlimiter.calculate(forward) * ratio;
+      var strafeSpeed = strafespeedlimiter.calculate(strafe) * ratio;
+      var rot = turnrateLimiter.calculate(rotation) * ratio;
+      
+      CheckBrownouts();
+
+      return new SpeedCommand(forwardSpeed, strafeSpeed, rot);
+    }
+
+    void CheckBrownouts() {
+      if (brownOutDetector.HasBrownout()) {
+        if (slewRate > 2.0) {
+          ChangeSlewRate(slewRate -= 0.1);
+        } else if (maxRatio > 0.5) {
+          maxRatio -= 0.05;
+        }
+      }
+      SmartDashboard.putNumber("SlewRate", slewRate);
+      SmartDashboard.putNumber("Max Ratio", maxRatio);
+    }
+
+    void ChangeSlewRate(double rate) {
+      forwardSpeedlimiter.ChangeRate(rate);
+      strafespeedlimiter.ChangeRate(rate);
+      turnrateLimiter.ChangeRate(rate * 1.8);
+    }
+  }
+
+  // since SlewRateLimiters can't change their rate, we will swap them out
+  class AdaptiveSlewRateLimiter {
+    private SlewRateLimiter speedLimiter;
+    private double value;
+
+    public AdaptiveSlewRateLimiter(double rateLimit) {
+      speedLimiter = new SlewRateLimiter(rateLimit);
+    }
+    
+    public double calculate(double input){
+      value = speedLimiter.calculate(MathUtil.applyDeadband(input, 0.1));
+      return value;
+    }
+    
+    public void ChangeRate(double rate) {
+      speedLimiter = new SlewRateLimiter(rate);
+      speedLimiter.reset(value);
+    }
+  }
+
+  public DriveByController(DriveTrain drive, IBrownOutDetector brownOutDetector) {
+    this.drive = drive;
+    this.speedController = new AdaptiveSpeedController(brownOutDetector, 3.0, 0.5, Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND);
+    addRequirements(drive);
   }
 
   @Override
+  public void initialize() {}
+
+  @Override
   public void execute() {
-
-    final var fwdSpeed =
-        -fwdspeedlimiter.calculate(MathUtil.applyDeadband(Joysticks.DRIVE_CONTROLLER.getLeftY(), 0.1))
-            * Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND;
-
-    final var strafeSpeed =
-        -strafespeedlimiter.calculate(MathUtil.applyDeadband(Joysticks.DRIVE_CONTROLLER.getLeftX(), 0.1))
-            * Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND;
-
-    final var rot =
-        -turnrateLimiter.calculate(MathUtil.applyDeadband(Joysticks.DRIVE_CONTROLLER.getRightX(), 0.1))
-            * Constants.DriveConstants.MAX_ROTATION_RADIANS_PER_SECOND;
-    
-    if(Constants.XboxButtons.DRIVER_LEFT_BUMPER.getAsBoolean()) drive.drive(fwdSpeed/4, strafeSpeed/4, rot/4, true);
-    else drive.drive(fwdSpeed, strafeSpeed, rot, true);
+    var speedCommand = speedController.GetSpeedCommand(
+      Joysticks.DRIVE_CONTROLLER.getLeftY(), // Forward
+      Joysticks.DRIVE_CONTROLLER.getLeftX(), // Strafe
+      Joysticks.DRIVE_CONTROLLER.getRightX(), // Rotate
+      Constants.XboxButtons.DRIVER_RIGHT_BUMPER.getAsBoolean()); // brake
+  
+    drive.drive(-speedCommand.forwardSpeed, -speedCommand.strafeSpeed, -speedCommand.rotationSpeed, true);
   }
 
   @Override

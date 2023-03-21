@@ -74,6 +74,8 @@ public final class Constants {
 
     public static final double MAX_ROTATION_RADIANS_PER_SECOND = (Math.PI/2);
     public static final double MAX_ROTATION_RADIANS_PER_SECOND_PER_SECOND = Math.PI;
+
+    public static final double GO_STRAIGHT_GAIN = 0.03;
   }
 
   public static final class ModuleConstants {

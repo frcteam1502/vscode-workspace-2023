@@ -14,12 +14,14 @@ import frc.robot.commands.Autonomous.SimpleBalance;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.subsystems.PdpSubsystem;
 
 public class RobotContainer {
   //Subsystems
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   private final GripperSubsystem gripperSubsystem = new GripperSubsystem();
   private final DriveTrain driveSubsystem = new DriveTrain();
+  private final PdpSubsystem pdpSubsystem = new PdpSubsystem();
 
   //Autonomous Commands
   private final SendableChooser<Command> sendableChooser = new SendableChooser<>();
@@ -36,7 +38,7 @@ public class RobotContainer {
   private void configureBindings() {
 
     //Drive
-    driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem)); //USES THE LEFT BUMPER TO SLOW DOWN
+    driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem, pdpSubsystem)); //USES THE LEFT BUMPER TO SLOW DOWN
     Constants.XboxButtons.DRIVER_BUTTON_B.whileTrue(new InstantCommand(driveSubsystem::setToBreak).repeatedly());
     
     //Arm
