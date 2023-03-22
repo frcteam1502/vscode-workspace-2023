@@ -19,6 +19,10 @@ public class DriveTrain extends SubsystemBase{
   public static double strafeSpeedCmd = 0;
   public static double turnSpeedCmd   = 0;
 
+  public static boolean isTurning = false;
+  public static double targetAngle = 0.0;
+  public static double turnCommand = 0.0;
+
   public static double fl_speed = 0;
   public static double fr_speed = 0;
   public static double rl_speed = 0;
@@ -88,10 +92,31 @@ public class DriveTrain extends SubsystemBase{
     strafeSpeedCmd = ySpeed;
     turnSpeedCmd = rot;
 
+    //Check to see if the robot is being commanded to turn.  It is expected that deadband will be applied to turn input before calling drive()
+    if(Math.abs(rot) > 0){
+      //Robot is being commanded to turn, update target angle each loop
+      isTurning = true;
+      targetAngle = gyro.getYaw();
+    }else if((rot == 0) && (isTurning)){
+      //1st time in this loop after rotation command stops, no longer being commanded to turn
+      isTurning = false;
+    }else{
+      //Robot is not being commanded to rotate, do nothing
+    }
+
+    //Check if turn orientation should be maintained
+    if(isTurning){
+      //Use the turn input from the joystick
+      turnCommand = rot;
+    }else{
+      //Joystick input is 0, so apply only enough turn to maintain orientation
+      turnCommand = (targetAngle - gyro.getYaw()) * Constants.DriveConstants.GO_STRAIGHT_GAIN;
+    }
+
     var swerveModuleStates =
         kinematics.toSwerveModuleStates(
             fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getGyroRotation2d())
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turnCommand, getGyroRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND);
     
