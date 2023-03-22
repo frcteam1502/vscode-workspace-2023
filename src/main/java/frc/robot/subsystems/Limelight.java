@@ -61,6 +61,10 @@ static double distance;
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipe);    
   }
 
+  public static int getPipeline() {
+    return pipe;
+  }
+
   public static String whatPipeline(int pipe){
     String result= "Only 0 and 1 and 2 are valid pipelines!";
     if(pipe == 0) result= "April Tag Pipeline";

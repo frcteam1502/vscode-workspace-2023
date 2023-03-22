@@ -67,12 +67,11 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "Wait",
-          "To Low"
+          "Wait"
         ],
-        "executionBehavior": "parallelDeadline",
-        "waitBehavior": "none",
-        "waitTime": 0
+        "executionBehavior": "sequential",
+        "waitBehavior": "after",
+        "waitTime": 5.0
       }
     },
     {

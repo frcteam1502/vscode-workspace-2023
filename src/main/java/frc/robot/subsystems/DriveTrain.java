@@ -25,6 +25,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.Constants.Motors;
 
 public class DriveTrain extends SubsystemBase{
@@ -219,8 +220,8 @@ public class DriveTrain extends SubsystemBase{
     PathPlannerTrajectory toImage = PathPlanner.generatePath(
       new PathConstraints(Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND * 3, 1), 
       new PathPoint(new Translation2d(0, 0), getHeading(), getGyroRotation2d(), getVelocity()),
-      new PathPoint(new Translation2d(1.0, 1.0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0))
-    );//Final PathPoint(poseFromCamera.getTranslation)
+      pointFromLimelight(new Translation2d(Limelight.getTargetPose()[0], Limelight.getTargetPose()[1])) 
+    );
     
     return new PPSwerveControllerCommand(
       toImage, 
@@ -232,13 +233,44 @@ public class DriveTrain extends SubsystemBase{
       this::setDesiredState, // Module states consumer
       true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
       this // Requires this drive subsystem
-    ); //TODO: Fix these PIDControllers
+    );
+  }
+
+  public PathPoint pointFromLimelight(Translation2d imagePose) {
+    double xDistanceFromCenter = 0;
+    double yDistanceFromCenter = 0;
+    double desiredDistanceFromImage = 0;
+
+    if(Limelight.getPipeline() == 0) desiredDistanceFromImage = 1;
+    else if(Limelight.getPipeline() == 1) desiredDistanceFromImage = 2;
+
+    Translation2d goalTranslation = new Translation2d(
+      imagePose.getX() - xDistanceFromCenter, 
+      imagePose.getY() - yDistanceFromCenter - desiredDistanceFromImage);
+    return new PathPoint(goalTranslation, Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0), 0);
+  }
+
+  public void strafe(boolean right) {
+    if(!LimelightHelpers.getTV("Limelight")) {
+      double strafe = .1;
+      if(!right) strafe *= -1;
+      drive(0, strafe, 0, true);
+    }
+    else moveToImage();
+  }
+
+  public void strafeRight() {
+    strafe(true);
+  }
+
+  public void strafeLeft() {
+    strafe(false);
   }
 
   public Command buildAuto(HashMap<String, Command> eventMap, String pathName) {
     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
       pathName, 
-      new PathConstraints(Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND * 3, 1)); //TODO: Find MAX ACCEL
+      new PathConstraints(Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND * 3, 1));
 
     SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
       this::getPose2d, // Pose2d supplier
@@ -250,7 +282,7 @@ public class DriveTrain extends SubsystemBase{
       eventMap,
       true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
       this // The drive subsystem. Used to properly set the requirements of path following commands
-    ); //TODO: Check Drive PIDs. P is good
+    );
     
     return autoBuilder.fullAuto(pathGroup);
   }
