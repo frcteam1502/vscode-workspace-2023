@@ -115,6 +115,10 @@ public class DriveTrain extends SubsystemBase{
     setDesiredState(swerveModuleStates);
   }
 
+  public void teleopInit() {
+    targetAngle = gyro.getYaw();
+  }
+
   public void setDesiredState(SwerveModuleState[] swerveModuleStates) {
     frontLeft.setDesiredState(swerveModuleStates[0]);
     frontRight.setDesiredState(swerveModuleStates[1]);

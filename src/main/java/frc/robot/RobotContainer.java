@@ -20,7 +20,7 @@ public class RobotContainer {
   //Subsystems
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   private final GripperSubsystem gripperSubsystem = new GripperSubsystem();
-  private final DriveTrain driveSubsystem = new DriveTrain();
+  public final DriveTrain driveSubsystem = new DriveTrain();
   private final PdpSubsystem pdpSubsystem = new PdpSubsystem();
 
   //Autonomous Commands

@@ -62,6 +62,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     DriveTrain.isTeleOp = true;
+    m_robotContainer.driveSubsystem.teleopInit();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
