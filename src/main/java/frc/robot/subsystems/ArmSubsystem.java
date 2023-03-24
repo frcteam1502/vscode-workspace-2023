@@ -16,7 +16,7 @@ public class ArmSubsystem extends SubsystemBase {
   private final SparkMaxPIDController rotatePID;
   private final SparkMaxPIDController extendPID;
 
-  private final RelativeEncoder rotateEncoder;
+  public final RelativeEncoder rotateEncoder;
   private final RelativeEncoder extendEncoder;
 
   private double goalExtend = 0;
@@ -26,7 +26,7 @@ public class ArmSubsystem extends SubsystemBase {
   private final double MAX_ROTATE = 115;
   private final double MIN_ROTATE = -7;
 
-  private final double MAX_EXTEND = 57;
+  private final double MAX_EXTEND = 48.8;
 
   private final double DEGREES_PER_ROTATION = 360 / 28.5; 
   private final double MAX_ROTATE_FEEDFORWARD = .06; //TODO: increase?
@@ -34,16 +34,16 @@ public class ArmSubsystem extends SubsystemBase {
   private final double ROTATE_CHANGE = .3; 
   private final double EXTEND_CHANGE = .1;
 
-  private final double MAX_ROTATION_SPEED = .08;
+  private final double MAX_ROTATION_SPEED = .15;
 
   //Test points in order of {Angle position, extend position}
   private final double[][] positionTable = 
   {
     {0, 0}, //Straight down position
-    {20, 0}, //Enter "To limit switch" section
-    {25, 23}, //Ground score
-    {85, 1.2}, //Medium score
-    {103.5, 54}  //High score
+    {19, 0}, //Enter "To limit switch" section
+    {20.1, 34.5}, //Ground score
+    {90, 0}, //Medium score
+    {102, 48.7}  //High score
   };
   
   public ArmSubsystem() {
@@ -102,6 +102,11 @@ public class ArmSubsystem extends SubsystemBase {
     rotateArm(positionTable[4][0]);
   }
 
+  public void rotateToHumanPlayer() {
+    goalRotate = 84.5;
+    goalExtend = 0;
+  }
+
   public void rotateManually(double input) {
     double change = Math.signum(input) * ROTATE_CHANGE;
     if(input > .8) change *= 2;
@@ -132,22 +137,22 @@ public class ArmSubsystem extends SubsystemBase {
   public void calculateGoalExtend(double currentAngle) {
     if(isBetweenPoints(positionTable[0], positionTable[1], currentAngle)) {
       goalExtend = 0;
-      if(isWithinExtendRange(rotateEncoder.getPosition())) 
+      if(isWithinExtendRange(rotateEncoder.getPosition(), 15)) 
       goalExtend = calcBetweenPoints(positionTable[0], positionTable[1], currentAngle);
     } 
     else if(isBetweenPoints(positionTable[1], positionTable[2], currentAngle)) {
       goalExtend = 0;
-      if(isWithinExtendRange(rotateEncoder.getPosition())) 
+      if(isWithinExtendRange(rotateEncoder.getPosition(), 15)) 
       goalExtend = calcBetweenPoints(positionTable[1], positionTable[2], currentAngle);
     } 
     else if(isBetweenPoints(positionTable[2], positionTable[3], currentAngle)) {
       goalExtend = 0;
-      if(isWithinExtendRange(rotateEncoder.getPosition())) 
+      if(isWithinExtendRange(rotateEncoder.getPosition(), 15)) 
       goalExtend = calcBetweenPoints(positionTable[2], positionTable[3], currentAngle);
     } 
     else if(isBetweenPoints(positionTable[3], positionTable[4], currentAngle)) {
       goalExtend = 0;
-      if(isWithinExtendRange(rotateEncoder.getPosition())) 
+      if(isWithinExtendRange(rotateEncoder.getPosition(), 15)) 
       goalExtend = calcBetweenPoints(positionTable[3], positionTable[4], currentAngle);
     } 
   }
@@ -214,8 +219,7 @@ public class ArmSubsystem extends SubsystemBase {
    * 
    * @return whether or not the current angle is within our alloted range to begin extending
    */
-  public boolean isWithinExtendRange(double currentAngle) {
-    final double range = 15;
+  public boolean isWithinExtendRange(double currentAngle, double range) {
     return (currentAngle >= goalRotate - range && currentAngle <= goalRotate + range);
   }
 

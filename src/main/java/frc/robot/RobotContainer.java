@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.XboxButtons;
 import frc.robot.commands.ArmByController;
 import frc.robot.commands.DriveByController;
+import frc.robot.commands.Autonomous.MoveArm;
 import frc.robot.commands.Autonomous.SimpleBalance;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveTrain;
@@ -47,6 +48,7 @@ public class RobotContainer {
     XboxButtons.BUTTON_B.onTrue(new InstantCommand(armSubsystem::rotateToMid));
     XboxButtons.BUTTON_A.onTrue(new InstantCommand(armSubsystem::rotateToLow));
     XboxButtons.BUTTON_X.onTrue(new InstantCommand(armSubsystem::rotateToStow));
+    XboxButtons.LEFT_BUMPER.onTrue(new InstantCommand(armSubsystem::rotateToHumanPlayer));
     
     //Gripper
     XboxButtons.RIGHT_BUMPER.onTrue(new InstantCommand(gripperSubsystem::turnOn))
@@ -68,23 +70,22 @@ public class RobotContainer {
 
     //1A
     //sequential
-    A1.put("Close Gripper", new InstantCommand(gripperSubsystem::turnOn).alongWith(new WaitCommand(.1))); //Close the gripper
-    A1.put("To Top", new InstantCommand(armSubsystem::rotateToHigh).alongWith(new WaitCommand(5))); //Move arm to high
-    A1.put("Wait", new WaitCommand(3));
-    A1.put("Open Gripper", new InstantCommand(gripperSubsystem::turnOff).alongWith(new WaitCommand(.2))); //Open the gripper and drop cone
+    A1.put("Close Gripper", new InstantCommand(gripperSubsystem::turnOn).withTimeout(.1)); //Close the gripper
+    A1.put("To Top", new MoveArm(armSubsystem, "High").withTimeout(3)); //Move arm to high
+    A1.put("Open Gripper", new InstantCommand(gripperSubsystem::turnOff).withTimeout(.2)); //Open the gripper and drop cone
 
     //Marker
     A1.put("To Low", new InstantCommand(armSubsystem::rotateToLow)); //rotate arm to low
 
     //sequential
     A1.put("Wait", new WaitCommand(.1)); //Wait before closing gripper
-    A1.put("Close Gripper", new InstantCommand(gripperSubsystem::turnOn).alongWith(new WaitCommand(1))); //Close the gripper and grab cube
+    A1.put("Close Gripper", new InstantCommand(gripperSubsystem::turnOn).withTimeout(1)); //Close the gripper and grab cube
 
     //Marker
     A1.put("To High", new InstantCommand(armSubsystem::rotateToHigh)); //rotate arm to High
 
     //Sequential
-    A1.put("Open Gripper", new InstantCommand(gripperSubsystem::turnOff).alongWith(new WaitCommand(.2))); //Open the gripper and drop cube
+    A1.put("Open Gripper", new InstantCommand(gripperSubsystem::turnOff).withTimeout(.2)); //Open the gripper and drop cube
   }
 
   public Command getAutonomousCommand() {

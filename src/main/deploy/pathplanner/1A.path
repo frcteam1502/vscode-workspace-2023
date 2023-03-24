@@ -19,7 +19,6 @@
         "names": [
           "Close Gripper",
           "To High",
-          "Wait",
           "Open Gripper"
         ],
         "executionBehavior": "sequential",
