@@ -36,13 +36,13 @@ public class ArmSubsystem extends SubsystemBase {
   private final double ROTATE_CHANGE = .3; 
   private final double EXTEND_CHANGE = .1;
 
-  private final double MAX_ROTATION_SPEED = .15;
+  private final double MAX_ROTATION_SPEED = .3;
 
   //Test points in order of {Angle position, extend position}
   private final double[][] positionTable = 
   {
     {0, 0}, //Straight down position
-    {19, 0}, //Enter "To limit switch" section
+    {18, 0}, //Enter "To limit switch" section
     {20.1, 34.5}, //Ground score
     {90, 0}, //Medium score
     {110, 48.7}  //High score
@@ -72,13 +72,13 @@ public class ArmSubsystem extends SubsystemBase {
     rotatePID.setFeedbackDevice(rotateEncoder);
     extendPID.setFeedbackDevice(extendEncoder);
 
-    rotatePID.setP(.25); //TODO: Get PID values
+    rotatePID.setP(.7); //TODO: Get PID values
     rotatePID.setI(0);
-    rotatePID.setD(0);
-    rotatePID.setFF(MAX_ROTATE_FEEDFORWARD);
-    rotatePID.setOutputRange(-MAX_ROTATION_SPEED, MAX_ROTATION_SPEED);
+    rotatePID.setD(.9);
+    //rotatePID.setFF(MAX_ROTATE_FEEDFORWARD);
+    rotatePID.setOutputRange(-MAX_ROTATION_SPEED / 4, MAX_ROTATION_SPEED);
 
-    extendPID.setP(0.15);
+    extendPID.setP(0.23);
     extendPID.setI(0);
     extendPID.setD(0);
   }
@@ -165,9 +165,9 @@ public class ArmSubsystem extends SubsystemBase {
       if(isWithinExtendRange(rotateEncoder.getPosition(), 15)) 
       goalExtend = calcBetweenPoints(positionTable[0], positionTable[1], currentAngle);
     } 
-    else if(isBetweenPoints(positionTable[1], positionTable[2], currentAngle)) {
+    else if(isBetweenPoints(positionTable[1], positionTable[2], currentAngle)) { //TODO: Maybe change the "1" in this position table to a "0"
       goalExtend = 0;
-      if(isWithinExtendRange(rotateEncoder.getPosition(), 15)) 
+      if(isWithinExtendRange(rotateEncoder.getPosition(), 1)) 
       goalExtend = calcBetweenPoints(positionTable[1], positionTable[2], currentAngle);
     } 
     else if(isBetweenPoints(positionTable[2], positionTable[3], currentAngle)) {
