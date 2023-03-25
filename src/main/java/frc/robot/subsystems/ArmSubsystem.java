@@ -5,6 +5,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -23,7 +25,7 @@ public class ArmSubsystem extends SubsystemBase {
   private double goalRotate = 0;
 
   //Rotation bounds
-  private final double MAX_ROTATE = 115;
+  private final double MAX_ROTATE = 120;
   private final double MIN_ROTATE = -7;
 
   private final double MAX_EXTEND = 48.8;
@@ -43,7 +45,7 @@ public class ArmSubsystem extends SubsystemBase {
     {19, 0}, //Enter "To limit switch" section
     {20.1, 34.5}, //Ground score
     {90, 0}, //Medium score
-    {102, 48.7}  //High score
+    {110, 48.7}  //High score
   };
   
   public ArmSubsystem() {
@@ -79,6 +81,29 @@ public class ArmSubsystem extends SubsystemBase {
     extendPID.setP(0.15);
     extendPID.setI(0);
     extendPID.setD(0);
+  }
+
+   // For Testing
+   public void UpdateInformation(){ 
+    // read PID coefficients from SmartDashboard
+    double p =         SmartDashboard.getNumber("ANGLE P Gain", 0);
+    double i =         SmartDashboard.getNumber("ANGLE I Gain", 0);
+    double d =         SmartDashboard.getNumber("ANGLE D Gain", 0);
+    double iz =        SmartDashboard.getNumber("ANGLE I Zone", 0);
+    double ff =        SmartDashboard.getNumber("ANGLE Feed Forward", 0);
+    double max =       SmartDashboard.getNumber("ANGLE Max Output", 0);
+    double min =       SmartDashboard.getNumber("ANGLE Min Output", 0);
+
+    // if PID coefficients on SmartDashboard have changed, write new values to controller
+    if((p != rotatePID.getP())) { rotatePID.setP(p); }
+    if((i != rotatePID.getI())) { rotatePID.setI(i); }
+    if((d != rotatePID.getD())) { rotatePID.setD(d); }
+    if((iz != rotatePID.getIZone())) { rotatePID.setIZone(iz); }
+    if((ff != rotatePID.getFF())) { rotatePID.setFF(ff); }
+    if((max != rotatePID.getOutputMax()) || (min != rotatePID.getOutputMin())) { 
+      rotatePID.setOutputRange(min, max); 
+    }
+    
   }
 
   public void rotateArm(double Pose) {

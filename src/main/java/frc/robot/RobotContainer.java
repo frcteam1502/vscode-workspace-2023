@@ -29,6 +29,8 @@ public class RobotContainer {
   private final SimpleBalance simpleBalance = new SimpleBalance(driveSubsystem);
   private final HashMap<String, Command> A1 = new HashMap<>();
   private final HashMap<String, Command> Temp = new HashMap<>();
+  private final HashMap<String, Command> Simple_Cone = new HashMap<>();
+
 
   
   public RobotContainer() {
@@ -59,6 +61,7 @@ public class RobotContainer {
     createAutoHashMaps();
     sendableChooser.setDefaultOption("Balance", simpleBalance);
     sendableChooser.addOption("1A", driveSubsystem.buildAuto(A1, "1A"));
+    sendableChooser.addOption("Simple Cone", driveSubsystem.buildAuto(Simple_Cone, "Simple_Cone"));
     sendableChooser.addOption("Test", driveSubsystem.buildAuto(Temp, "Temp"));
     SmartDashboard.putData(sendableChooser);
   }
@@ -86,6 +89,25 @@ public class RobotContainer {
 
     //Sequential
     A1.put("Open Gripper", new InstantCommand(gripperSubsystem::turnOff).withTimeout(.2)); //Open the gripper and drop cube
+
+    //Simple Cone
+    //sequential
+    Simple_Cone.put("GoToStow", new InstantCommand(armSubsystem::rotateToStow));//Move arm to stow to reset from backdrive pre-match
+    Simple_Cone.put("Wait1", new WaitCommand(.5));//Wait .5 sec for stow
+    Simple_Cone.put("GoToHigh", new InstantCommand(armSubsystem::rotateToHigh));//Move arm to stow to high
+    Simple_Cone.put("Wait2", new WaitCommand(3));
+
+    //sequential
+    Simple_Cone.put("OpenGripper", new InstantCommand(gripperSubsystem::turnOn)); //Open the gripper and drop Cone
+    Simple_Cone.put("Wait3", new WaitCommand(2));
+
+    //Marker
+    Simple_Cone.put("GoToLow", new InstantCommand(armSubsystem::rotateToLow)); //rotate arm to Low
+
+    //sequential
+    Simple_Cone.put("Wait4", new WaitCommand(2));
+    Simple_Cone.put("CloseGripper", new InstantCommand(gripperSubsystem::turnOff)); //Close gripper and grab cube
+  
   }
 
   public Command getAutonomousCommand() {
