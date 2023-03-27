@@ -12,7 +12,7 @@ public class LedSubsystem extends SubsystemBase {
   public Spark left_blinkin = new Spark(0);
   public Spark right_blinkin = new Spark(1);
 
-  LedSubsystem(){
+  public LedSubsystem(){
     left_blinkin.set(WHITE);
     right_blinkin.set(WHITE);
   }

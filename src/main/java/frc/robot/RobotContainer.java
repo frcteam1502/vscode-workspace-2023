@@ -15,6 +15,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.PdpSubsystem;
+import frc.robot.subsystems.LedSubsystem;
 
 public class RobotContainer {
   //Subsystems
@@ -22,6 +23,7 @@ public class RobotContainer {
   private final GripperSubsystem gripperSubsystem = new GripperSubsystem();
   public final DriveTrain driveSubsystem = new DriveTrain();
   private final PdpSubsystem pdpSubsystem = new PdpSubsystem();
+  private final LedSubsystem ledSubsystem = new LedSubsystem();
 
   //Autonomous Commands
   private final SendableChooser<Command> sendableChooser = new SendableChooser<>();
@@ -43,6 +45,10 @@ public class RobotContainer {
     driveSubsystem.setDefaultCommand(new DriveByController(driveSubsystem, pdpSubsystem)); //USES THE LEFT BUMPER TO SLOW DOWN
     Constants.XboxButtons.DRIVER_BUTTON_B.whileTrue(new InstantCommand(driveSubsystem::setToBreak).repeatedly());
     
+    //LEDs
+    Constants.XboxButtons.DRIVER_BUTTON_X.onTrue(new InstantCommand(ledSubsystem::setViolet));
+    Constants.XboxButtons.DRIVER_BUTTON_Y.onTrue(new InstantCommand(ledSubsystem::setYellow));
+
     //Arm
     armSubsystem.setDefaultCommand(new ArmByController(armSubsystem));
     XboxButtons.BUTTON_Y.onTrue(new InstantCommand(armSubsystem::rotateToHigh));
