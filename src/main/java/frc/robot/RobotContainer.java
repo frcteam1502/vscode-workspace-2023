@@ -73,7 +73,6 @@ public class RobotContainer {
     //1A
     //sequential
     A1.put("To Top", new InstantCommand(armSubsystem::rotateToHigh)); //Move arm to high
-    Simple_Cone.put("Wait1", new WaitCommand(3));
     A1.put("Open Gripper", new InstantCommand(gripperSubsystem::turnOn)); //Open the gripper and drop cone
 
     //Marker
@@ -96,7 +95,7 @@ public class RobotContainer {
     Simple_Cone.put("GoToStow", new InstantCommand(armSubsystem::rotateToStow));//Move arm to stow to reset from backdrive pre-match
     Simple_Cone.put("Wait1", new WaitCommand(.5));//Wait .5 sec for stow
     Simple_Cone.put("GoToHigh", new InstantCommand(armSubsystem::rotateToHigh));//Move arm to stow to high
-    Simple_Cone.put("Wait2", new WaitCommand(3));
+    Simple_Cone.put("Wait2", new WaitCommand(.5));
 
     //sequential
     Simple_Cone.put("OpenGripper", new InstantCommand(gripperSubsystem::turnOn)); //Open the gripper and drop Cone
