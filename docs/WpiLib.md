@@ -1,5 +1,7 @@
 # WpiLib VSCode
 
+c:\Users\Public\wpilib\2023\vscode\resources\app\out\vs\workbench\contrib\terminal\browser\media\shellIntegration.ps1
+
 ## Build
 todo
 ## Deploy
