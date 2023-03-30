@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Limelight;
 
 import edu.wpi.first.cameraserver.CameraServer;
 
@@ -35,6 +36,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+
+    Limelight.findDistance();
 
     SmartDashboard.putNumber("Extend Pose", Constants.Motors.EXTEND.getEncoder().getPosition());
     SmartDashboard.putNumber("Rotate Pose", Constants.Motors.ARM_LEAD.getEncoder().getPosition());

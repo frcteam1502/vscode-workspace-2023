@@ -11,13 +11,34 @@ public class Limelight extends SubsystemBase{
 static int pipe=0;
 static double distance;
 
+static final double LOAD_STATION_TAG_HEIGHT = .71;
+static final double GRID_TAG_HEIGHT = .48;
+static final double LIMELIGHT_HEIGHT = .63;
+static final double TAG_SIZE = .15;
+static final double LIMELIGHT_FOV_DEGREES = 59.6;//Per Limelight docs
+static final double LIMELIGHT_RES_HORIZONTAL = 320;//Per Limelight docs
+static final double DEGREES_PER_PIXEL = LIMELIGHT_FOV_DEGREES/LIMELIGHT_RES_HORIZONTAL;
+
    
-   
-    public static void findDistance(){
-        Target target = getTarget();
-        distance = target.tx;
-        SmartDashboard.putNumber("Distance", distance);
-    }
+public static double findDistance(){
+  Target target = getTarget();
+  double side_pixels = target.thor;
+  double id = target.tid;
+  double valid = target.tv;
+  double distance = 1000;//Max out distance if target is not valid
+
+  if(valid == 1){
+    double angle_deg = (side_pixels/2)*DEGREES_PER_PIXEL;
+    double angle_rad = Math.toRadians(angle_deg);
+    distance = (TAG_SIZE/2)/(Math.tan(angle_rad));
+  }
+
+  SmartDashboard.putNumber("Tag ID", id);
+  SmartDashboard.putNumber("Pixels", side_pixels);
+  SmartDashboard.putNumber("Calculated Distance", distance);
+  
+  return(distance);
+}
     
 //Limelight wont be centored so do math later when robot built, im sick and have bad brain fog get off my back for english
     public static class Target {
@@ -26,23 +47,29 @@ static double distance;
         public double tv;
         public double ta;
         public double ts;
+        public double tid;
+        public double thor;
 
-        Target(double x, double y, double v, double a, double s) {
+        Target(double x, double y, double v, double a, double s, double id, double hor) {
             tx = x;
             ty = y;
             tv = v;
             ta = a;
             ts = s;
+            tid = id;
+            thor = hor;
         }
   }
 
   public static Target getTarget() {
-    double tx = getTableEntry("tx").getDouble(0.0);
-    double ty = getTableEntry("ty").getDouble(0.0);
-    double ta = getTableEntry("ta").getDouble(0.0);
-    double tv = getTableEntry("tv").getDouble(0.0);
+    double tx = getTableEntry("tx").getDouble(0.0);//Horizontal offset from crosshair to target (degrees)
+    double ty = getTableEntry("ty").getDouble(0.0);//Vertical offset from crosshair to target (degrees)
+    double ta = getTableEntry("ta").getDouble(0.0);//Target area
+    double tv = getTableEntry("tv").getDouble(0.0);//Whether the Limelight has valid targets (0 or 1)
+    double tid = getTableEntry("tid").getDouble(0.0);
     double ts = getTableEntry("ts").getDouble(0.0);
-    return new Target(tx, ty, tv, ta, ts);
+    double thor = getTableEntry("thor").getDouble(0.0);
+    return new Target(tx, ty, tv, ta, ts, tid, thor);
   }
 
   private static NetworkTableEntry getTableEntry(String entry) {
@@ -132,6 +159,9 @@ static double distance;
     ret[1] = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetYaw").getDouble(0.0);
     ret[2] = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetArea").getDouble(0.0);
     ret[3] = NetworkTableInstance.getDefault().getTable("limelight").getEntry("targetSkew").getDouble(0.0);
+
+    SmartDashboard.putNumber("targetArea", ret[2]);
+
     return ret;
   }
 }

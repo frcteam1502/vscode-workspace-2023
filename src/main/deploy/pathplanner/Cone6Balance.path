@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 2.9,
-        "y": 4.995845277404841
+        "x": 2.45,
+        "y": 3.25
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3273952102146906,
-        "y": 4.995845277404841
+        "x": 1.985880339842766,
+        "y": 3.25
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -29,16 +29,16 @@
     },
     {
       "anchorPoint": {
-        "x": 1.7,
-        "y": 4.995845277404841
+        "x": 1.9,
+        "y": 3.25
       },
       "prevControl": {
-        "x": 2.2683804726903167,
-        "y": 4.995845277404841
+        "x": 2.429435030298632,
+        "y": 3.249446641750427
       },
       "nextControl": {
-        "x": 2.2683804726903167,
-        "y": 4.995845277404841
+        "x": 2.429435030298632,
+        "y": 3.249446641750427
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -57,23 +57,47 @@
     },
     {
       "anchorPoint": {
-        "x": 6.8,
-        "y": 4.6236619616096375
+        "x": 6.0,
+        "y": 3.25
       },
       "prevControl": {
-        "x": 5.512053695283225,
-        "y": 4.336776270752929
+        "x": 5.29981737968452,
+        "y": 3.25
+      },
+      "nextControl": {
+        "x": 5.29981737968452,
+        "y": 3.25
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 4.8,
+        "y": 3.249446641750427
+      },
+      "prevControl": {
+        "x": 5.021491457028916,
+        "y": 3.2497233208752134
       },
       "nextControl": null,
-      "holonomicAngle": 180.0,
+      "holonomicAngle": 0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Wait4",
-          "CloseGripper"
+          "Autobalance"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -83,9 +107,11 @@
   ],
   "markers": [
     {
-      "position": 1.55,
+      "position": 0.08181818181818173,
       "names": [
-        "GoToLow"
+        "GoToStow",
+        "Wait4",
+        "GoToStow"
       ]
     }
   ]

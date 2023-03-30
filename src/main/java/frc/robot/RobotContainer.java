@@ -11,6 +11,7 @@ import frc.robot.Constants.XboxButtons;
 import frc.robot.commands.ArmByController;
 import frc.robot.commands.DriveByController;
 import frc.robot.commands.Autonomous.SimpleBalance;
+import frc.robot.commands.Autonomous.AutoBalance;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.GripperSubsystem;
@@ -27,10 +28,12 @@ public class RobotContainer {
 
   //Autonomous Commands
   private final SendableChooser<Command> sendableChooser = new SendableChooser<>();
+  private final AutoBalance autobalance = new AutoBalance(driveSubsystem);
   private final SimpleBalance simpleBalance = new SimpleBalance(driveSubsystem);
-  private final HashMap<String, Command> A1 = new HashMap<>();
-  private final HashMap<String, Command> Temp = new HashMap<>();
-  private final HashMap<String, Command> Simple_Cone = new HashMap<>();
+  private final HashMap<String, Command> Cone1High = new HashMap<>();
+  private final HashMap<String, Command> Cube2High = new HashMap<>();
+  private final HashMap<String, Command> Cone9High = new HashMap<>();
+  private final HashMap<String, Command> Cone6Balance = new HashMap<>();
 
 
   
@@ -65,55 +68,79 @@ public class RobotContainer {
   private void setUpSendableChooser() {
     createAutoHashMaps();
     sendableChooser.setDefaultOption("Balance", simpleBalance);
-    sendableChooser.addOption("1A", driveSubsystem.buildAuto(A1, "1A"));
-    sendableChooser.addOption("Simple Cone", driveSubsystem.buildAuto(Simple_Cone, "Simple_Cone"));
-    sendableChooser.addOption("Test", driveSubsystem.buildAuto(Temp, "Temp"));
+    sendableChooser.addOption("Cone 1 High", driveSubsystem.buildAuto(Cone1High, "Cone1High"));
+    sendableChooser.addOption("Cube 2 High", driveSubsystem.buildAuto(Cube2High, "Cube2High"));
+    sendableChooser.addOption("Cone 9 High", driveSubsystem.buildAuto(Cone9High, "Cone9High"));
+    //sendableChooser.addOption("Cone 6 Balance", driveSubsystem.buildAuto(Cone6Balance, "Cone6Balance"));
     SmartDashboard.putData(sendableChooser);
   }
 
   private void createAutoHashMaps() {
-    //Temp
-    Temp.put("Wait", new WaitCommand(.1));
+
+    /* Cone 1 High */
+    //sequential
+    Cone1High.put("GoToStow", new InstantCommand(armSubsystem::rotateToStow));//Move arm to stow to reset from backdrive pre-match
+    Cone1High.put("Wait1", new WaitCommand(.5));//Wait .5 sec for stow
+    Cone1High.put("GoToHigh", new InstantCommand(armSubsystem::rotateToHigh));//Move arm to stow to high
+    Cone1High.put("Wait2", new WaitCommand(.5));
+
+    //sequential
+    Cone1High.put("OpenGripper", new InstantCommand(gripperSubsystem::turnOn)); //Open the gripper and drop Cone
+    Cone1High.put("Wait3", new WaitCommand(2));
+
+    //Marker
+    Cone1High.put("CloseGripper", new InstantCommand(gripperSubsystem::turnOff)); //Close gripper and grab cube
+    Cone1High.put("GoToStow", new InstantCommand(armSubsystem::rotateToStow));
     
-
-    //1A
+    /* Cube 2 High */
     //sequential
-    A1.put("To Top", new InstantCommand(armSubsystem::rotateToHigh)); //Move arm to high
-    A1.put("Open Gripper", new InstantCommand(gripperSubsystem::turnOn)); //Open the gripper and drop cone
-
-    //Marker
-    A1.put("To Low", new InstantCommand(armSubsystem::rotateToLow)); //rotate arm to low
+    Cube2High.put("GoToStow", new InstantCommand(armSubsystem::rotateToStow));//Move arm to stow to reset from backdrive pre-match
+    Cube2High.put("Wait1", new WaitCommand(.5));//Wait .5 sec for stow
+    Cube2High.put("GoToHigh", new InstantCommand(armSubsystem::rotateToHigh));//Move arm to stow to high
+    Cube2High.put("Wait2", new WaitCommand(.5));
 
     //sequential
-    A1.put("Wait2", new WaitCommand(.2)); //Wait before closing gripper
-    A1.put("Close Gripper", new InstantCommand(gripperSubsystem::turnOff)); //Close the gripper and grab cube
+    Cube2High.put("OpenGripper", new InstantCommand(gripperSubsystem::turnOn)); //Open the gripper and drop Cone
+    Cube2High.put("Wait3", new WaitCommand(2));
 
     //Marker
-    A1.put("To High", new InstantCommand(armSubsystem::rotateToHigh)); //rotate arm to High
-
-    //Sequential
-    A1.put("Wait3", new WaitCommand(1));
-    A1.put("Open Gripper", new InstantCommand(gripperSubsystem::turnOn)); //Open the gripper and drop cube
-
+    Cube2High.put("CloseGripper", new InstantCommand(gripperSubsystem::turnOff)); //Close gripper and grab cube
+    Cube2High.put("GoToStow", new InstantCommand(armSubsystem::rotateToStow));
     
-    //Simple Cone
+    /* Cone 9 High */
     //sequential
-    Simple_Cone.put("GoToStow", new InstantCommand(armSubsystem::rotateToStow));//Move arm to stow to reset from backdrive pre-match
-    Simple_Cone.put("Wait1", new WaitCommand(.5));//Wait .5 sec for stow
-    Simple_Cone.put("GoToHigh", new InstantCommand(armSubsystem::rotateToHigh));//Move arm to stow to high
-    Simple_Cone.put("Wait2", new WaitCommand(.5));
+    Cone9High.put("GoToStow", new InstantCommand(armSubsystem::rotateToStow));//Move arm to stow to reset from backdrive pre-match
+    Cone9High.put("Wait1", new WaitCommand(.5));//Wait .5 sec for stow
+    Cone9High.put("GoToHigh", new InstantCommand(armSubsystem::rotateToHigh));//Move arm to stow to high
+    Cone9High.put("Wait2", new WaitCommand(.5));
 
     //sequential
-    Simple_Cone.put("OpenGripper", new InstantCommand(gripperSubsystem::turnOn)); //Open the gripper and drop Cone
-    Simple_Cone.put("Wait3", new WaitCommand(2));
+    Cone9High.put("OpenGripper", new InstantCommand(gripperSubsystem::turnOn)); //Open the gripper and drop Cone
+    Cone9High.put("Wait3", new WaitCommand(2));
 
-    //Marker
-    Simple_Cone.put("GoToLow", new InstantCommand(armSubsystem::rotateToLow)); //rotate arm to Low
+    //Parallel
+    Cone9High.put("CloseGripper", new InstantCommand(gripperSubsystem::turnOff)); //Close gripper and grab cube
+    Cone9High.put("GoToStow", new InstantCommand(armSubsystem::rotateToStow)); //rotate arm to Low
 
-    //sequential
-    Simple_Cone.put("Wait4", new WaitCommand(2));
-    Simple_Cone.put("CloseGripper", new InstantCommand(gripperSubsystem::turnOff)); //Close gripper and grab cube
   
+    /******************************** Cone 6 Balance ************************************/
+    //sequential
+    Cone6Balance.put("GoToStow", new InstantCommand(armSubsystem::rotateToStow));//Move arm to stow to reset from backdrive pre-match
+    Cone6Balance.put("Wait1", new WaitCommand(.5));//Wait .5 sec for stow
+    Cone6Balance.put("GoToHigh", new InstantCommand(armSubsystem::rotateToHigh));//Move arm to stow to high
+    Cone6Balance.put("Wait2", new WaitCommand(.5));
+
+    //sequential
+    Cone6Balance.put("OpenGripper", new InstantCommand(gripperSubsystem::turnOn)); //Open the gripper and drop Cone
+    Cone6Balance.put("Wait3", new WaitCommand(2));
+
+    //Marker
+    Cone6Balance.put("CloseGripper", new InstantCommand(gripperSubsystem::turnOff)); //Open the gripper and drop Cone
+    Cone6Balance.put("Wait4", new WaitCommand(.5));
+    Cone6Balance.put("GoToStow", new InstantCommand(armSubsystem::rotateToLow)); //rotate arm to Low
+
+    
+    
   }
 
   public Command getAutonomousCommand() {
