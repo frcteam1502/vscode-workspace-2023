@@ -88,9 +88,10 @@ public class RobotContainer {
     Cone1High.put("OpenGripper", new InstantCommand(gripperSubsystem::turnOn)); //Open the gripper and drop Cone
     Cone1High.put("Wait3", new WaitCommand(2));
 
-    //Marker
+    //sequential
     Cone1High.put("CloseGripper", new InstantCommand(gripperSubsystem::turnOff)); //Close gripper and grab cube
     Cone1High.put("GoToStow", new InstantCommand(armSubsystem::rotateToStow));
+    Cone1High.put("Wait4", new WaitCommand(2));
     
     /* Cube 2 High */
     //sequential
@@ -103,9 +104,10 @@ public class RobotContainer {
     Cube2High.put("OpenGripper", new InstantCommand(gripperSubsystem::turnOn)); //Open the gripper and drop Cone
     Cube2High.put("Wait3", new WaitCommand(2));
 
-    //Marker
+    //Sequential
     Cube2High.put("CloseGripper", new InstantCommand(gripperSubsystem::turnOff)); //Close gripper and grab cube
     Cube2High.put("GoToStow", new InstantCommand(armSubsystem::rotateToStow));
+    Cube2High.put("Wait4", new WaitCommand(2));
     
     /* Cone 9 High */
     //sequential
@@ -121,7 +123,7 @@ public class RobotContainer {
     //Parallel
     Cone9High.put("CloseGripper", new InstantCommand(gripperSubsystem::turnOff)); //Close gripper and grab cube
     Cone9High.put("GoToStow", new InstantCommand(armSubsystem::rotateToStow)); //rotate arm to Low
-
+    Cone9High.put("Wait3", new WaitCommand(2));
   
     /******************************** Cone 6 Balance ************************************/
     //sequential

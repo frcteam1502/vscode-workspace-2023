@@ -76,7 +76,8 @@
       "stopEvent": {
         "names": [
           "CloseGripper",
-          "GoToStow"
+          "GoToStow",
+          "Wait4"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
