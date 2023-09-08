@@ -11,7 +11,7 @@ Laptop-6 | GREMLINS      |ditto |   |               |                |
 11729    |               |CRL-03|   |ROBOTICS4      |LEAGUE LAPTOP 1 | ditto    
 FRC #2   | 1502 DS #2    |ditto |   |CSD-5          |LEAGUE LAPTOP 2 | no       
 1502     | Dell ??       |ditto |   |CSD-1          |                | no       
--        |               |      |   |               |                |          
+.        |               |      |   |               |                |          
 IPAD     | FTC CRASH 12  | 012  |   |               |                |          
 IPAD     |               | -    |   |               |                |          
 IPAD     |               | -    |   |               |                |          
