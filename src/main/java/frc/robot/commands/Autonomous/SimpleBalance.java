@@ -13,12 +13,14 @@ public class SimpleBalance extends SequentialCommandGroup {
 
         //Traverse the charge station
         new ParallelRaceGroup(new Move(drive, .3, 0), new WaitCommand(2)),
-        new ParallelRaceGroup(new Move(drive, .5, 0), new WaitCommand(2.1)),
+        new ParallelRaceGroup(new Move(drive, .3, 0), new WaitCommand(2.5)),
 
         //Drive backwards onto balance
-        new ParallelRaceGroup(new Move(drive, -.3, 0), new WaitCommand(2.44)),
+        new ParallelRaceGroup(new Move(drive, -.3, 0), new WaitCommand(3
+        )),
 
-        new ParallelRaceGroup(new AutoBalance(drive), new WaitCommand(7))
+        new ParallelRaceGroup(new AutoBalance(drive), new WaitCommand(8
+        ))
     );
   }
 }
