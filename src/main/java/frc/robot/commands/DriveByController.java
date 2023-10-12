@@ -5,9 +5,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.IBrownOutDetector;
 import frc.robot.Constants.Joysticks;
+import frc.robot.libraries.IBrownOutDetector;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.SwerveConstants;
 
 public class DriveByController extends CommandBase {
   private final DriveTrain drive;
@@ -59,7 +60,7 @@ public class DriveByController extends CommandBase {
     }
 
     void CheckBrownouts() {
-      if (brownOutDetector.HasBrownout()) {
+      if (brownOutDetector.NeedsLimiting()) {
         if (slewRate > 2.0) {
           ChangeSlewRate(slewRate -= 0.1);
         } else if (maxRatio > 0.5) {
@@ -99,7 +100,7 @@ public class DriveByController extends CommandBase {
 
   public DriveByController(DriveTrain drive, IBrownOutDetector brownOutDetector) {
     this.drive = drive;
-    this.speedController = new AdaptiveSpeedController(brownOutDetector, 3.0, 0.3, Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND);
+    this.speedController = new AdaptiveSpeedController(brownOutDetector, 3.0, 0.3, SwerveConstants.DriveConstants.MAX_SPEED_METERS_PER_SECOND);
     addRequirements(drive);
   }
 

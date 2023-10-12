@@ -12,6 +12,8 @@ import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -25,8 +27,9 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.LimelightHelpers;
-import frc.robot.Constants.Motors;
+import frc.robot.libraries.LimelightHelpers;
+import frc.robot.SwerveConstants;
+import frc.robot.SwerveConstants.Motors;
 
 public class DriveTrain extends SubsystemBase{
   
@@ -40,31 +43,31 @@ public class DriveTrain extends SubsystemBase{
 
   private final SwerveModule frontLeft = new SwerveModule(
     Motors.DRIVE_FRONT_LEFT, Motors.ANGLE_FRONT_LEFT, 
-    Constants.CANCoders.FRONT_LEFT_CAN_CODER, 
-    Constants.CANCoders.FRONT_LEFT_CAN_CODER_OFFSET,
-    Constants.CANCoders.FRONT_LEFT_CAN_CODER_DIRECTION);
+    SwerveConstants.CANCoders.FRONT_LEFT_CAN_CODER, 
+    SwerveConstants.CANCoders.FRONT_LEFT_CAN_CODER_OFFSET,
+    SwerveConstants.CANCoders.FRONT_LEFT_CAN_CODER_DIRECTION);
 
   private final SwerveModule frontRight = new SwerveModule(
     Motors.DRIVE_FRONT_RIGHT, Motors.ANGLE_FRONT_RIGHT, 
-    Constants.CANCoders.FRONT_RIGHT_CAN_CODER, 
-    Constants.CANCoders.FRONT_RIGHT_CAN_CODER_OFFSET,
-    Constants.CANCoders.FRONT_RIGHT_CAN_CODER_DIRECTION);
+    SwerveConstants.CANCoders.FRONT_RIGHT_CAN_CODER, 
+    SwerveConstants.CANCoders.FRONT_RIGHT_CAN_CODER_OFFSET,
+    SwerveConstants.CANCoders.FRONT_RIGHT_CAN_CODER_DIRECTION);
 
   private final SwerveModule backLeft = new SwerveModule(
     Motors.DRIVE_BACK_LEFT, Motors.ANGLE_BACK_LEFT, 
-    Constants.CANCoders.BACK_LEFT_CAN_CODER, 
-    Constants.CANCoders.BACK_LEFT_CAN_CODER_OFFSET,
-    Constants.CANCoders.BACK_LEFT_CAN_CODER_DIRECTION);
+    SwerveConstants.CANCoders.BACK_LEFT_CAN_CODER, 
+    SwerveConstants.CANCoders.BACK_LEFT_CAN_CODER_OFFSET,
+    SwerveConstants.CANCoders.BACK_LEFT_CAN_CODER_DIRECTION);
 
   private final SwerveModule backRight = new SwerveModule(
     Motors.DRIVE_BACK_RIGHT, Motors.ANGLE_BACK_RIGHT, 
-    Constants.CANCoders.BACK_RIGHT_CAN_CODER, 
-    Constants.CANCoders.BACK_RIGHT_CAN_CODER_OFFSET,
-    Constants.CANCoders.BACK_RIGHT_CAN_CODER_DIRECTION);
+    SwerveConstants.CANCoders.BACK_RIGHT_CAN_CODER, 
+    SwerveConstants.CANCoders.BACK_RIGHT_CAN_CODER_OFFSET,
+    SwerveConstants.CANCoders.BACK_RIGHT_CAN_CODER_DIRECTION);
 
-  private final Pigeon2 gyro = Constants.gyro;
+  private final Pigeon2 gyro = SwerveConstants.gyro;
 
-  private final SwerveDriveKinematics kinematics = Constants.DriveConstants.KINEMATICS;
+  private final SwerveDriveKinematics kinematics = SwerveConstants.DriveConstants.KINEMATICS;
 
   public final SwerveDrivePoseEstimator odometry;
 
@@ -98,7 +101,7 @@ public class DriveTrain extends SubsystemBase{
       else if(rot == 0 && isTurning) isTurning = false;
 
       if(isTurning) turnCommand = rot;
-      else turnCommand = (targetAngle - gyro.getYaw()) * Constants.DriveConstants.GO_STRAIGHT_GAIN;
+      else turnCommand = (targetAngle - gyro.getYaw()) * SwerveConstants.DriveConstants.GO_STRAIGHT_GAIN;
 
       forwardCommand = xSpeed;
       strafeCommand = ySpeed;
@@ -110,7 +113,7 @@ public class DriveTrain extends SubsystemBase{
             fieldRelative
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turnCommand, getGyroRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.DriveConstants.MAX_SPEED_METERS_PER_SECOND);
   
     setDesiredState(swerveModuleStates);
   }
@@ -210,19 +213,29 @@ public class DriveTrain extends SubsystemBase{
   }  
 
   public void ConfigMotorDirections() {
-    Motors.ANGLE_FRONT_LEFT.setInverted(Constants.DriveConstants.FrontLeftTurningMotorReversed);
-    Motors.ANGLE_FRONT_RIGHT.setInverted(Constants.DriveConstants.FrontRightTurningMotorReversed);
-    Motors.ANGLE_BACK_LEFT.setInverted(Constants.DriveConstants.BackLeftTurningMotorReversed);
-    Motors.ANGLE_BACK_RIGHT.setInverted(Constants.DriveConstants.BackRightTurningMotorReversed);
-    Motors.DRIVE_FRONT_LEFT.setInverted(Constants.DriveConstants.FrontLeftDriveMotorReversed);
-    Motors.DRIVE_FRONT_RIGHT.setInverted(Constants.DriveConstants.FrontRightDriveMotorReversed);
-    Motors.DRIVE_BACK_LEFT.setInverted(Constants.DriveConstants.BackLeftDriveMotorReversed);
-    Motors.DRIVE_BACK_RIGHT.setInverted(Constants.DriveConstants.BackRightDriveMotorReversed);
+    Motors.ANGLE_FRONT_LEFT.setInverted(SwerveConstants.DriveConstants.FrontLeftTurningMotorReversed);
+    Motors.ANGLE_FRONT_RIGHT.setInverted(SwerveConstants.DriveConstants.FrontRightTurningMotorReversed);
+    Motors.ANGLE_BACK_LEFT.setInverted(SwerveConstants.DriveConstants.BackLeftTurningMotorReversed);
+    Motors.ANGLE_BACK_RIGHT.setInverted(SwerveConstants.DriveConstants.BackRightTurningMotorReversed);
+    Motors.DRIVE_FRONT_LEFT.setInverted(SwerveConstants.DriveConstants.FrontLeftDriveMotorReversed);
+    Motors.DRIVE_FRONT_RIGHT.setInverted(SwerveConstants.DriveConstants.FrontRightDriveMotorReversed);
+    Motors.DRIVE_BACK_LEFT.setInverted(SwerveConstants.DriveConstants.BackLeftDriveMotorReversed);
+    Motors.DRIVE_BACK_RIGHT.setInverted(SwerveConstants.DriveConstants.BackRightDriveMotorReversed);
+
+    SwerveConstants.Motors.DRIVE_FRONT_LEFT.setIdleMode(IdleMode.kBrake);
+    SwerveConstants.Motors.DRIVE_FRONT_RIGHT.setIdleMode(IdleMode.kBrake);
+    SwerveConstants.Motors.DRIVE_BACK_LEFT.setIdleMode(IdleMode.kBrake);
+    SwerveConstants.Motors.DRIVE_BACK_RIGHT.setIdleMode(IdleMode.kBrake);
+
+    SwerveConstants.Motors.ANGLE_FRONT_LEFT.setIdleMode(IdleMode.kCoast);
+    SwerveConstants.Motors.ANGLE_FRONT_RIGHT.setIdleMode(IdleMode.kCoast);
+    SwerveConstants.Motors.ANGLE_BACK_LEFT.setIdleMode(IdleMode.kCoast);
+    SwerveConstants.Motors.ANGLE_BACK_RIGHT.setIdleMode(IdleMode.kCoast);
   }
 
   public Command moveToImage() {
     PathPlannerTrajectory toImage = PathPlanner.generatePath(
-      new PathConstraints(Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND * 3, 1), 
+      new PathConstraints(SwerveConstants.DriveConstants.MAX_SPEED_METERS_PER_SECOND * 3, 1), 
       new PathPoint(new Translation2d(0, 0), getHeading(), getGyroRotation2d(), getVelocity()),
       pointFromLimelight(new Translation2d(Limelight.getTargetPose()[0], Limelight.getTargetPose()[1])) 
     );
@@ -230,7 +243,7 @@ public class DriveTrain extends SubsystemBase{
     return new PPSwerveControllerCommand(
       toImage, 
       this::getPose2d, // Pose supplier
-      Constants.DriveConstants.KINEMATICS, // SwerveDriveKinematics
+      SwerveConstants.DriveConstants.KINEMATICS, // SwerveDriveKinematics
       new PIDController(4.35, 0.0, 0.09), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
       new PIDController(4.35, 0.0, 0.09), // Y controller (usually the same values as X controller)
       new PIDController(1.3, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
@@ -274,12 +287,12 @@ public class DriveTrain extends SubsystemBase{
   public Command buildAuto(HashMap<String, Command> eventMap, String pathName) {
     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
       pathName, 
-      new PathConstraints(Constants.DriveConstants.MAX_SPEED_METERS_PER_SECOND / 1.1, 1));
+      new PathConstraints(SwerveConstants.DriveConstants.MAX_SPEED_METERS_PER_SECOND / 1.1, 1));
 
     SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
       this::getPose2d, // Pose2d supplier
       this::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
-      Constants.DriveConstants.KINEMATICS, // SwerveDriveKinematics
+      SwerveConstants.DriveConstants.KINEMATICS, // SwerveDriveKinematics
       new PIDConstants(4.35, 0.0, 0.09), // PID constants to correct for translation error (used to create the X and Y PID controllers)
       new PIDConstants(2.55, 0.0, 0.15), // PID constants to correct for rotation error (used to create the rotation controller)
       this::setDesiredState, // Module states consumer used to output to the drive subsystem

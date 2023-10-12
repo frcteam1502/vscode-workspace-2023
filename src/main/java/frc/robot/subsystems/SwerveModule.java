@@ -11,7 +11,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Constants;
+import frc.robot.SwerveConstants;
 
 public class SwerveModule {
   private final CANSparkMax driveMotor;
@@ -35,10 +35,10 @@ public class SwerveModule {
     driveEncoder = driveMotor.getEncoder();
 
     // Set the distance per pulse for the drive encoder. 
-    driveEncoder.setPositionConversionFactor(Constants.ModuleConstants.DRIVE_METERS_PER_ENCODER_REV);
+    driveEncoder.setPositionConversionFactor(SwerveConstants.ModuleConstants.DRIVE_METERS_PER_ENCODER_REV);
 
     // Set the velocity per pulse for the drive encoder
-    driveEncoder.setVelocityConversionFactor(Constants.ModuleConstants.DRIVE_ENCODER_MPS_PER_REV);
+    driveEncoder.setVelocityConversionFactor(SwerveConstants.ModuleConstants.DRIVE_ENCODER_MPS_PER_REV);
 
     // Set the angle in radians per pulse for the turning encoder.
     //turningEncoder.setPositionConversionFactor(Constants.ModuleConstants.RADIANS_PER_ENCODER_REV);

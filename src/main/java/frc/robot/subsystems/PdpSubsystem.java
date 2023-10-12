@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.simulation.PDPSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Joysticks;
-import frc.robot.IBrownOutDetector;
+import frc.robot.libraries.IBrownOutDetector;
 import frc.robot.Robot;
 
 public class PdpSubsystem extends SubsystemBase implements IBrownOutDetector {
@@ -114,7 +114,7 @@ public class PdpSubsystem extends SubsystemBase implements IBrownOutDetector {
     double minBrownout = 7.5;
 
     @Override
-    public Boolean HasBrownout() { // means "needs limiting", slew or total??
+    public Boolean NeedsLimiting() { // means "needs limiting", slew or total??
         if (voltage < 7.5) {
             if (minBrownout > voltage) {
                 minBrownout = voltage;
