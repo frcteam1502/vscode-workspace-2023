@@ -26,7 +26,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.libraries.LimelightHelpers;
 import frc.robot.SwerveConstants;
 import frc.robot.SwerveConstants.Motors;
@@ -222,15 +221,15 @@ public class DriveTrain extends SubsystemBase{
     Motors.DRIVE_BACK_LEFT.setInverted(SwerveConstants.DriveConstants.BackLeftDriveMotorReversed);
     Motors.DRIVE_BACK_RIGHT.setInverted(SwerveConstants.DriveConstants.BackRightDriveMotorReversed);
 
-    SwerveConstants.Motors.DRIVE_FRONT_LEFT.setIdleMode(IdleMode.kBrake);
-    SwerveConstants.Motors.DRIVE_FRONT_RIGHT.setIdleMode(IdleMode.kBrake);
-    SwerveConstants.Motors.DRIVE_BACK_LEFT.setIdleMode(IdleMode.kBrake);
-    SwerveConstants.Motors.DRIVE_BACK_RIGHT.setIdleMode(IdleMode.kBrake);
+    SwerveConstants.Motors.DRIVE_FRONT_LEFT.setIdleMode(SwerveConstants.DriveConstants.FrontLeftDriveMotorBrake);
+    SwerveConstants.Motors.DRIVE_FRONT_RIGHT.setIdleMode(SwerveConstants.DriveConstants.FrontRightDriveMotorBrake);
+    SwerveConstants.Motors.DRIVE_BACK_LEFT.setIdleMode(SwerveConstants.DriveConstants.BackLeftDriveMotorBrake);
+    SwerveConstants.Motors.DRIVE_BACK_RIGHT.setIdleMode(SwerveConstants.DriveConstants.BackRightDriveMotorBrake);
 
-    SwerveConstants.Motors.ANGLE_FRONT_LEFT.setIdleMode(IdleMode.kCoast);
-    SwerveConstants.Motors.ANGLE_FRONT_RIGHT.setIdleMode(IdleMode.kCoast);
-    SwerveConstants.Motors.ANGLE_BACK_LEFT.setIdleMode(IdleMode.kCoast);
-    SwerveConstants.Motors.ANGLE_BACK_RIGHT.setIdleMode(IdleMode.kCoast);
+    SwerveConstants.Motors.ANGLE_FRONT_LEFT.setIdleMode(SwerveConstants.DriveConstants.FrontLeftTurningMotorBrake);
+    SwerveConstants.Motors.ANGLE_FRONT_RIGHT.setIdleMode(SwerveConstants.DriveConstants.FrontRightTurningMotorBrake);
+    SwerveConstants.Motors.ANGLE_BACK_LEFT.setIdleMode(SwerveConstants.DriveConstants.BackLeftTurningMotorBrake);
+    SwerveConstants.Motors.ANGLE_BACK_RIGHT.setIdleMode(SwerveConstants.DriveConstants.BackRightTurningMotorBrake);
   }
 
   public Command moveToImage() {
