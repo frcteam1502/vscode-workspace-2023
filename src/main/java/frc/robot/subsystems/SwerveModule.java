@@ -22,15 +22,15 @@ public class SwerveModule {
   private final CANCoder absEncoder;
 
   private final SparkMaxPIDController drivePIDController;
-  private final PIDController turningPIDController = new PIDController(3.4, 0, 0);
+  private final PIDController turningPIDController = new PIDController(SwerveConstants.ModuleConstants.MODULE_TURN_PID_CONTROLLER_P, SwerveConstants.ModuleConstants.MODULE_TURN_PID_CONTROLLER_I, SwerveConstants.ModuleConstants.MODULE_TURN_PID_CONTROLLER_D);
 
   public SwerveModule(CANSparkMax driveMotor, CANSparkMax turnMotor, CANCoder absEncoder, double absOffset, boolean CANCoderDirection) {
     this.driveMotor = driveMotor;
     this.turningMotor = turnMotor;
     this.absEncoder = absEncoder;
 
-    driveMotor.setClosedLoopRampRate(.25);
-    driveMotor.setSmartCurrentLimit(40);
+    driveMotor.setClosedLoopRampRate(SwerveConstants.ModuleConstants.CLOSED_LOOP_RAMP_RATE);
+    driveMotor.setSmartCurrentLimit(SwerveConstants.ModuleConstants.SMART_CURRENT_LIMIT);
 
     driveEncoder = driveMotor.getEncoder();
 
@@ -50,10 +50,10 @@ public class SwerveModule {
     this.turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
     this.drivePIDController = this.driveMotor.getPIDController();
-    this.drivePIDController.setP(.08);
-    this.drivePIDController.setI(0);
-    this.drivePIDController.setD(0);
-    this.drivePIDController.setFF(1);
+    this.drivePIDController.setP(SwerveConstants.ModuleConstants.MODULE_DRIVE_PID_CONTROLLER_P);
+    this.drivePIDController.setI(SwerveConstants.ModuleConstants.MODULE_DRIVE_PID_CONTROLLER_I);
+    this.drivePIDController.setD(SwerveConstants.ModuleConstants.MODULE_DRIVE_PID_CONTROLLER_D);
+    this.drivePIDController.setFF(SwerveConstants.ModuleConstants.MODULE_DRIVE_PID_CONTROLLER_F);
   }
 
   /**

@@ -4,6 +4,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -46,11 +47,21 @@ public static final class DriveConstants {
   public static final boolean FrontRightTurningMotorReversed = true;
   public static final boolean BackRightTurningMotorReversed = true;
 
+  public static final CANSparkMax.IdleMode FrontLeftTurningMotorBrake = IdleMode.kCoast;
+  public static final CANSparkMax.IdleMode BackLeftTurningMotorBrake = IdleMode.kCoast;
+  public static final CANSparkMax.IdleMode FrontRightTurningMotorBrake = IdleMode.kCoast;
+  public static final CANSparkMax.IdleMode BackRightTurningMotorBrake = IdleMode.kCoast;
+
   //Drive Motors
   public static final boolean FrontLeftDriveMotorReversed = false;
   public static final boolean BackLeftDriveMotorReversed = false;
   public static final boolean FrontRightDriveMotorReversed = false;
   public static final boolean BackRightDriveMotorReversed = false;
+
+  public static final CANSparkMax.IdleMode FrontLeftDriveMotorBrake = IdleMode.kBrake;
+  public static final CANSparkMax.IdleMode BackLeftDriveMotorBrake = IdleMode.kBrake;
+  public static final CANSparkMax.IdleMode FrontRightDriveMotorBrake = IdleMode.kBrake;
+  public static final CANSparkMax.IdleMode BackRightDriveMotorBrake = IdleMode.kBrake;
 
   //Wheel Base
   public static final double WHEEL_BASE_WIDTH = Units.inchesToMeters(25);
@@ -97,13 +108,22 @@ public static final class ModuleConstants {
   public static final double RADIANS_PER_ENCODER_REV = TURNING_DEGREES_PER_ENCODER_REV * (Math.PI/180);
 
   // max turn speed = (5400/ 21.43) revs per min 240 revs per min 4250 deg per min
-  public static final double MODULE_TURN_PID_CONTROLLER_P = 1.5;
+  public static final double MODULE_TURN_PID_CONTROLLER_P = 3.4;
+  public static final double MODULE_TURN_PID_CONTROLLER_I = 0;
+  public static final double MODULE_TURN_PID_CONTROLLER_D = 0;
+  public static final double MODULE_TURN_PID_CONTROLLER_F = 0;
 
-  public static final double MODULE_DRIVE_PID_CONTROLLER_P = 1.0;
+  public static final double MODULE_DRIVE_PID_CONTROLLER_P = .08;
+  public static final double MODULE_DRIVE_PID_CONTROLLER_I = 0;
+  public static final double MODULE_DRIVE_PID_CONTROLLER_D = 0;
+  public static final double MODULE_DRIVE_PID_CONTROLLER_F = 1.0;
 
   public static final double MAX_MODULE_ROTATION_RADIANS_PER_SECOND = Math.PI/2;
 
   public static final double MAX_MODULE_ROTATION_RADIANS_PER_SECOND_PER_SECOND = Math.PI;
+
+  public static final double CLOSED_LOOP_RAMP_RATE = .25;
+  public static final int SMART_CURRENT_LIMIT = 40;
 }
 
 //needed_for_swerve
