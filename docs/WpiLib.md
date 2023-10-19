@@ -14,8 +14,10 @@ Manual Build and Deploy from Terminal
 
 
 ## Tasks
+There is a GRADLE view that can be opened in vscode
+(also, settings: @ext:vscjava.vscode-gradle)
 
- .\gradlew.bat tasks
+view Tasks: `.\gradlew.bat tasks`
 
 set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m"
 
@@ -117,3 +119,6 @@ Pattern: build<ConfigurationName>: Assembles the artifacts of a configuration.
 To see all tasks and more detail, run gradlew tasks --all
 
 To see more detail about a task, run gradlew help --task <task>
+
+
+# END
