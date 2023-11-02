@@ -7,9 +7,11 @@ import edu.wpi.first.wpilibj.simulation.PDPSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Joysticks;
+import frc.robot.annotations.*;
 import frc.robot.libraries.IBrownOutDetector;
 import frc.robot.Robot;
 
+@SubsystemInfo(disabled = false)
 public class PdpSubsystem extends SubsystemBase implements IBrownOutDetector {
     PowerDistribution m_pdp;
     PDPSim m_simPdp;

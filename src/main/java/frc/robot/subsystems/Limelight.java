@@ -3,10 +3,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.libraries.LimelightHelpers;
 
-public class Limelight extends SubsystemBase{
+public class Limelight { // NOT a subsysyem
 
 static int pipe=0;
 static double distance;

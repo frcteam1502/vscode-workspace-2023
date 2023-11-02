@@ -4,14 +4,15 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.Constants.Joysticks;
 import frc.robot.libraries.IBrownOutDetector;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.IDrive;
 import frc.robot.SwerveConstants;
 
 public class DriveByController extends CommandBase {
-  private final DriveTrain drive;
+  private final IDrive drive;
   private final AdaptiveSpeedController speedController;
   
   class SpeedCommand {
@@ -98,10 +99,10 @@ public class DriveByController extends CommandBase {
     }
   }
 
-  public DriveByController(DriveTrain drive, IBrownOutDetector brownOutDetector) {
+  public DriveByController(IDrive drive, IBrownOutDetector brownOutDetector) {
     this.drive = drive;
     this.speedController = new AdaptiveSpeedController(brownOutDetector, 3.0, 0.3, SwerveConstants.DriveConstants.MAX_SPEED_METERS_PER_SECOND);
-    addRequirements(drive);
+    addRequirements((Subsystem)drive);
   }
 
   @Override

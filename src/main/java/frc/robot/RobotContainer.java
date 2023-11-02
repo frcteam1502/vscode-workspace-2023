@@ -1,16 +1,10 @@
 package frc.robot;
 
-import java.util.HashMap;
-
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants.XboxButtons;
 import frc.robot.commands.DriveByController;
-import frc.robot.commands.Autonomous.SimpleBalance;
-import frc.robot.commands.Autonomous.AutoBalance;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.PdpSubsystem;
 

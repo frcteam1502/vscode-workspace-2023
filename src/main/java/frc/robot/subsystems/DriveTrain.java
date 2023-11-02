@@ -27,10 +27,13 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.libraries.LimelightHelpers;
+import injection.Configuration;
 import frc.robot.SwerveConstants;
 import frc.robot.SwerveConstants.Motors;
+import frc.robot.annotations.SubsystemInfo;
 
-public class DriveTrain extends SubsystemBase{
+@SubsystemInfo(disabled = true)
+public class DriveTrain extends SubsystemBase implements IDrive {
   
   public static boolean isTeleOp = false;
 
@@ -74,6 +77,10 @@ public class DriveTrain extends SubsystemBase{
   
   private double pitchOffset;
 
+  public DriveTrain(Configuration configuration) {
+    this();
+  }
+
   public DriveTrain() {
     pitchOffset = 0;
 
@@ -91,6 +98,7 @@ public class DriveTrain extends SubsystemBase{
     updateOdometry();
   }
 
+  @Override
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     if(isTeleOp) {
       if(Math.abs(rot) > 0){
